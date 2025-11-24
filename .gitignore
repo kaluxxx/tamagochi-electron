@@ -1,0 +1,68 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs/
+
+# Build output
+dist/
+build/
+out/
+release/
+release-builds/
+dist-electron/
+dist-linux/
+dist-mac/
+dist-win/
+dist/win-unpacked/
+dist/linux-unpacked/
+dist/mac-unpacked/
+
+# Electron artifacts
+*.asar
+*.AppImage
+*.dmg
+*.exe
+*.msi
+*.deb
+*.rpm
+*.snap
+
+# Temp / caches
+tmp/
+temp/
+.cache/
+.parcel-cache/
+.vite/
+.pnp/
+pnpm-store/
+
+# Environment
+.env
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage & test
+coverage/
+.nyc_output/
+
+# Misc
+.sass-cache
+.eslintcache
