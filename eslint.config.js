@@ -20,6 +20,9 @@ export default [
         __dirname: 'readonly',
         document: 'readonly',
         window: 'readonly',
+        HTMLImageElement: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
       },
     },
     plugins: {

@@ -1,0 +1,56 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Vaccine - Seringue -->
+
+  <!-- Ombre -->
+  <rect x="14" y="26" width="10" height="1" fill="#D0D0D0"/>
+
+  <!-- Piston (partie arrière) -->
+  <rect x="8" y="11" width="3" height="2" fill="#E74C3C"/>
+  <rect x="9" y="12" width="1" height="1" fill="#EC7063"/>
+
+  <!-- Tige du piston -->
+  <rect x="11" y="11" width="6" height="2" fill="#BDC3C7"/>
+  <rect x="12" y="11" width="4" height="1" fill="#ECF0F1"/>
+
+  <!-- Contour corps seringue -->
+  <rect x="15" y="10" width="8" height="2" fill="#BDC3C7"/>
+  <rect x="14" y="12" width="10" height="8" fill="#BDC3C7"/>
+  <rect x="15" y="20" width="8" height="2" fill="#95A5A6"/>
+
+  <!-- Corps transparent -->
+  <rect x="16" y="11" width="6" height="10" fill="#ECF0F1"/>
+  <rect x="17" y="12" width="4" height="8" fill="#FFFFFF"/>
+
+  <!-- Liquide/vaccin (bleu clair) -->
+  <rect x="17" y="16" width="4" height="4" fill="#AED6F1"/>
+  <rect x="18" y="17" width="2" height="2" fill="#85C1E9"/>
+
+  <!-- Graduations -->
+  <rect x="16" y="14" width="1" height="1" fill="#7F8C8D"/>
+  <rect x="16" y="16" width="1" height="1" fill="#7F8C8D"/>
+  <rect x="16" y="18" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- Aiguille (partie métallique) -->
+  <rect x="19" y="21" width="4" height="2" fill="#95A5A6"/>
+  <rect x="20" y="22" width="2" height="1" fill="#BDC3C7"/>
+
+  <!-- Pointe aiguille -->
+  <rect x="23" y="21" width="1" height="2" fill="#7F8C8D"/>
+  <rect x="24" y="22" width="1" height="1" fill="#5D6D7E"/>
+
+  <!-- Protège-aiguille (capuchon orange) -->
+  <rect x="20" y="23" width="4" height="3" fill="#E67E22"/>
+  <rect x="21" y="24" width="2" height="1" fill="#F39C12"/>
+
+  <!-- Highlight corps -->
+  <rect x="17" y="12" width="2" height="4" fill="#FFFFFF"/>
+  <rect x="18" y="13" width="1" height="2" fill="#FDFEFE"/>
+
+  <!-- Bulles d'air dans le liquide -->
+  <rect x="18" y="17" width="1" height="1" fill="#D6EAF8"/>
+  <rect x="20" y="18" width="1" height="1" fill="#D6EAF8"/>
+
+  <!-- Fixations -->
+  <rect x="15" y="13" width="1" height="1" fill="#7F8C8D"/>
+  <rect x="22" y="13" width="1" height="1" fill="#7F8C8D"/>
+</svg>

@@ -1,0 +1,84 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Empty State - Écran vide avec invitation à créer -->
+
+  <!-- Ombre au sol -->
+  <rect x="48" y="110" width="32" height="2" fill="#D0D0D0"/>
+  <rect x="50" y="112" width="28" height="1" fill="#E0E0E0"/>
+
+  <!-- Boîtier Tamagotchi vide/éteint (plus grand) -->
+  <rect x="36" y="32" width="56" height="68" fill="#BDC3C7"/>
+  <rect x="34" y="34" width="60" height="64" fill="#95A5A6"/>
+
+  <!-- Bordure 3D -->
+  <rect x="36" y="32" width="56" height="4" fill="#D5DBDB"/>
+  <rect x="36" y="32" width="4" height="68" fill="#D5DBDB"/>
+  <rect x="36" y="96" width="56" height="4" fill="#707B7C"/>
+  <rect x="88" y="32" width="4" height="68" fill="#707B7C"/>
+
+  <!-- Écran LCD éteint/vide (gris foncé) -->
+  <rect x="42" y="40" width="44" height="36" fill="#34495E"/>
+  <rect x="44" y="42" width="40" height="32" fill="#2C3E50"/>
+
+  <!-- Point d'interrogation pixel art sur l'écran -->
+  <!-- Haut du ? -->
+  <rect x="60" y="48" width="8" height="2" fill="#7F8C8D"/>
+  <rect x="58" y="50" width="2" height="4" fill="#7F8C8D"/>
+  <rect x="68" y="50" width="2" height="4" fill="#7F8C8D"/>
+
+  <!-- Corps du ? -->
+  <rect x="68" y="54" width="2" height="2" fill="#7F8C8D"/>
+  <rect x="66" y="56" width="2" height="2" fill="#7F8C8D"/>
+  <rect x="64" y="58" width="2" height="2" fill="#7F8C8D"/>
+
+  <!-- Point du ? -->
+  <rect x="64" y="62" width="2" height="2" fill="#7F8C8D"/>
+
+  <!-- Boutons sous l'écran (désactivés/gris) -->
+  <rect x="46" y="82" width="8" height="8" fill="#95A5A6"/>
+  <rect x="47" y="83" width="6" height="6" fill="#BDC3C7"/>
+
+  <rect x="60" y="82" width="8" height="8" fill="#95A5A6"/>
+  <rect x="61" y="83" width="6" height="6" fill="#BDC3C7"/>
+
+  <rect x="74" y="82" width="8" height="8" fill="#95A5A6"/>
+  <rect x="75" y="83" width="6" height="6" fill="#BDC3C7"/>
+
+  <!-- Flèche pointant vers le haut (invitation à cliquer le bouton créer) -->
+  <rect x="62" y="12" width="4" height="12" fill="#FF69B4"/>
+  <rect x="64" y="10" width="2" height="2" fill="#FF1493"/>
+
+  <!-- Pointe de flèche -->
+  <rect x="58" y="14" width="2" height="2" fill="#FF69B4"/>
+  <rect x="60" y="12" width="2" height="2" fill="#FF69B4"/>
+  <rect x="66" y="12" width="2" height="2" fill="#FF69B4"/>
+  <rect x="68" y="14" width="2" height="2" fill="#FF69B4"/>
+
+  <!-- Étoiles de motivation autour -->
+  <rect x="20" y="48" width="2" height="1" fill="#FFD700"/>
+  <rect x="19" y="49" width="4" height="1" fill="#FFD700"/>
+  <rect x="20" y="50" width="2" height="1" fill="#FFD700"/>
+  <rect x="21" y="49" width="1" height="1" fill="#FFF4A3"/>
+
+  <rect x="106" y="48" width="2" height="1" fill="#FFD700"/>
+  <rect x="105" y="49" width="4" height="1" fill="#FFD700"/>
+  <rect x="106" y="50" width="2" height="1" fill="#FFD700"/>
+  <rect x="107" y="49" width="1" height="1" fill="#FFF4A3"/>
+
+  <rect x="24" y="72" width="2" height="1" fill="#4A90E2"/>
+  <rect x="23" y="73" width="4" height="1" fill="#4A90E2"/>
+  <rect x="24" y="74" width="2" height="1" fill="#4A90E2"/>
+
+  <rect x="102" y="72" width="2" height="1" fill="#2ECC71"/>
+  <rect x="101" y="73" width="4" height="1" fill="#2ECC71"/>
+  <rect x="102" y="74" width="2" height="1" fill="#2ECC71"/>
+
+  <!-- Ligne de sol décorative -->
+  <rect x="16" y="114" width="96" height="1" fill="#ECF0F1"/>
+  <rect x="12" y="115" width="104" height="1" fill="#BDC3C7"/>
+
+  <!-- Petits détails décoratifs (pixels épars) -->
+  <rect x="32" y="28" width="1" height="1" fill="#E0E0E0"/>
+  <rect x="94" y="28" width="1" height="1" fill="#E0E0E0"/>
+  <rect x="30" y="102" width="1" height="1" fill="#E0E0E0"/>
+  <rect x="96" y="102" width="1" height="1" fill="#E0E0E0"/>
+</svg>

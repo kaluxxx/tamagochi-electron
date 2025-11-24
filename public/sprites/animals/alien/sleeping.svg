@@ -1,0 +1,68 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Alien Sleeping - Endormi flottant (alien style) -->
+
+  <!-- Antennes détendues (tombantes doucement) -->
+  <rect x="12" y="12" width="1" height="2" fill="#2ECC71"/>
+  <rect x="11" y="13" width="1" height="1" fill="#27AE60"/>
+  <rect x="11" y="14" width="2" height="1" fill="#2ECC71"/>
+  <!-- Boule antenne -->
+  <rect x="10" y="15" width="2" height="2" fill="#9B59B6"/>
+  <rect x="10" y="15" width="1" height="1" fill="#7F4DA3"/>
+
+  <rect x="19" y="12" width="1" height="2" fill="#2ECC71"/>
+  <rect x="20" y="13" width="1" height="1" fill="#27AE60"/>
+  <rect x="19" y="14" width="2" height="1" fill="#2ECC71"/>
+  <!-- Boule antenne -->
+  <rect x="20" y="15" width="2" height="2" fill="#9B59B6"/>
+  <rect x="21" y="15" width="1" height="1" fill="#7F4DA3"/>
+
+  <!-- Contour tête endormie -->
+  <rect x="11" y="14" width="10" height="2" fill="#27AE60"/>
+  <rect x="10" y="16" width="12" height="10" fill="#27AE60"/>
+
+  <!-- Tête principale -->
+  <rect x="12" y="15" width="8" height="11" fill="#2ECC71"/>
+  <rect x="13" y="16" width="6" height="9" fill="#52D981"/>
+
+  <!-- Front alien endormi -->
+  <rect x="14" y="17" width="4" height="3" fill="#7FE5A0"/>
+
+  <!-- Yeux fermés (paisibles) -->
+  <rect x="13" y="19" width="2" height="1" fill="#1C1C1C"/>
+  <rect x="17" y="19" width="2" height="1" fill="#1C1C1C"/>
+
+  <!-- Paupières/cils -->
+  <rect x="13" y="20" width="2" height="1" fill="#27AE60"/>
+  <rect x="17" y="20" width="2" height="1" fill="#27AE60"/>
+
+  <!-- Petit nez -->
+  <rect x="15" y="21" width="1" height="1" fill="#27AE60"/>
+
+  <!-- Petite bouche paisible -->
+  <rect x="15" y="22" width="2" height="1" fill="#34495E"/>
+
+  <!-- Symbole alien endormi (lignes sur front) -->
+  <rect x="15" y="18" width="2" height="1" fill="#27AE60"/>
+
+  <!-- Corps flottant/levitant -->
+  <rect x="11" y="26" width="10" height="3" fill="#2ECC71"/>
+  <rect x="12" y="27" width="8" height="1" fill="#52D981"/>
+
+  <!-- Effet de lévitation (lignes ondulées sous le corps) -->
+  <rect x="12" y="29" width="2" height="1" fill="#E8F0F8" opacity="0.5"/>
+  <rect x="15" y="29" width="2" height="1" fill="#E8F0F8" opacity="0.5"/>
+  <rect x="18" y="29" width="2" height="1" fill="#E8F0F8" opacity="0.5"/>
+
+  <!-- ZZZ aliens (avec couleur alien) -->
+  <rect x="23" y="17" width="3" height="1" fill="#7FE5A0"/>
+  <rect x="24" y="18" width="2" height="1" fill="#7FE5A0"/>
+  <rect x="23" y="19" width="3" height="1" fill="#7FE5A0"/>
+
+  <rect x="25" y="14" width="3" height="1" fill="#52D981"/>
+  <rect x="26" y="15" width="2" height="1" fill="#52D981"/>
+  <rect x="25" y="16" width="3" height="1" fill="#52D981"/>
+
+  <rect x="27" y="11" width="2" height="1" fill="#2ECC71"/>
+  <rect x="28" y="12" width="2" height="1" fill="#2ECC71"/>
+  <rect x="27" y="13" width="2" height="1" fill="#2ECC71"/>
+</svg>

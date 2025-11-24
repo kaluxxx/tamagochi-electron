@@ -1,0 +1,68 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Chien Hungry - Affamé avec bave -->
+
+  <!-- Oreilles -->
+  <rect x="8" y="9" width="3" height="6" fill="#8B4513"/>
+  <rect x="9" y="10" width="1" height="4" fill="#A0522D"/>
+  <rect x="21" y="9" width="3" height="6" fill="#8B4513"/>
+  <rect x="22" y="10" width="1" height="4" fill="#A0522D"/>
+
+  <!-- Contour tête -->
+  <rect x="10" y="11" width="12" height="2" fill="#6B3410"/>
+  <rect x="9" y="13" width="14" height="11" fill="#6B3410"/>
+
+  <!-- Tête principale -->
+  <rect x="11" y="12" width="10" height="12" fill="#8B4513"/>
+
+  <!-- Museau clair -->
+  <rect x="11" y="16" width="10" height="8" fill="#D2B48C"/>
+  <rect x="12" y="17" width="8" height="6" fill="#E8D5B7"/>
+
+  <!-- Yeux suppliant/affamés -->
+  <rect x="13" y="14" width="2" height="4" fill="#2C3E50"/>
+  <rect x="13" y="14" width="1" height="1" fill="#FFFFFF"/>
+  <rect x="14" y="15" width="1" height="1" fill="#7F8C8D"/>
+
+  <rect x="17" y="14" width="2" height="4" fill="#2C3E50"/>
+  <rect x="17" y="14" width="1" height="1" fill="#FFFFFF"/>
+  <rect x="18" y="15" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- Nez -->
+  <rect x="15" y="18" width="2" height="2" fill="#1C1C1C"/>
+  <rect x="14" y="19" width="4" height="1" fill="#2C3E50"/>
+
+  <!-- Bouche grande ouverte -->
+  <rect x="14" y="20" width="4" height="3" fill="#2C3E50"/>
+  <rect x="15" y="21" width="2" height="1" fill="#FF6B9D"/>
+
+  <!-- Langue pendante affamée -->
+  <rect x="15" y="23" width="2" height="3" fill="#FF6B9D"/>
+  <rect x="16" y="24" width="1" height="1" fill="#FF8BB0"/>
+
+  <!-- Bave importante -->
+  <rect x="17" y="22" width="1" height="1" fill="#6CB4E8"/>
+  <rect x="17" y="23" width="1" height="3" fill="#6CB4E8"/>
+  <rect x="18" y="24" width="1" height="2" fill="#6CB4E8"/>
+  <rect x="18" y="26" width="1" height="1" fill="#4A90E2"/>
+
+  <!-- Corps avec ventre creux -->
+  <rect x="10" y="24" width="12" height="4" fill="#8B4513"/>
+  <rect x="11" y="25" width="10" height="2" fill="#A0522D"/>
+
+  <!-- Lignes ventre affamé -->
+  <rect x="13" y="25" width="6" height="1" fill="#6B3410"/>
+  <rect x="14" y="26" width="4" height="1" fill="#6B3410"/>
+
+  <!-- Pattes -->
+  <rect x="11" y="27" width="2" height="1" fill="#8B4513"/>
+  <rect x="19" y="27" width="2" height="1" fill="#8B4513"/>
+
+  <!-- Queue basse -->
+  <rect x="21" y="25" width="2" height="2" fill="#8B4513"/>
+  <rect x="22" y="26" width="1" height="1" fill="#A0522D"/>
+
+  <!-- Symbole nourriture (pensée) -->
+  <rect x="24" y="12" width="4" height="3" fill="#FFB366"/>
+  <rect x="25" y="13" width="2" height="1" fill="#E07020"/>
+  <rect x="25" y="11" width="1" height="1" fill="#FFB366"/>
+</svg>

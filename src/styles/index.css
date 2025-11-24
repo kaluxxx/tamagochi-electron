@@ -56,6 +56,17 @@
   h3 {
     @apply font-bold text-xl;
   }
+
+  /* Crisp pixel art rendering */
+  .image-pixelated {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .image-smooth {
+    image-rendering: auto;
+  }
 }
 
 @layer components {
