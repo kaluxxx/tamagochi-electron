@@ -68,7 +68,6 @@ src/
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./tamagotchi.db"
 }
 
 generator client {
