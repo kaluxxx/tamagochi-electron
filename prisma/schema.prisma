@@ -1,0 +1,33 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./tamagotchi.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Animal {
+  id        String    @id @default(uuid())
+  name      String
+  type      String    // "cat", "dog", "alien"
+  hunger    Int       @default(100)
+  happiness Int       @default(100)
+  health    Int       @default(100)
+  energy    Int       @default(100)
+  age       Int       @default(0) // in hours
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  isAlive   Boolean   @default(true)
+  actions   Action[]
+}
+
+model Action {
+  id         String   @id @default(uuid())
+  animalId   String
+  actionType String   // "feed", "play", "heal", "sleep"
+  timestamp  DateTime @default(now())
+  animal     Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+}
