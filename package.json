@@ -19,7 +19,11 @@
     "package": "npm run build && electron-builder",
     "package:win": "npm run build && electron-builder --win",
     "package:mac": "npm run build && electron-builder --mac",
-    "package:linux": "npm run build && electron-builder --linux"
+    "package:linux": "npm run build && electron-builder --linux",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [
     "electron",
@@ -60,6 +64,7 @@
     "prettier": "^3.6.2",
     "prisma": "^7.0.0",
     "tailwindcss": "^4.1.17",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite": "^7.2.4",
     "vite-plugin-electron": "^0.29.0",
