@@ -8,18 +8,6 @@ const __dirname = path.dirname(__filename)
 
 let mainWindow: BrowserWindow | null = null
 
-// Helper to wrap IPC handlers with error handling
-function handleIPC<T extends (...args: any[]) => Promise<any>>(handler: T) {
-  return async (...args: Parameters<T>) => {
-    try {
-      return await handler(...args)
-    } catch (error) {
-      console.error('IPC Handler error:', error)
-      throw error
-    }
-  }
-}
-
 async function createWindow() {
   // Initialize database connection
   try {

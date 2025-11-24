@@ -1,9 +1,38 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-primary-pink: #FF69B4;
+  --color-primary-blue: #4A90E2;
+  --color-primary-yellow: #FFD700;
+  --color-primary-purple: #9B59B6;
+  --color-success-green: #2ECC71;
+  --color-warning-orange: #F39C12;
+  --color-danger-red: #E74C3C;
+  --color-bg-light: #F8F9FA;
+  --color-bg-dark: #2C3E50;
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #7F8C8D;
+  --color-border: #BDC3C7;
+  --color-stat-high: #2ECC71;
+  --color-stat-medium: #F39C12;
+  --color-stat-low: #E74C3C;
+  --color-stat-bg: #ECF0F1;
+
+  --font-pixel: "Press Start 2P", cursive;
+  --font-sans: Nunito, sans-serif;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  --radius-card: 24px;
+  --radius-button: 16px;
+  --radius-stat: 12px;
+}
 
 @layer base {
   body {
