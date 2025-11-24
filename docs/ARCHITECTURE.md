@@ -76,26 +76,26 @@ generator client {
 }
 
 model Animal {
-  id            String    @id @default(uuid())
-  nom           String
-  type          String    // "chat", "chien", "alien"
-  faim          Int       @default(100)
-  bonheur       Int       @default(100)
-  sante         Int       @default(100)
-  energie       Int       @default(100)
-  age           Int       @default(0) // en heures
-  dateCreation  DateTime  @default(now())
-  derniereUpdate DateTime @default(now())
-  vivant        Boolean   @default(true)
-  actions       Action[]
+  id        String    @id @default(uuid())
+  name      String
+  type      String    // "cat", "dog", "alien"
+  hunger    Int       @default(100)
+  happiness Int       @default(100)
+  health    Int       @default(100)
+  energy    Int       @default(100)
+  age       Int       @default(0) // in hours
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  isAlive   Boolean   @default(true)
+  actions   Action[]
 }
 
 model Action {
-  id          String   @id @default(uuid())
-  animalId    String
-  typeAction  String   // "nourrir", "jouer", "soigner", "dormir"
-  timestamp   DateTime @default(now())
-  animal      Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  animalId   String
+  actionType String   // "feed", "play", "heal", "sleep"
+  timestamp  DateTime @default(now())
+  animal     Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
 }
 ```
 
@@ -167,35 +167,35 @@ export const useAnimalTick = (animalId: string) => {
 // electron/database.ts
 export const tickAnimal = async (animalId: string) => {
   const animal = await prisma.animal.findUnique({ where: { id: animalId } })
-  
+
   // Calcul du temps écoulé
   const now = new Date()
-  const lastUpdate = animal.derniereUpdate
+  const lastUpdate = animal.updatedAt
   const hoursElapsed = (now - lastUpdate) / (1000 * 60 * 60)
-  
+
   // Dégradation des stats
-  const newFaim = Math.max(0, animal.faim - hoursElapsed * 2)
-  const newBonheur = Math.max(0, animal.bonheur - hoursElapsed * 1.5)
-  const newEnergie = Math.max(0, animal.energie - hoursElapsed * 1)
-  
+  const newHunger = Math.max(0, animal.hunger - hoursElapsed * 2)
+  const newHappiness = Math.max(0, animal.happiness - hoursElapsed * 1.5)
+  const newEnergy = Math.max(0, animal.energy - hoursElapsed * 1)
+
   // Si faim ou bonheur < 20, santé diminue
-  const newSante = (newFaim < 20 || newBonheur < 20) 
-    ? Math.max(0, animal.sante - hoursElapsed * 3)
-    : animal.sante
-  
+  const newHealth = (newHunger < 20 || newHappiness < 20)
+    ? Math.max(0, animal.health - hoursElapsed * 3)
+    : animal.health
+
   // Mort si santé = 0
-  const vivant = newSante > 0
-  
+  const isAlive = newHealth > 0
+
   return prisma.animal.update({
     where: { id: animalId },
     data: {
-      faim: newFaim,
-      bonheur: newBonheur,
-      energie: newEnergie,
-      sante: newSante,
-      vivant,
+      hunger: newHunger,
+      happiness: newHappiness,
+      energy: newEnergy,
+      health: newHealth,
+      isAlive,
       age: animal.age + hoursElapsed,
-      derniereUpdate: now
+      updatedAt: now
     }
   })
 }
@@ -203,7 +203,7 @@ export const tickAnimal = async (animalId: string) => {
 
 ### Temps écoulé offline
 
-Quand l'app redémarre, on calcule le temps écoulé depuis `derniereUpdate` et on applique la dégradation en une fois.
+Quand l'app redémarre, on calcule le temps écoulé depuis `updatedAt` et on applique la dégradation en une fois.
 
 ## 7. Communication IPC (Electron)
 
@@ -308,9 +308,9 @@ export const sendNotification = (title: string, body: string) => {
 }
 
 // Appelé depuis le tick si stats < 30%
-if (animal.faim < 30) {
+if (animal.hunger < 30) {
   sendNotification(
-    `${animal.nom} a faim !`,
+    `${animal.name} a faim !`,
     'Il est temps de le nourrir 🍖'
   )
 }

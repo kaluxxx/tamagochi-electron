@@ -224,16 +224,16 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 | Champ | Type | Description |
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
-| `nom` | String | Nom de l'animal (3-20 caractères) |
-| `type` | String | Type (chat/chien/alien) |
-| `faim` | Integer | Niveau de faim (0-100) |
-| `bonheur` | Integer | Niveau de bonheur (0-100) |
-| `sante` | Integer | Niveau de santé (0-100) |
-| `energie` | Integer | Niveau d'énergie (0-100) |
+| `name` | String | Nom de l'animal (3-20 caractères) |
+| `type` | String | Type (cat/dog/alien) |
+| `hunger` | Integer | Niveau de faim (0-100) |
+| `happiness` | Integer | Niveau de bonheur (0-100) |
+| `health` | Integer | Niveau de santé (0-100) |
+| `energy` | Integer | Niveau d'énergie (0-100) |
 | `age` | Integer | Âge en heures |
-| `dateCreation` | DateTime | Date de création |
-| `derniereUpdate` | DateTime | Dernière mise à jour des stats |
-| `vivant` | Boolean | Statut vivant/mort |
+| `createdAt` | DateTime | Date de création |
+| `updatedAt` | DateTime | Dernière mise à jour des stats |
+| `isAlive` | Boolean | Statut vivant/mort |
 
 ### Table `Action`
 
@@ -241,7 +241,7 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
 | `animalId` | UUID | Référence vers Animal |
-| `typeAction` | String | Type (nourrir/jouer/soigner/dormir) |
+| `actionType` | String | Type (feed/play/heal/sleep) |
 | `timestamp` | DateTime | Horodatage de l'action |
 
 ### Relations
