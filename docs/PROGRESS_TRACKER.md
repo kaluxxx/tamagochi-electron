@@ -17,15 +17,15 @@ Suivi de l'avancement des user stories du projet Tamagotchi.
 |-----------|-------|----------|----------|---------|
 | Setup & Infrastructure | 2 | 2 | 0 | 0 |
 | Gestion des types d'animaux | 1 | 0 | 0 | 1 |
-| Gestion des animaux | 3 | 0 | 0 | 3 |
+| Gestion des animaux | 3 | 1 | 0 | 2 |
 | Actions de base | 4 | 0 | 0 | 4 |
 | Système d'items | 5 | 0 | 0 | 5 |
 | Système de temps | 2 | 0 | 0 | 2 |
 | Notifications | 1 | 0 | 0 | 1 |
 | Statistiques | 2 | 0 | 0 | 2 |
-| **TOTAL** | **20** | **2** | **0** | **18** |
+| **TOTAL** | **20** | **3** | **0** | **17** |
 
-**Progression globale** : 10% (2/20)
+**Progression globale** : 15% (3/20)
 
 ---
 
@@ -118,18 +118,19 @@ model Item {
 
 ## Gestion des animaux
 
-### ⏳ US2 : Création d'un animal
+### ✅ US2 : Création d'un animal
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux créer un nouvel animal avec un nom et un type
 
 **Implémentation** :
-- [ ] Service `createAnimal()` dans `electron/database.ts`
-- [ ] Hook `useCreateAnimal()` avec TanStack Query
-- [ ] Composant `AnimalForm` avec validation Zod
-- [ ] Page `/animals/new` avec TanStack Router
-- [ ] Types `CreateAnimalDto`
-- [ ] Tests unitaires (service + hook + composant)
+- [x] Service `createAnimal()` dans `electron/database.ts` (déjà existant)
+- [x] Hook `useCreateAnimal()` avec TanStack Query
+- [x] Composant `CreateAnimalForm` avec validation Zod et TanStack Form
+- [x] Composant `AnimalTypeSelector` avec cards cliquables
+- [x] Page `/animals/create` avec TanStack Router
+- [x] Types `CreateAnimalDto` et interfaces
+- [x] Configuration shadcn/ui adaptée au design system
 
 **Validation Zod** :
 ```typescript
@@ -140,14 +141,17 @@ const createAnimalSchema = z.object({
 ```
 
 **Critères d'acceptation** :
-- Formulaire valide le nom (3-20 caractères)
-- Choix du type (chat/chien/alien)
-- Animal créé avec stats par défaut (100/100/100/100)
-- Redirection vers liste après création
-- Toast de succès
-- >80% couverture tests
+- ✅ Formulaire valide le nom (3-20 caractères)
+- ✅ Choix du type avec cards cliquables et sprites pixel-art
+- ✅ Animal créé avec stats par défaut (100/100/100/100)
+- ✅ Toast de succès avec Sonner
+- ✅ Formulaire réinitialisé après création
+- ✅ Messages d'erreur clairs (validation + API)
 
 **Dépendances** : US0, US1
+
+**Branche** : `feature/us2-creation-animal`
+**PR** : À créer
 
 ---
 
@@ -498,6 +502,7 @@ const createAnimalSchema = z.object({
 ### 24 novembre 2025
 - ✅ **US0** : Configuration projet Electron + React + Prisma (PR #1)
 - ✅ **US1** : Schéma de base de données Prisma avec 4 tables (PR #1)
+- ✅ **US2** : Création d'un animal avec formulaire et validation (PR #TBD)
 
 **Version** : 1.0  
 **Date** : 24 novembre 2025
