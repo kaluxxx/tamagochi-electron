@@ -1,0 +1,56 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Health Stat - Cœur -->
+
+  <!-- Ombre -->
+  <rect x="11" y="24" width="10" height="1" fill="#D0D0D0"/>
+
+  <!-- Contour cœur -->
+  <!-- Bosses supérieures gauche -->
+  <rect x="11" y="10" width="4" height="2" fill="#C0392B"/>
+  <rect x="10" y="12" width="6" height="4" fill="#C0392B"/>
+
+  <!-- Bosses supérieures droite -->
+  <rect x="17" y="10" width="4" height="2" fill="#C0392B"/>
+  <rect x="16" y="12" width="6" height="4" fill="#C0392B"/>
+
+  <!-- Corps central -->
+  <rect x="10" y="16" width="12" height="2" fill="#C0392B"/>
+  <rect x="11" y="18" width="10" height="2" fill="#C0392B"/>
+  <rect x="12" y="20" width="8" height="2" fill="#C0392B"/>
+
+  <!-- Pointe du cœur -->
+  <rect x="14" y="22" width="4" height="1" fill="#C0392B"/>
+  <rect x="15" y="23" width="2" height="1" fill="#A93226"/>
+
+  <!-- Cœur principal (rouge vif) -->
+  <!-- Bosses supérieures -->
+  <rect x="12" y="11" width="2" height="4" fill="#E74C3C"/>
+  <rect x="18" y="11" width="2" height="4" fill="#E74C3C"/>
+
+  <!-- Corps -->
+  <rect x="11" y="13" width="10" height="8" fill="#E74C3C"/>
+  <rect x="12" y="14" width="8" height="7" fill="#EC7063"/>
+
+  <!-- Highlight (brillance) -->
+  <rect x="13" y="13" width="3" height="3" fill="#F1948A"/>
+  <rect x="14" y="14" width="2" height="2" fill="#FADBD8"/>
+  <rect x="15" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+  <!-- Ombre interne -->
+  <rect x="18" y="16" width="2" height="4" fill="#C0392B"/>
+  <rect x="16" y="19" width="3" height="2" fill="#C0392B"/>
+
+  <!-- Reflet sur les bosses -->
+  <rect x="12" y="12" width="1" height="2" fill="#F1948A"/>
+  <rect x="18" y="12" width="1" height="2" fill="#F1948A"/>
+
+  <!-- Petite croix blanche (symbole médical) -->
+  <rect x="15" y="16" width="2" height="1" fill="#FFFFFF"/>
+  <rect x="16" y="15" width="1" height="3" fill="#FFFFFF"/>
+
+  <!-- Particules de vie (petites étoiles vertes) -->
+  <rect x="8" y="13" width="1" height="1" fill="#2ECC71"/>
+  <rect x="23" y="13" width="1" height="1" fill="#2ECC71"/>
+  <rect x="9" y="11" width="1" height="1" fill="#52D981"/>
+  <rect x="22" y="11" width="1" height="1" fill="#52D981"/>
+</svg>
