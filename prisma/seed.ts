@@ -122,7 +122,7 @@ async function main() {
     },
   })
 
-  const console = await prisma.item.create({
+  const gameConsole = await prisma.item.create({
     data: {
       name: 'Console',
       type: 'toy',
@@ -181,7 +181,7 @@ async function main() {
 
   console.log('✅ Items created:', {
     food: [steak, milk, apple],
-    toys: [ball, plush, console],
+    toys: [ball, plush, gameConsole],
     medicine: [vitamin, vaccine, bandage],
   })
 

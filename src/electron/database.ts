@@ -1,35 +1,62 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+let prisma: PrismaClient
+
+function getPrismaClient() {
+  if (!prisma) {
+    prisma = new PrismaClient({
+      log: ['error', 'warn']
+    })
+  }
+  return prisma
+}
+
+export async function initializeDatabase() {
+  try {
+    const client = getPrismaClient()
+    await client.$connect()
+    console.log('Database connected successfully')
+  } catch (error) {
+    console.error('Failed to connect to database:', error)
+    throw error
+  }
+}
+
+export async function closeDatabase() {
+  if (prisma) {
+    await prisma.$disconnect()
+    console.log('Database disconnected')
+  }
+}
 
 // AnimalType operations
 export const getAllAnimalTypes = async () => {
-  return prisma.animalType.findMany()
+  return getPrismaClient().animalType.findMany()
 }
 
 export const getAnimalTypeById = async (id: string) => {
-  return prisma.animalType.findUnique({
+  return getPrismaClient().animalType.findUnique({
     where: { id }
   })
 }
 
 // Animal operations
 export const getAllAnimals = async () => {
-  return prisma.animal.findMany({
+  return getPrismaClient().animal.findMany({
     include: { type: true },
     orderBy: { createdAt: 'desc' }
   })
 }
 
 export const getAnimalById = async (id: string) => {
-  return prisma.animal.findUnique({
+  return getPrismaClient().animal.findUnique({
     where: { id },
     include: { type: true }
   })
 }
 
 export const createAnimal = async (data: { name: string; typeId: string }) => {
-  return prisma.animal.create({
+  return getPrismaClient().animal.create({
     data: {
       name: data.name,
       typeId: data.typeId
@@ -39,10 +66,10 @@ export const createAnimal = async (data: { name: string; typeId: string }) => {
 }
 
 export const feedAnimal = async (id: string) => {
-  const animal = await prisma.animal.findUnique({ where: { id } })
+  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return prisma.animal.update({
+  return getPrismaClient().animal.update({
     where: { id },
     data: {
       hunger: Math.min(100, animal.hunger + 20),
@@ -54,11 +81,11 @@ export const feedAnimal = async (id: string) => {
 }
 
 export const playWithAnimal = async (id: string) => {
-  const animal = await prisma.animal.findUnique({ where: { id } })
+  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
   if (animal.energy < 10) throw new Error('Not enough energy')
 
-  return prisma.animal.update({
+  return getPrismaClient().animal.update({
     where: { id },
     data: {
       happiness: Math.min(100, animal.happiness + 15),
@@ -70,10 +97,10 @@ export const playWithAnimal = async (id: string) => {
 }
 
 export const healAnimal = async (id: string) => {
-  const animal = await prisma.animal.findUnique({ where: { id } })
+  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return prisma.animal.update({
+  return getPrismaClient().animal.update({
     where: { id },
     data: {
       health: Math.min(100, animal.health + 20),
@@ -83,10 +110,10 @@ export const healAnimal = async (id: string) => {
 }
 
 export const sleepAnimal = async (id: string) => {
-  const animal = await prisma.animal.findUnique({ where: { id } })
+  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return prisma.animal.update({
+  return getPrismaClient().animal.update({
     where: { id },
     data: {
       energy: Math.min(100, animal.energy + 30),
@@ -97,7 +124,7 @@ export const sleepAnimal = async (id: string) => {
 }
 
 export const tickAnimal = async (id: string) => {
-  const animal = await prisma.animal.findUnique({
+  const animal = await getPrismaClient().animal.findUnique({
     where: { id },
     include: { type: true }
   })
@@ -121,7 +148,7 @@ export const tickAnimal = async (id: string) => {
   // Death if health = 0
   const isAlive = newHealth > 0
 
-  return prisma.animal.update({
+  return getPrismaClient().animal.update({
     where: { id },
     data: {
       hunger: newHunger,
@@ -138,7 +165,7 @@ export const tickAnimal = async (id: string) => {
 
 // Action operations
 export const getActionsByAnimalId = async (animalId: string) => {
-  return prisma.action.findMany({
+  return getPrismaClient().action.findMany({
     where: { animalId },
     include: { item: true },
     orderBy: { timestamp: 'desc' },
@@ -147,7 +174,7 @@ export const getActionsByAnimalId = async (animalId: string) => {
 }
 
 export const recordAction = async (animalId: string, actionType: string, itemId?: string) => {
-  return prisma.action.create({
+  return getPrismaClient().action.create({
     data: {
       animalId,
       actionType,
@@ -159,31 +186,31 @@ export const recordAction = async (animalId: string, actionType: string, itemId?
 
 // Item operations
 export const getAllItems = async () => {
-  return prisma.item.findMany()
+  return getPrismaClient().item.findMany()
 }
 
 export const getItemById = async (id: string) => {
-  return prisma.item.findUnique({
+  return getPrismaClient().item.findUnique({
     where: { id }
   })
 }
 
 export const getItemsByType = async (type: string) => {
-  return prisma.item.findMany({
+  return getPrismaClient().item.findMany({
     where: { type }
   })
 }
 
 export const useItem = async (animalId: string, itemId: string) => {
-  const animal = await prisma.animal.findUnique({ where: { id: animalId } })
-  const item = await prisma.item.findUnique({ where: { id: itemId } })
+  const animal = await getPrismaClient().animal.findUnique({ where: { id: animalId } })
+  const item = await getPrismaClient().item.findUnique({ where: { id: itemId } })
 
   if (!animal) throw new Error('Animal not found')
   if (!item) throw new Error('Item not found')
   if (animal.energy < item.energyCost) throw new Error('Not enough energy')
 
   // Apply item effects
-  const updatedAnimal = await prisma.animal.update({
+  const updatedAnimal = await getPrismaClient().animal.update({
     where: { id: animalId },
     data: {
       hunger: Math.min(100, animal.hunger + item.hungerBoost),

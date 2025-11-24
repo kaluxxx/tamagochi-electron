@@ -1,10 +1,35 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import * as animalService from './database'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 let mainWindow: BrowserWindow | null = null
 
-function createWindow() {
+// Helper to wrap IPC handlers with error handling
+function handleIPC<T extends (...args: any[]) => Promise<any>>(handler: T) {
+  return async (...args: Parameters<T>) => {
+    try {
+      return await handler(...args)
+    } catch (error) {
+      console.error('IPC Handler error:', error)
+      throw error
+    }
+  }
+}
+
+async function createWindow() {
+  // Initialize database connection
+  try {
+    await animalService.initializeDatabase()
+  } catch (error) {
+    console.error('Failed to initialize database:', error)
+    app.quit()
+    return
+  }
+
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
@@ -91,7 +116,8 @@ ipcMain.handle('items:useItem', async (_, animalId: string, itemId: string) => {
 
 app.whenReady().then(createWindow)
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+  await animalService.closeDatabase()
   if (process.platform !== 'darwin') {
     app.quit()
   }
