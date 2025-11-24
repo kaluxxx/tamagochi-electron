@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient({
-  datasourceUrl: 'file:./tamagotchi.db'
-})
+const prisma = new PrismaClient()
 
 // Animal operations
 export const getAllAnimals = async () => {
