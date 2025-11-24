@@ -74,27 +74,56 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model AnimalType {
+  id                 String   @id @default(uuid())
+  name               String   @unique  // "cat", "dog", "alien"
+  displayName        String   // "Chat", "Chien", "Alien"
+  hungerDecayRate    Float    @default(2.0)
+  happinessDecayRate Float    @default(1.5)
+  energyDecayRate    Float    @default(1.0)
+  healthDecayRate    Float    @default(3.0)
+  emoji              String   // 🐱 🐶 👽
+  animals            Animal[]
+}
+
 model Animal {
-  id        String    @id @default(uuid())
-  name      String
-  type      String    // "cat", "dog", "alien"
-  hunger    Int       @default(100)
-  happiness Int       @default(100)
-  health    Int       @default(100)
-  energy    Int       @default(100)
-  age       Int       @default(0) // in hours
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  isAlive   Boolean   @default(true)
-  actions   Action[]
+  id          String     @id @default(uuid())
+  name        String
+  typeId      String
+  hunger      Int        @default(100)
+  happiness   Int        @default(100)
+  health      Int        @default(100)
+  energy      Int        @default(100)
+  age         Int        @default(0) // in hours
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  isAlive     Boolean    @default(true)
+  type        AnimalType @relation(fields: [typeId], references: [id])
+  actions     Action[]
 }
 
 model Action {
   id         String   @id @default(uuid())
   animalId   String
   actionType String   // "feed", "play", "heal", "sleep"
+  itemId     String?
   timestamp  DateTime @default(now())
   animal     Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  item       Item?    @relation(fields: [itemId], references: [id])
+}
+
+model Item {
+  id             String   @id @default(uuid())
+  name           String
+  type           String   // "food", "toy", "medicine"
+  hungerBoost    Int      @default(0)
+  happinessBoost Int      @default(0)
+  healthBoost    Int      @default(0)
+  energyBoost    Int      @default(0)
+  energyCost     Int      @default(0)
+  emoji          String
+  description    String
+  actions        Action[]
 }
 ```
 

@@ -219,13 +219,26 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 ## Modèle de données
 
+### Table `AnimalType`
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | UUID | Identifiant unique |
+| `name` | String | Nom technique unique (cat/dog/alien) |
+| `displayName` | String | Nom d'affichage (Chat/Chien/Alien) |
+| `hungerDecayRate` | Float | Taux de dégradation de la faim par heure (défaut: 2.0) |
+| `happinessDecayRate` | Float | Taux de dégradation du bonheur par heure (défaut: 1.5) |
+| `energyDecayRate` | Float | Taux de dégradation de l'énergie par heure (défaut: 1.0) |
+| `healthDecayRate` | Float | Taux de dégradation de la santé par heure (défaut: 3.0) |
+| `emoji` | String | Emoji représentant le type (🐱/🐶/👽) |
+
 ### Table `Animal`
 
 | Champ | Type | Description |
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
 | `name` | String | Nom de l'animal (3-20 caractères) |
-| `type` | String | Type (cat/dog/alien) |
+| `typeId` | UUID | Référence vers AnimalType |
 | `hunger` | Integer | Niveau de faim (0-100) |
 | `happiness` | Integer | Niveau de bonheur (0-100) |
 | `health` | Integer | Niveau de santé (0-100) |
@@ -242,12 +255,49 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 | `id` | UUID | Identifiant unique |
 | `animalId` | UUID | Référence vers Animal |
 | `actionType` | String | Type (feed/play/heal/sleep) |
+| `itemId` | UUID (nullable) | Référence vers Item utilisé (optionnel) |
 | `timestamp` | DateTime | Horodatage de l'action |
+
+### Table `Item`
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | UUID | Identifiant unique |
+| `name` | String | Nom de l'objet |
+| `type` | String | Type (food/toy/medicine) |
+| `hungerBoost` | Integer | Bonus de faim (0-100) |
+| `happinessBoost` | Integer | Bonus de bonheur (0-100) |
+| `healthBoost` | Integer | Bonus de santé (0-100) |
+| `energyBoost` | Integer | Bonus d'énergie (0-100) |
+| `energyCost` | Integer | Coût en énergie pour utiliser l'objet |
+| `emoji` | String | Emoji représentant l'objet |
+| `description` | String | Description de l'objet |
 
 ### Relations
 
+- Un `AnimalType` a plusieurs `Animal` (One-to-Many)
 - Un `Animal` a plusieurs `Action` (One-to-Many)
+- Un `Animal` appartient à un `AnimalType` (Many-to-One)
+- Un `Item` peut être utilisé dans plusieurs `Action` (One-to-Many)
+- Une `Action` peut utiliser un `Item` (Many-to-One, optionnel)
 - Suppression en cascade : si animal supprimé → actions supprimées
+
+### Exemples d'items
+
+**Nourriture (food):**
+- 🍖 Steak : +30 hunger, -5 energy
+- 🥛 Lait : +15 hunger, +10 happiness
+- 🍎 Pomme : +10 hunger, +5 health
+
+**Jouets (toy):**
+- 🎾 Balle : +20 happiness, -15 energy
+- 🧸 Peluche : +15 happiness, -5 energy
+- 🎮 Console : +25 happiness, -20 energy
+
+**Médicaments (medicine):**
+- 💊 Vitamine : +20 health, +10 energy
+- 💉 Vaccin : +30 health
+- 🩹 Bandage : +15 health
 
 ---
 
