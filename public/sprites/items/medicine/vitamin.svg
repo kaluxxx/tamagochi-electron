@@ -1,0 +1,49 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Vitamin - Pilule/gélule -->
+
+  <!-- Ombre -->
+  <rect x="10" y="22" width="12" height="1" fill="#D0D0D0"/>
+
+  <!-- Contour pilule -->
+  <rect x="9" y="11" width="14" height="2" fill="#E67E22"/>
+  <rect x="8" y="13" width="16" height="6" fill="#E67E22"/>
+  <rect x="9" y="19" width="14" height="2" fill="#CA6F1E"/>
+
+  <!-- Corps de la pilule (partie orange) -->
+  <rect x="10" y="12" width="12" height="8" fill="#F39C12"/>
+  <rect x="11" y="13" width="10" height="6" fill="#F8C471"/>
+
+  <!-- Partie supérieure (capsule orange) -->
+  <rect x="12" y="13" width="8" height="3" fill="#F5B041"/>
+  <rect x="13" y="14" width="6" height="1" fill="#FAD7A0"/>
+
+  <!-- Highlight -->
+  <rect x="13" y="13" width="3" height="2" fill="#FAD7A0"/>
+  <rect x="14" y="14" width="1" height="1" fill="#FFFFFF"/>
+
+  <!-- Séparation capsule (milieu) -->
+  <rect x="10" y="16" width="12" height="1" fill="#CA6F1E"/>
+  <rect x="11" y="16" width="10" height="1" fill="#E67E22"/>
+
+  <!-- Partie inférieure (capsule jaune) -->
+  <rect x="12" y="17" width="8" height="3" fill="#F1C40F"/>
+  <rect x="13" y="18" width="6" height="1" fill="#F9E79F"/>
+
+  <!-- Highlight partie jaune -->
+  <rect x="13" y="17" width="2" height="1" fill="#FCF3CF"/>
+
+  <!-- Ombre interne -->
+  <rect x="19" y="14" width="1" height="4" fill="#E67E22"/>
+
+  <!-- Lettres "VIT" -->
+  <rect x="13" y="14" width="1" height="2" fill="#E67E22"/>
+  <rect x="15" y="14" width="1" height="2" fill="#E67E22"/>
+  <rect x="17" y="14" width="1" height="2" fill="#E67E22"/>
+  <rect x="14" y="15" width="1" height="1" fill="#E67E22"/>
+
+  <!-- Petites étoiles/brillance autour -->
+  <rect x="7" y="12" width="1" height="1" fill="#F8C471"/>
+  <rect x="24" y="12" width="1" height="1" fill="#F8C471"/>
+  <rect x="8" y="10" width="1" height="1" fill="#FAD7A0"/>
+  <rect x="23" y="10" width="1" height="1" fill="#FAD7A0"/>
+</svg>
