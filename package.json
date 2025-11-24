@@ -1,0 +1,35 @@
+{
+  "name": "tamagotchi-electron",
+  "version": "0.1.0",
+  "description": "Application desktop de gestion d'animaux virtuels type Tamagotchi",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css}\"",
+    "electron:dev": "vite",
+    "electron:build": "electron-builder",
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux"
+  },
+  "keywords": [
+    "electron",
+    "tamagotchi",
+    "react",
+    "prisma",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
