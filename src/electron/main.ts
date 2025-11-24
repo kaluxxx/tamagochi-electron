@@ -26,7 +26,16 @@ function createWindow() {
   }
 }
 
-// IPC Handlers
+// IPC Handlers - AnimalTypes
+ipcMain.handle('animalTypes:getAll', async () => {
+  return animalService.getAllAnimalTypes()
+})
+
+ipcMain.handle('animalTypes:getById', async (_, id: string) => {
+  return animalService.getAnimalTypeById(id)
+})
+
+// IPC Handlers - Animals
 ipcMain.handle('animals:getAll', async () => {
   return animalService.getAllAnimals()
 })
@@ -61,6 +70,23 @@ ipcMain.handle('animals:tick', async (_, id: string) => {
 
 ipcMain.handle('actions:getByAnimalId', async (_, animalId: string) => {
   return animalService.getActionsByAnimalId(animalId)
+})
+
+// IPC Handlers - Items
+ipcMain.handle('items:getAll', async () => {
+  return animalService.getAllItems()
+})
+
+ipcMain.handle('items:getById', async (_, id: string) => {
+  return animalService.getItemById(id)
+})
+
+ipcMain.handle('items:getByType', async (_, type: string) => {
+  return animalService.getItemsByType(type)
+})
+
+ipcMain.handle('items:useItem', async (_, animalId: string, itemId: string) => {
+  return animalService.useItem(animalId, itemId)
 })
 
 app.whenReady().then(createWindow)
