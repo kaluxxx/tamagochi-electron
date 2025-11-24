@@ -63,6 +63,10 @@ Thumbs.db
 coverage/
 .nyc_output/
 
+# Database (Prisma)
+prisma/*.db
+prisma/*.db-journal
+
 # Misc
 .sass-cache
 .eslintcache
