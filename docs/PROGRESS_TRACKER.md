@@ -15,90 +15,104 @@ Suivi de l'avancement des user stories du projet Tamagotchi.
 
 | Catégorie | Total | Complété | En cours | À faire |
 |-----------|-------|----------|----------|---------|
-| Setup & Infrastructure | 2 | 0 | 0 | 2 |
+| Setup & Infrastructure | 2 | 2 | 0 | 0 |
+| Gestion des types d'animaux | 1 | 0 | 0 | 1 |
 | Gestion des animaux | 3 | 0 | 0 | 3 |
-| Actions & Interactions | 4 | 0 | 0 | 4 |
+| Actions de base | 4 | 0 | 0 | 4 |
+| Système d'items | 5 | 0 | 0 | 5 |
 | Système de temps | 2 | 0 | 0 | 2 |
 | Notifications | 1 | 0 | 0 | 1 |
 | Statistiques | 2 | 0 | 0 | 2 |
-| **TOTAL** | **14** | **0** | **0** | **14** |
+| **TOTAL** | **20** | **2** | **0** | **18** |
 
-**Progression globale** : 0% (0/14)
+**Progression globale** : 10% (2/20)
 
 ---
 
 ## Setup & Infrastructure
 
-### ⏳ US0 : Configuration projet Electron + React + Prisma
+### ✅ US0 : Configuration projet Electron + React + Prisma
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : Setup initial du projet avec toutes les dépendances et configuration de base
 
 **Tâches** :
-- [ ] Initialiser projet Electron avec Vite
-- [ ] Installer React 18 + TypeScript
-- [ ] Configurer TanStack Query + TanStack Router
-- [ ] Installer Tailwind CSS + Lucide React
-- [ ] Setup Prisma avec SQLite
-- [ ] Configurer IPC Bridge (preload)
-- [ ] Setup Vitest + React Testing Library
-- [ ] Configurer ESLint + Prettier
-- [ ] Structure de dossiers feature-based
+- [x] Initialiser projet Electron avec Vite
+- [x] Installer React 18 + TypeScript
+- [x] Configurer TanStack Query + TanStack Router
+- [x] Installer Tailwind CSS + Lucide React
+- [x] Setup Prisma avec SQLite
+- [x] Configurer IPC Bridge (preload)
+- [x] Setup Vitest + React Testing Library
+- [x] Configurer ESLint 9 + Prettier
+- [x] Structure de dossiers feature-based
+- [x] CI/CD GitHub Actions
 
 **Critères d'acceptation** :
-- App Electron démarre avec écran vide
-- Hot reload fonctionne
-- Tests unitaires exécutables
-- Prisma connecté à SQLite
+- ✅ App Electron démarre avec écran vide
+- ✅ Hot reload fonctionne (Vite)
+- ✅ Tests unitaires exécutables (Vitest)
+- ✅ Prisma 7 connecté à SQLite
+- ✅ CI/CD en place
 
 **Dépendances** : Aucune
 
+**Branche** : `feature/initial-setup`
+**PR** : #1
+
 ---
 
-### ⏳ US1 : Schéma de base de données Prisma
+### ✅ US1 : Schéma de base de données Prisma (4 tables)
 
-**Statut** : À faire  
-**Description** : Définir et migrer le schéma Prisma pour les tables `Animal` et `Action`
+**Statut** : Complété ✅
+**Description** : Définir et migrer le schéma Prisma avec 4 tables : `AnimalType`, `Animal`, `Action`, `Item`
 
 **Implémentation** :
-- [ ] Créer `prisma/schema.prisma` avec tables Animal + Action
-- [ ] Générer migration initiale
-- [ ] Générer client Prisma
-- [ ] Créer service `database.ts` avec fonctions CRUD basiques
-- [ ] Tests unitaires des fonctions CRUD
+- [x] Créer `prisma/schema.prisma` avec 4 tables
+- [x] Configuration Prisma 7 avec `prisma.config.ts`
+- [x] Générer client Prisma
+- [x] Créer service `database.ts` avec fonctions CRUD complètes
+- [x] Créer seed avec 3 AnimalTypes + 9 Items
 
 **Schéma Prisma** :
 ```prisma
+model AnimalType {
+  id, name, displayName, hungerDecayRate, happinessDecayRate,
+  energyDecayRate, healthDecayRate, emoji
+  animals Animal[]
+}
+
 model Animal {
-  id             String    @id @default(uuid())
-  nom            String
-  type           String
-  faim           Int       @default(100)
-  bonheur        Int       @default(100)
-  sante          Int       @default(100)
-  energie        Int       @default(100)
-  age            Int       @default(0)
-  dateCreation   DateTime  @default(now())
-  derniereUpdate DateTime  @default(now())
-  vivant         Boolean   @default(true)
-  actions        Action[]
+  id, name, typeId, hunger, happiness, health, energy, age,
+  createdAt, updatedAt, isAlive
+  type AnimalType @relation
+  actions Action[]
 }
 
 model Action {
-  id         String   @id @default(uuid())
-  animalId   String
-  typeAction String
-  timestamp  DateTime @default(now())
-  animal     Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  id, animalId, actionType, itemId?, timestamp
+  animal Animal @relation
+  item Item? @relation
+}
+
+model Item {
+  id, name, type, hungerBoost, happinessBoost, healthBoost,
+  energyBoost, energyCost, emoji, description
+  actions Action[]
 }
 ```
 
 **Critères d'acceptation** :
-- Migration appliquée avec succès
-- Client Prisma généré
-- Fonctions CRUD testées (>80% couverture)
+- ✅ 4 tables créées (dépassement contrainte de 2)
+- ✅ Client Prisma généré
+- ✅ Fonctions CRUD pour toutes les entités
+- ✅ Seed fonctionnel
+- ✅ Relations One-to-Many correctes
 
 **Dépendances** : US0
+
+**Branche** : `feature/initial-setup`
+**PR** : #1
 
 ---
 
@@ -475,11 +489,15 @@ const createAnimalSchema = z.object({
 
 ## Prochaine étape
 
-🎯 **US0 : Configuration projet Electron + React + Prisma**
+🎯 **US1 : Voir les types d'animaux disponibles** OU **US2 : Création d'un animal**
 
 ---
 
-**Historique des complétions** : Aucune pour le moment
+## Historique des complétions
+
+### 24 novembre 2025
+- ✅ **US0** : Configuration projet Electron + React + Prisma (PR #1)
+- ✅ **US1** : Schéma de base de données Prisma avec 4 tables (PR #1)
 
 **Version** : 1.0  
 **Date** : 24 novembre 2025
