@@ -12,7 +12,10 @@ export default defineConfig({
         entry: 'src/electron/main.ts',
         vite: {
           build: {
-            outDir: 'dist-electron'
+            outDir: 'dist-electron',
+            rollupOptions: {
+              external: ['@prisma/client', '.prisma/client']
+            }
           }
         }
       },
@@ -37,5 +40,8 @@ export default defineConfig({
   },
   server: {
     port: 5173
+  },
+  optimizeDeps: {
+    exclude: ['@prisma/client', '.prisma/client']
   }
 })
