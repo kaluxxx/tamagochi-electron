@@ -54,20 +54,34 @@ npm run type-check            # TypeScript check
 - **Feature-based structure:** `src/features/{animals,actions,stats}` with components/hooks/services/types per feature
 - **Layered architecture:** Components → Hooks → Services → IPC → Electron Main → Prisma → SQLite
 - **IPC via Context Bridge:** Use `window.api.*` methods (defined in `electron/preload.ts`)
-- **Time system:** Tick every 10s, calculate elapsed time from `derniereUpdate`, handle offline time in batch
+- **Time system:** Tick every 10s, calculate elapsed time from `updatedAt`, handle offline time in batch
 - **Stats degradation:** Hunger -2/h, Happiness -1.5/h, Energy -1/h, Health -3/h (only if hunger or happiness < 20)
 - **Type safety:** Strict TypeScript, Prisma-generated types, no `any`
 
 ## Database Schema
 
+**4 tables pour gestion complète:**
+
 ```prisma
+model AnimalType {
+  id, name, displayName, hungerDecayRate, happinessDecayRate, energyDecayRate, healthDecayRate, emoji
+  animals Animal[]
+}
+
 model Animal {
-  id, nom, type, faim, bonheur, sante, energie, age, dateCreation, derniereUpdate, vivant
+  id, name, typeId, hunger, happiness, health, energy, age, createdAt, updatedAt, isAlive
+  type AnimalType @relation
   actions Action[]
 }
 
 model Action {
-  id, animalId, typeAction, timestamp
+  id, animalId, actionType, itemId?, timestamp
   animal Animal @relation
+  item Item? @relation
+}
+
+model Item {
+  id, name, type, hungerBoost, happinessBoost, healthBoost, energyBoost, energyCost, emoji, description
+  actions Action[]
 }
 ```
