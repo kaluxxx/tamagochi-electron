@@ -60,14 +60,28 @@ npm run type-check            # TypeScript check
 
 ## Database Schema
 
+**4 tables pour gestion complète:**
+
 ```prisma
+model AnimalType {
+  id, name, displayName, hungerDecayRate, happinessDecayRate, energyDecayRate, healthDecayRate, emoji
+  animals Animal[]
+}
+
 model Animal {
-  id, name, type, hunger, happiness, health, energy, age, createdAt, updatedAt, isAlive
+  id, name, typeId, hunger, happiness, health, energy, age, createdAt, updatedAt, isAlive
+  type AnimalType @relation
   actions Action[]
 }
 
 model Action {
-  id, animalId, actionType, timestamp
+  id, animalId, actionType, itemId?, timestamp
   animal Animal @relation
+  item Item? @relation
+}
+
+model Item {
+  id, name, type, hungerBoost, happinessBoost, healthBoost, energyBoost, energyCost, emoji, description
+  actions Action[]
 }
 ```
