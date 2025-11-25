@@ -1,4 +1,5 @@
 import type { Animal, AnimalType, CreateAnimalInput } from '../types'
+import type { TickResult } from '@/shared/types/window'
 
 /**
  * Service API pour les opérations liées aux animaux
@@ -44,7 +45,7 @@ export const animalApi = {
     return window.api.animals.sleep(id)
   },
 
-  tickAnimal: async (id: string): Promise<Animal> => {
+  tickAnimal: async (id: string): Promise<TickResult> => {
     return window.api.animals.tick(id)
   },
 }

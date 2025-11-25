@@ -45,9 +45,12 @@ export function GameView({ animal }: AnimalGameViewProps) {
     handleAction,
     handleUseItem,
     isActionDisabled,
+    canPlay,
+    canSleep,
   } = useActions({
     animalId: animal.id,
     isAlive: animal.isAlive,
+    energy: animal.energy,
   })
 
   const handleItemUsed = () => {
@@ -111,6 +114,8 @@ export function GameView({ animal }: AnimalGameViewProps) {
             isPlaying={isPlaying}
             isFeeding={isFeeding}
             isHealing={isHealing}
+            canPlay={canPlay}
+            canSleep={canSleep}
           />
         </CollapsiblePanel>
         <CollapsiblePanel

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('api', {
@@ -30,5 +31,16 @@ contextBridge.exposeInMainWorld('api', {
   },
   history: {
     getByAnimalId: (animalId: string, limit?: number) => ipcRenderer.invoke('history:getByAnimalId', animalId, limit),
+  },
+  // Event listeners for Main → Renderer communication
+  onAnimalsUpdated: (callback: () => void) => {
+    const handler = () => callback()
+    ipcRenderer.on('animals:updated', handler)
+    return () => ipcRenderer.removeListener('animals:updated', handler)
+  },
+  onAnimalDied: (callback: (animal: unknown) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, animal: unknown) => callback(animal)
+    ipcRenderer.on('animal:died', handler)
+    return () => ipcRenderer.removeListener('animal:died', handler)
   }
 })

@@ -11,6 +11,8 @@ interface ActionsPanelProps {
   isPlaying: boolean
   isFeeding: boolean
   isHealing: boolean
+  canPlay: boolean
+  canSleep: boolean
 }
 
 interface ActionButtonProps {
@@ -20,24 +22,33 @@ interface ActionButtonProps {
   onClick: () => void
   isDisabled: boolean
   isActive: boolean
+  tooltip?: string
 }
 
-function ActionButton({ label, activeLabel, icon, onClick, isDisabled, isActive }: ActionButtonProps) {
+function ActionButton({ label, activeLabel, icon, onClick, isDisabled, isActive, tooltip }: ActionButtonProps) {
   return (
-    <button
-      onClick={onClick}
-      disabled={isDisabled}
-      className={cn(
-        'w-full bg-[#87CEEB] border-4 border-black p-3 flex items-center gap-3',
-        'font-pixel text-[10px] text-black uppercase',
-        'transition-all active:translate-y-1',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
-        'hover:bg-[#5DADE2]'
+    <div className="relative group">
+      <button
+        onClick={onClick}
+        disabled={isDisabled}
+        className={cn(
+          'w-full bg-[#87CEEB] border-4 border-black p-3 flex items-center gap-3',
+          'font-pixel text-[10px] text-black uppercase',
+          'transition-all active:translate-y-1',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'hover:bg-[#5DADE2]'
+        )}
+      >
+        <SpriteImage src={icon} alt={label} className="w-8 h-8" pixelated />
+        <span>{isActive ? activeLabel : label}</span>
+      </button>
+      {tooltip && isDisabled && (
+        <div className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-black text-white text-[8px] font-pixel rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+          {tooltip}
+          <div className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-black" />
+        </div>
       )}
-    >
-      <SpriteImage src={icon} alt={label} className="w-8 h-8" pixelated />
-      <span>{isActive ? activeLabel : label}</span>
-    </button>
+    </div>
   )
 }
 
@@ -48,6 +59,8 @@ export function ActionsPanel({
   isPlaying,
   isFeeding,
   isHealing,
+  canPlay,
+  canSleep,
 }: ActionsPanelProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
@@ -66,8 +79,9 @@ export function ActionsPanel({
           activeLabel="JOUE..."
           icon={getActionSprite('play')}
           onClick={() => onAction('play')}
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || !canPlay}
           isActive={isPlaying}
+          tooltip={!canPlay ? "Énergie insuffisante (min 20%)" : undefined}
         />
 
         <ActionButton
@@ -75,8 +89,9 @@ export function ActionsPanel({
           activeLabel="DORT..."
           icon={getActionSprite('sleep')}
           onClick={() => onAction('sleep')}
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || !canSleep}
           isActive={isSleeping}
+          tooltip={!canSleep ? "Pas assez fatigué (max 80%)" : undefined}
         />
 
         <ActionButton

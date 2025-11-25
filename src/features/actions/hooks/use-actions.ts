@@ -6,6 +6,7 @@ import type { ActionType, ActiveAction } from '../types'
 interface UseActionsProps {
   animalId: string
   isAlive: boolean
+  energy: number
 }
 
 interface UseActionsReturn {
@@ -24,9 +25,11 @@ interface UseActionsReturn {
   handleAction: (action: ActionType) => void
   handleUseItem: (itemId: string, onComplete: () => void) => void
   isActionDisabled: boolean
+  canPlay: boolean
+  canSleep: boolean
 }
 
-export function useActions({ animalId, isAlive }: UseActionsProps): UseActionsReturn {
+export function useActions({ animalId, isAlive, energy }: UseActionsProps): UseActionsReturn {
   // Compteur pour forcer le re-render toutes les secondes
   const [tick, setTick] = useState(0)
 
@@ -101,6 +104,8 @@ export function useActions({ animalId, isAlive }: UseActionsProps): UseActionsRe
 
   const activeAction: ActiveAction = activeActionType
   const isActionDisabled = !isAlive || hasActiveAction
+  const canPlay = energy >= 20
+  const canSleep = energy <= 80
 
   return {
     actionInProgress,
@@ -118,5 +123,7 @@ export function useActions({ animalId, isAlive }: UseActionsProps): UseActionsRe
     handleAction,
     handleUseItem,
     isActionDisabled,
+    canPlay,
+    canSleep,
   }
 }
