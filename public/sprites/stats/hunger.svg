@@ -1,42 +1,32 @@
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
-  <!-- Hunger Stat - Cuisse de poulet -->
+  <!-- Hunger Stat - Pomme rouge simple -->
 
-  <!-- Ombre -->
-  <rect x="12" y="25" width="8" height="1" fill="#D0D0D0"/>
+  <!-- Tige -->
+  <rect x="15" y="7" width="2" height="3" fill="#8B4513"/>
 
-  <!-- Os (partie supérieure) -->
-  <rect x="14" y="8" width="4" height="3" fill="#F5F5DC"/>
-  <rect x="15" y="9" width="2" height="1" fill="#FFFFFF"/>
+  <!-- Feuille -->
+  <rect x="17" y="8" width="3" height="1" fill="#2ECC71"/>
+  <rect x="18" y="9" width="2" height="1" fill="#2ECC71"/>
+  <rect x="18" y="7" width="2" height="1" fill="#27AE60"/>
 
-  <!-- Contour viande -->
-  <rect x="13" y="11" width="6" height="2" fill="#8B2500"/>
-  <rect x="12" y="13" width="8" height="8" fill="#8B2500"/>
-  <rect x="13" y="21" width="6" height="2" fill="#6B1A00"/>
+  <!-- Contour de la pomme -->
+  <rect x="11" y="10" width="10" height="2" fill="#B22222"/>
+  <rect x="10" y="12" width="12" height="8" fill="#B22222"/>
+  <rect x="11" y="20" width="10" height="3" fill="#B22222"/>
+  <rect x="12" y="23" width="8" height="1" fill="#8B0000"/>
 
-  <!-- Corps de la viande (dorée/grillée) -->
-  <rect x="14" y="12" width="4" height="10" fill="#D2691E"/>
-  <rect x="15" y="13" width="2" height="8" fill="#CD5C5C"/>
+  <!-- Corps de la pomme (rouge vif) -->
+  <rect x="12" y="11" width="8" height="11" fill="#DC143C"/>
 
-  <!-- Marques de grill -->
-  <rect x="14" y="14" width="4" height="1" fill="#8B2500"/>
-  <rect x="13" y="16" width="6" height="1" fill="#8B2500"/>
-  <rect x="14" y="18" width="4" height="1" fill="#8B2500"/>
-  <rect x="13" y="20" width="6" height="1" fill="#8B2500"/>
+  <!-- Reflet brillant -->
+  <rect x="13" y="13" width="2" height="2" fill="#FF6B6B"/>
+  <rect x="14" y="14" width="2" height="1" fill="#FFB3B3"/>
+  <rect x="14" y="12" width="1" height="1" fill="#FFFFFF"/>
 
-  <!-- Highlights (viande juteuse) -->
-  <rect x="15" y="13" width="2" height="2" fill="#E9967A"/>
-  <rect x="16" y="14" width="1" height="1" fill="#F5DEB3"/>
+  <!-- Détails ombres -->
+  <rect x="18" y="18" width="2" height="3" fill="#A52A2A"/>
+  <rect x="12" y="21" width="2" height="1" fill="#8B0000"/>
 
-  <!-- Texture/gras -->
-  <rect x="14" y="15" width="1" height="1" fill="#F5DEB3"/>
-  <rect x="17" y="17" width="1" height="1" fill="#F5DEB3"/>
-  <rect x="15" y="19" width="1" height="1" fill="#F5DEB3"/>
-
-  <!-- Os inférieur (bout) -->
-  <rect x="15" y="23" width="2" height="2" fill="#F5F5DC"/>
-  <rect x="15" y="24" width="2" height="1" fill="#FFFFFF"/>
-
-  <!-- Brillance sur l'os -->
-  <rect x="15" y="9" width="1" height="1" fill="#FFFFFF"/>
-  <rect x="15" y="24" width="1" height="1" fill="#FFFFFF"/>
+  <!-- Ombre au sol -->
+  <rect x="12" y="25" width="8" height="1" fill="#D0D0D0" opacity="0.6"/>
 </svg>

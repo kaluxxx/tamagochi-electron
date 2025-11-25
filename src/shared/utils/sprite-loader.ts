@@ -5,7 +5,7 @@
  * All sprites are stored in public/sprites/ directory.
  */
 
-export type MoodType = 'happy' | 'sad' | 'hungry' | 'sleeping' | 'neutral'
+export type MoodType = 'happy' | 'sad' | 'hungry' | 'sleeping' | 'playing' | 'tired' | 'neutral' | 'dead'
 export type ItemType = 'food' | 'toy' | 'medicine'
 export type StatType = 'hunger' | 'happiness' | 'health' | 'energy'
 export type ActionType = 'feed' | 'play' | 'heal' | 'sleep'
@@ -60,6 +60,7 @@ export const getUISprite = (uiElement: string): string => {
 /**
  * Calculate the mood of an animal based on its stats
  * @param stats - The animal's current stats
+ * @param activeAction - Current active action ('sleeping' | 'playing')
  * @returns The appropriate mood type
  */
 export const calculateMood = (stats: {
@@ -67,11 +68,15 @@ export const calculateMood = (stats: {
   happiness: number
   energy: number
   health: number
-}): MoodType => {
+}, activeAction?: 'sleeping' | 'playing'): MoodType => {
+  // Actions actives prioritaires
+  if (activeAction === 'sleeping') return 'sleeping'
+  if (activeAction === 'playing') return 'playing'
+
   const { hunger, happiness, energy } = stats
 
-  // Priority: sleeping > hungry > sad > happy > neutral
-  if (energy < 30) return 'sleeping'
+  // Priority: tired > hungry > sad > happy > neutral
+  if (energy < 30) return 'tired'
   if (hunger < 30) return 'hungry'
   if (happiness < 30) return 'sad'
   if (happiness > 60 && hunger > 60) return 'happy'
@@ -90,14 +95,4 @@ export const preloadSprites = (spritePaths: string[]): void => {
     const img = new window.Image()
     img.src = path
   })
-}
-
-/**
- * Get all animal sprites for a specific type (for preloading)
- * @param animalType - The animal type
- * @returns Array of all sprite paths for that animal
- */
-export const getAllAnimalSprites = (animalType: string): string[] => {
-  const moods: MoodType[] = ['happy', 'sad', 'hungry', 'sleeping', 'neutral']
-  return moods.map(mood => getAnimalSprite(animalType, mood))
 }

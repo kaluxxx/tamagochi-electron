@@ -116,6 +116,19 @@
 }
 
 @layer utilities {
+  /* Pixel art scene styling - from v0 design */
+  .pixel-scene {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  /* Pixel panel style with shadow - from v0 design */
+  .pixel-panel {
+    image-rendering: pixelated;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
+  }
+
   @keyframes fadeSlideUp {
     from {
       opacity: 0;
