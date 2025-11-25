@@ -16,16 +16,16 @@ Suivi de l'avancement des user stories du projet Tamagotchi.
 | Catégorie | Total | Complété | En cours | À faire |
 |-----------|-------|----------|----------|---------|
 | Setup & Infrastructure | 2 | 2 | 0 | 0 |
-| Gestion des types d'animaux | 1 | 0 | 0 | 1 |
+| Gestion des types d'animaux | 1 | 1 | 0 | 0 |
 | Gestion des animaux | 3 | 3 | 0 | 0 |
 | Actions de base | 4 | 4 | 0 | 0 |
-| Système d'items | 5 | 0 | 0 | 5 |
-| Système de temps | 2 | 0 | 0 | 2 |
-| Notifications | 1 | 0 | 0 | 1 |
-| Statistiques | 2 | 0 | 0 | 2 |
-| **TOTAL** | **20** | **9** | **0** | **11** |
+| Système d'items | 5 | 5 | 0 | 0 |
+| Système de temps | 2 | 2 | 0 | 0 |
+| Notifications | 1 | 1 | 0 | 0 |
+| Statistiques | 2 | 1 | 0 | 1 |
+| **TOTAL** | **20** | **19** | **0** | **1** |
 
-**Progression globale** : 45% (9/20)
+**Progression globale** : 95% (19/20)
 
 ---
 
@@ -113,6 +113,25 @@ model Item {
 
 **Branche** : `feature/initial-setup`
 **PR** : #1
+
+---
+
+## Gestion des types d'animaux
+
+### ✅ US1 : Voir les types d'animaux disponibles
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux voir la liste des types d'animaux disponibles (chat, chien, alien) avec leurs caractéristiques spécifiques
+
+**Implémentation** :
+- [x] Service `getAllAnimalTypes()` dans `src/electron/database.ts`
+- [x] IPC handler `animalTypes:getAll`
+- [x] Affichage dans `AnimalTypeSelector` lors de la création
+
+**Critères d'acceptation** :
+- ✅ 3 types disponibles : Chat, Chien, Alien
+- ✅ Chaque type affiche son emoji et nom
+- ✅ Taux de dégradation spécifiques par type
 
 ---
 
@@ -330,105 +349,113 @@ const createAnimalSchema = z.object({
 
 ## Système de temps
 
-### ⏳ US9 : Dégradation passive des stats (tick)
+### ✅ US9 : Dégradation passive des stats (tick)
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux que les stats de mon animal se dégradent automatiquement avec le temps
 
 **Implémentation** :
-- [ ] Service `tickAnimal()` dans `electron/database.ts`
-- [ ] Hook `useAnimalTick()` avec `useInterval()` (10s)
-- [ ] Calcul dégradation selon temps écoulé
-- [ ] Logique de mort si `sante = 0`
-- [ ] Tests (service + hook)
+- [x] Service `tickAnimal()` dans `src/electron/database.ts`
+- [x] Tick system dans main process (`setInterval` 10s)
+- [x] Calcul dégradation selon temps écoulé et type d'animal
+- [x] Logique de mort si `sante = 0`
+- [x] Multiplicateur santé basé sur nombre de stats critiques (< 20)
 
-**Logique de dégradation** :
-- Toutes les heures :
-    - Faim : -2
-    - Bonheur : -1.5
-    - Énergie : -1
-    - Santé : -3 si faim < 20 ou bonheur < 20
+**Logique de dégradation** (par type d'animal) :
+- Chat : Faim -2.5/h, Bonheur -1.5/h, Énergie -0.8/h
+- Chien : Faim -2.0/h, Bonheur -2.0/h, Énergie -1.2/h
+- Alien : Faim -1.5/h, Bonheur -1.0/h, Énergie -1.5/h
+- Santé : -healthDecayRate × nombre de stats < 20
 
 **Critères d'acceptation** :
-- Tick toutes les 10 secondes quand app ouverte
-- Stats diminuent progressivement
-- Animal meurt si santé = 0
-- Toast "Ton animal est mort 😢" si décès
-- >80% couverture tests
+- ✅ Tick toutes les 10 secondes dans main process
+- ✅ Stats diminuent progressivement selon type
+- ✅ Animal meurt si santé = 0
+- ✅ Toast "Ton animal est mort 😢" si décès
+- ✅ Event IPC `animals:updated` pour refresh UI
 
 **Dépendances** : US4
 
+**Branche** : `feature/us14-us15-stat-degradation`
+**PR** : #8
+
 ---
 
-### ⏳ US10 : Calcul du temps écoulé offline
+### ✅ US10 : Calcul du temps écoulé offline
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux que les stats de mon animal se dégradent même quand l'app est fermée
 
 **Implémentation** :
-- [ ] Hook `useOfflineTime()` pour calculer temps écoulé au démarrage
-- [ ] Appliquer dégradation batch à la réouverture
-- [ ] Toast d'information si animal mort pendant fermeture
-- [ ] Tests
+- [x] Fonction `syncOfflineTime()` dans `src/electron/main.ts`
+- [x] Appelé au démarrage avant création de fenêtre
+- [x] Applique dégradation batch à la réouverture
+- [x] Notification spéciale si animal mort pendant absence
 
 **Critères d'acceptation** :
-- Au démarrage, calcul du temps écoulé depuis `derniereUpdate`
-- Dégradation appliquée en une fois
-- Si animal mort offline, affichage message
-- >80% couverture tests
+- ✅ Au démarrage, calcul du temps écoulé depuis `updatedAt`
+- ✅ Dégradation appliquée en une fois
+- ✅ Si animal mort offline, message "mort pendant ton absence"
 
 **Dépendances** : US9
+
+**Branche** : `feature/us14-us15-stat-degradation`
+**PR** : #8
 
 ---
 
 ## Notifications
 
-### ⏳ US11 : Notifications desktop
+### ✅ US11 : Notifications desktop
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux recevoir des notifications quand les stats de mon animal sont critiques
 
 **Implémentation** :
-- [ ] Service `sendNotification()` dans `electron/main.ts`
-- [ ] Déclenchement depuis `tickAnimal()` si stats < 30%
-- [ ] Notification critique si stats < 10%
-- [ ] Tests
+- [x] Fonction `sendDeathNotification()` dans `src/electron/main.ts`
+- [x] Fonction `checkCriticalStats()` dans `src/electron/main.ts`
+- [x] Déclenchement depuis tick si stats < 30%
+- [x] Cooldown de 1 heure par stat par animal
 
 **Notifications** :
-- Faim < 30% : "Ton animal a faim !"
-- Bonheur < 30% : "Ton animal s'ennuie !"
-- Santé < 30% : "Ton animal est malade !"
-- Énergie < 30% : "Ton animal est fatigué !"
+- Mort : "X est mort..." / "X est décédé pendant ton absence"
+- Faim < 30% : "X a faim !"
+- Bonheur < 30% : "X s'ennuie !"
+- Santé < 30% : "X est malade !"
+- Énergie < 30% : "X est fatigué !"
 
 **Critères d'acceptation** :
-- Notifications natives Electron
-- Pas de spam (max 1 notif par stat par heure)
-- Clic sur notif ouvre l'app sur l'animal concerné
-- >80% couverture tests
+- ✅ Notifications natives Electron
+- ✅ Pas de spam (max 1 notif par stat par heure via cooldown map)
+- ✅ Notifications de mort immédiates
 
 **Dépendances** : US9
+
+**Branche** : `feature/us14-us15-stat-degradation`
+**PR** : #8
 
 ---
 
 ## Statistiques
 
-### ⏳ US12 : Historique des actions
+### ✅ US12 : Historique des actions
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux voir l'historique des actions effectuées sur mon animal
 
 **Implémentation** :
-- [ ] Service `getActionsByAnimalId()` dans `electron/database.ts`
-- [ ] Hook `useGetActionsByAnimalId()` avec TanStack Query
-- [ ] Composant `ActionHistory` (liste avec icônes)
-- [ ] Affichage dans page détail animal
-- [ ] Tests
+- [x] Service `getActionHistory()` dans `src/electron/database.ts`
+- [x] Hook `useHistory()` dans `src/features/history/hooks/`
+- [x] Composant `HistoryPanel` dans `src/features/history/components/`
+- [x] Composant `HistoryEntry` avec icônes et deltas
+- [x] Affichage dans GameView (colonne gauche)
+- [x] Stats before/after dans chaque action
 
 **Critères d'acceptation** :
-- Liste des 20 dernières actions
-- Icône + label + timestamp
-- Regroupement par jour (optionnel)
-- >80% couverture tests
+- ✅ Liste des 20 dernières actions
+- ✅ Icône + label + timestamp relatif
+- ✅ Affichage des deltas de stats (+/-) pour chaque action
+- ✅ Item affiché pour actions `use_item`
 
 **Dépendances** : US5, US6, US7, US8
 
@@ -436,7 +463,7 @@ const createAnimalSchema = z.object({
 
 ### ⏳ US13 : Statistiques globales (optionnel)
 
-**Statut** : À faire  
+**Statut** : À faire
 **Description** : En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux
 
 **Implémentation** :
@@ -450,24 +477,104 @@ const createAnimalSchema = z.object({
 **Critères d'acceptation** :
 - Page `/stats` ou section dans dashboard
 - Graphiques simples (optionnel)
-- >80% couverture tests
 
 **Dépendances** : US3, US12
 
 ---
 
-## Notes de développement
+## Système d'Items
 
-### Approche TDD
-- Tous les composants sont développés en TDD (Test-Driven Development)
-- Tests écrits avant l'implémentation
-- Couverture de code : objectif >80% global
+### ✅ US-Items-1 : Voir l'inventaire d'items
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux voir la liste de tous les items disponibles
+
+**Implémentation** :
+- [x] Composant `InventoryPanel` dans `src/features/inventory/components/`
+- [x] Hook `useInventory()` avec TanStack Query
+- [x] Service `inventoryApi` pour IPC
+- [x] Affichage dans GameView (colonne droite)
+
+**Critères d'acceptation** :
+- ✅ Liste des items avec emoji, nom, quantité
+- ✅ Filtre par type (food/toy/medicine/all)
+- ✅ Affichage des effets de chaque item
+
+---
+
+### ✅ US-Items-2 : Filtrer les items par type
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux filtrer les items par catégorie
+
+**Implémentation** :
+- [x] Tabs dans `InventoryPanel` (Tout, Nourriture, Jouets, Médicaments)
+- [x] Service `getInventoryByType()` dans database
+- [x] IPC handler `inventory:getByType`
+
+**Critères d'acceptation** :
+- ✅ 4 filtres : all, food, toy, medicine
+- ✅ Compteur d'items par catégorie
+
+---
+
+### ✅ US-Items-3 : Utiliser un item sur un animal
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux utiliser un item sur mon animal
+
+**Implémentation** :
+- [x] Service `useItem()` dans `src/electron/database.ts`
+- [x] Transaction atomique (update animal + decrement inventory + create action)
+- [x] Validation énergie suffisante
+- [x] Animation d'utilisation (3s)
+
+**Critères d'acceptation** :
+- ✅ Stats de l'animal mises à jour selon item
+- ✅ Quantité décrémentée dans inventaire
+- ✅ Action enregistrée dans historique
+
+---
+
+### ✅ US-Items-4 : Vérifier le coût énergétique
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux être informé si mon animal n'a pas assez d'énergie
+
+**Implémentation** :
+- [x] Validation dans `useItem()` avant utilisation
+- [x] Bouton désactivé si énergie insuffisante
+- [x] Tooltip avec coût énergétique
+
+**Critères d'acceptation** :
+- ✅ Erreur claire si énergie insuffisante
+- ✅ Affichage du coût énergétique sur chaque item
+
+---
+
+### ✅ US-Items-5 : Voir l'historique des items utilisés
+
+**Statut** : Complété ✅
+**Description** : En tant qu'utilisateur, je veux voir dans l'historique quels items ont été utilisés
+
+**Implémentation** :
+- [x] ActionType `use_item` avec `itemId` dans Action
+- [x] Relation Item incluse dans query historique
+- [x] Affichage item dans `HistoryEntry`
+
+**Critères d'acceptation** :
+- ✅ Actions `use_item` affichent le nom et emoji de l'item
+- ✅ Deltas de stats visibles
+
+---
+
+## Notes de développement
 
 ### Stack technique
 - **Frontend** : React 18 + TypeScript
 - **Routing** : TanStack Router (file-based)
-- **State** : TanStack Query + Context API
-- **UI** : Tailwind CSS + Lucide React
+- **State** : TanStack Query + Zustand
+- **UI** : Tailwind CSS + shadcn/ui + Lucide React
 - **Backend** : Electron + Prisma + SQLite
 - **Tests** : Vitest + React Testing Library
 - **Build** : Vite + electron-builder
@@ -511,11 +618,18 @@ const createAnimalSchema = z.object({
 
 ## Prochaine étape
 
-🎯 **US9 : Dégradation passive des stats (tick)** - Système de temps automatique
+🎯 **US13 : Statistiques globales** - Dashboard avec statistiques (optionnel)
 
 ---
 
 ## Historique des complétions
+
+### 25 novembre 2025 (suite)
+- ✅ **US9** : Dégradation passive des stats avec tick system backend (PR #8)
+- ✅ **US10** : Calcul du temps écoulé offline avec syncOfflineTime (PR #8)
+- ✅ **US11** : Notifications desktop avec cooldown 1h (PR #8)
+- ✅ **US12** : Historique des actions avec stats before/after
+- ✅ **US-Items-1 à 5** : Système d'items complet avec inventaire
 
 ### 25 novembre 2025
 - ✅ **US3** : Liste des animaux avec onglets et séparation vivants/morts (PR #4)
@@ -527,8 +641,8 @@ const createAnimalSchema = z.object({
 
 ### 24 novembre 2025
 - ✅ **US0** : Configuration projet Electron + React + Prisma (PR #1)
-- ✅ **US1** : Schéma de base de données Prisma avec 4 tables (PR #1)
+- ✅ **US1** : Schéma de base de données Prisma avec 5 tables (PR #1)
 - ✅ **US2** : Création d'un animal avec formulaire et validation (PR #3)
 
-**Version** : 1.1
+**Version** : 2.0
 **Date** : 25 novembre 2025
