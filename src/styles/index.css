@@ -361,12 +361,12 @@
 
   @keyframes dead-fade {
     0%, 100% {
-      opacity: 0.6;
-      filter: grayscale(100%);
+      opacity: 1;
+      transform: translateY(0);
     }
     50% {
-      opacity: 0.4;
-      filter: grayscale(100%);
+      opacity: 0.8;
+      transform: translateY(-5px);
     }
   }
 

@@ -73,10 +73,7 @@ export function AnimalCard({ animal, onClick }: AnimalCardProps) {
               alt={animal.name}
               size="xl"
               pixelated
-              className={cn(
-                'w-20 h-20',
-                !animal.isAlive && 'grayscale opacity-60'
-              )}
+              className="w-20 h-20"
             />
           </div>
 
