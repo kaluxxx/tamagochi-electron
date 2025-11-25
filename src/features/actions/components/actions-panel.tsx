@@ -1,7 +1,7 @@
 import { SpriteImage } from '@/shared/components/ui/sprite-image'
 import { getActionSprite } from '@/shared/utils/sprite-loader'
 import { cn } from '@/shared/lib/utils'
-import type { ActionType } from '../hooks/use-animal-actions'
+import type { ActionType } from '../types'
 
 interface ActionsPanelProps {
   onAction: (action: ActionType) => void

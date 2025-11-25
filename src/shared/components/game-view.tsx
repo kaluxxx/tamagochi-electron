@@ -1,14 +1,14 @@
-import { StatsPanel } from './stats-panel'
-import { GameZone } from './game-zone'
-import { ActionsPanel } from './actions-panel'
-import { useAnimalActions } from '../hooks/use-animal-actions'
-import type { Animal } from '../types'
+import { StatsPanel } from '@/features/animals/components/stats-panel'
+import { GameZone } from '@/features/animals/components/game-zone'
+import { ActionsPanel } from '@/features/actions/components/actions-panel'
+import { useActions } from '@/features/actions/hooks/use-actions'
+import type { Animal } from '@/features/animals/types'
 
-interface AnimalGameViewProps {
+interface GameViewProps {
   animal: Animal
 }
 
-export function AnimalGameView({ animal }: AnimalGameViewProps) {
+export function GameView({ animal }: GameViewProps) {
   const {
     actionInProgress,
     isSleeping,
@@ -18,7 +18,7 @@ export function AnimalGameView({ animal }: AnimalGameViewProps) {
     activeAction,
     handleAction,
     isActionDisabled,
-  } = useAnimalActions({
+  } = useActions({
     animalId: animal.id,
     isAlive: animal.isAlive,
   })

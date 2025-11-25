@@ -1,16 +1,14 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAnimalActionsStore } from '../stores/animal-actions-store'
+import { useActionsStore } from '../stores/actions-store'
+import type { ActionType, ActiveAction } from '../types'
 
-export type ActionType = 'feed' | 'play' | 'sleep' | 'heal'
-export type ActiveAction = 'sleeping' | 'playing' | undefined
-
-interface UseAnimalActionsProps {
+interface UseActionsProps {
   animalId: string
   isAlive: boolean
 }
 
-interface UseAnimalActionsReturn {
+interface UseActionsReturn {
   actionInProgress: ActionType | null
   isSleeping: boolean
   sleepProgress: number
@@ -21,7 +19,7 @@ interface UseAnimalActionsReturn {
   isActionDisabled: boolean
 }
 
-export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): UseAnimalActionsReturn {
+export function useActions({ animalId, isAlive }: UseActionsProps): UseActionsReturn {
   const queryClient = useQueryClient()
   const [instantActionInProgress, setInstantActionInProgress] = useState<'feed' | 'heal' | null>(null)
   // Compteur pour forcer le re-render toutes les secondes
@@ -35,7 +33,7 @@ export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): 
     handleStartSleep,
     handleStartPlay,
     hasActiveAction,
-  } = useAnimalActionsStore(animalId)
+  } = useActionsStore(animalId)
 
   // Forcer le re-render toutes les secondes pour mettre à jour la progression
   useEffect(() => {
