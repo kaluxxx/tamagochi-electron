@@ -1,0 +1,87 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Alien Playing - Flottant/bondissant, antennes dressées, joyeux -->
+
+  <!-- Antennes très dressées (excitation) -->
+  <rect x="10" y="3" width="1" height="5" fill="#2ECC71"/>
+  <rect x="9" y="4" width="1" height="3" fill="#27AE60"/>
+  <rect x="8" y="2" width="3" height="2" fill="#2ECC71"/>
+  <!-- Boule antenne gauche (brillante) -->
+  <rect x="7" y="1" width="3" height="2" fill="#9B59B6"/>
+  <rect x="7" y="1" width="2" height="1" fill="#C89EDB"/>
+  <rect x="8" y="1" width="1" height="1" fill="#E8D0F0"/>
+
+  <rect x="21" y="3" width="1" height="5" fill="#2ECC71"/>
+  <rect x="22" y="4" width="1" height="3" fill="#27AE60"/>
+  <rect x="21" y="2" width="3" height="2" fill="#2ECC71"/>
+  <!-- Boule antenne droite (brillante) -->
+  <rect x="22" y="1" width="3" height="2" fill="#9B59B6"/>
+  <rect x="23" y="1" width="2" height="1" fill="#C89EDB"/>
+  <rect x="24" y="1" width="1" height="1" fill="#E8D0F0"/>
+
+  <!-- Contour tête -->
+  <rect x="10" y="8" width="12" height="2" fill="#27AE60"/>
+  <rect x="9" y="10" width="14" height="12" fill="#27AE60"/>
+
+  <!-- Tête principale -->
+  <rect x="11" y="9" width="10" height="13" fill="#2ECC71"/>
+  <rect x="12" y="10" width="8" height="11" fill="#52D981"/>
+
+  <!-- Grand front alien -->
+  <rect x="13" y="11" width="6" height="4" fill="#7FE5A0"/>
+  <rect x="14" y="12" width="4" height="2" fill="#A3EEC2"/>
+
+  <!-- Yeux grands et brillants (excités) -->
+  <rect x="12" y="15" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="13" y="16" width="1" height="2" fill="#4A90E2"/>
+  <rect x="14" y="17" width="1" height="1" fill="#FFFFFF"/>
+  <!-- Étoile dans l'oeil -->
+  <rect x="12" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+  <rect x="17" y="15" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="18" y="16" width="1" height="2" fill="#4A90E2"/>
+  <rect x="19" y="17" width="1" height="1" fill="#FFFFFF"/>
+  <rect x="19" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+  <!-- Petit nez -->
+  <rect x="16" y="19" width="1" height="1" fill="#27AE60"/>
+
+  <!-- Grande bouche souriante -->
+  <rect x="14" y="20" width="4" height="2" fill="#1C1C1C"/>
+  <rect x="15" y="21" width="2" height="1" fill="#52D981"/>
+
+  <!-- Corps flottant (légèrement plus haut) -->
+  <rect x="11" y="22" width="10" height="5" fill="#2ECC71"/>
+  <rect x="12" y="23" width="8" height="3" fill="#52D981"/>
+  <rect x="13" y="24" width="6" height="1" fill="#7FE5A0"/>
+
+  <!-- Bras/appendices levés (jeu) -->
+  <rect x="7" y="21" width="4" height="2" fill="#2ECC71"/>
+  <rect x="6" y="20" width="2" height="2" fill="#2ECC71"/>
+  <rect x="7" y="21" width="1" height="1" fill="#52D981"/>
+
+  <rect x="21" y="21" width="4" height="2" fill="#2ECC71"/>
+  <rect x="24" y="20" width="2" height="2" fill="#2ECC71"/>
+  <rect x="24" y="21" width="1" height="1" fill="#52D981"/>
+
+  <!-- Pieds (flottants) -->
+  <rect x="13" y="27" width="2" height="1" fill="#27AE60"/>
+  <rect x="17" y="27" width="2" height="1" fill="#27AE60"/>
+
+  <!-- Ombre au sol (flotte) -->
+  <rect x="12" y="29" width="8" height="1" fill="rgba(0,0,0,0.2)"/>
+
+  <!-- Étoiles/particules de jeu -->
+  <rect x="4" y="12" width="1" height="1" fill="#FFD700"/>
+  <rect x="3" y="13" width="1" height="1" fill="#FFD700"/>
+  <rect x="5" y="13" width="1" height="1" fill="#FFD700"/>
+  <rect x="4" y="14" width="1" height="1" fill="#FFD700"/>
+
+  <rect x="27" y="12" width="1" height="1" fill="#FFD700"/>
+  <rect x="26" y="13" width="1" height="1" fill="#FFD700"/>
+  <rect x="28" y="13" width="1" height="1" fill="#FFD700"/>
+  <rect x="27" y="14" width="1" height="1" fill="#FFD700"/>
+
+  <!-- Orbe d'énergie (jouet alien) -->
+  <rect x="4" y="22" width="3" height="3" fill="#9B59B6"/>
+  <rect x="5" y="23" width="1" height="1" fill="#C89EDB"/>
+</svg>

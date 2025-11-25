@@ -1,0 +1,71 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Chat Tired - Fatigué, yeux mi-clos -->
+
+  <!-- Oreilles légèrement baissées -->
+  <rect x="7" y="8" width="4" height="4" fill="#FF8C42"/>
+  <rect x="8" y="9" width="2" height="2" fill="#FFB366"/>
+  <rect x="9" y="9" width="1" height="1" fill="#FFDAA0"/>
+
+  <rect x="21" y="8" width="4" height="4" fill="#FF8C42"/>
+  <rect x="22" y="9" width="2" height="2" fill="#FFB366"/>
+  <rect x="22" y="9" width="1" height="1" fill="#FFDAA0"/>
+
+  <!-- Ombres oreilles -->
+  <rect x="7" y="11" width="3" height="1" fill="#E07020"/>
+  <rect x="22" y="11" width="3" height="1" fill="#E07020"/>
+
+  <!-- Contour tête -->
+  <rect x="9" y="10" width="14" height="2" fill="#E07020"/>
+  <rect x="8" y="12" width="16" height="10" fill="#E07020"/>
+
+  <!-- Tête principale -->
+  <rect x="10" y="11" width="12" height="11" fill="#FF8C42"/>
+
+  <!-- Face intérieure -->
+  <rect x="11" y="13" width="10" height="7" fill="#FFB366"/>
+  <rect x="12" y="14" width="8" height="5" fill="#FFDAA0"/>
+
+  <!-- Yeux mi-clos (fatigués) - paupières tombantes -->
+  <rect x="12" y="15" width="3" height="3" fill="#FFDAA0"/>
+  <rect x="12" y="16" width="3" height="2" fill="#2C3E50"/>
+  <rect x="12" y="16" width="1" height="1" fill="#7F8C8D"/>
+
+  <rect x="17" y="15" width="3" height="3" fill="#FFDAA0"/>
+  <rect x="17" y="16" width="3" height="2" fill="#2C3E50"/>
+  <rect x="17" y="16" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- Paupières fatiguées -->
+  <rect x="12" y="15" width="3" height="1" fill="#E07020"/>
+  <rect x="17" y="15" width="3" height="1" fill="#E07020"/>
+
+  <!-- Nez détaillé -->
+  <rect x="15" y="18" width="2" height="2" fill="#FF6B9D"/>
+  <rect x="15" y="18" width="1" height="1" fill="#FF8BB0"/>
+  <rect x="16" y="19" width="1" height="1" fill="#E05080"/>
+
+  <!-- Bouche fatiguée (légèrement ouverte) -->
+  <rect x="15" y="20" width="2" height="1" fill="#34495E"/>
+
+  <!-- Moustaches tombantes -->
+  <rect x="7" y="17" width="3" height="1" fill="#34495E"/>
+  <rect x="7" y="19" width="3" height="1" fill="#34495E"/>
+  <rect x="22" y="17" width="3" height="1" fill="#34495E"/>
+  <rect x="22" y="19" width="3" height="1" fill="#34495E"/>
+
+  <!-- Ombres sous la tête -->
+  <rect x="11" y="22" width="10" height="1" fill="#E07020"/>
+
+  <!-- Corps affaissé -->
+  <rect x="11" y="23" width="10" height="5" fill="#FF8C42"/>
+  <rect x="12" y="24" width="8" height="3" fill="#FFB366"/>
+  <rect x="13" y="25" width="6" height="2" fill="#FFDAA0"/>
+
+  <!-- Pattes avant -->
+  <rect x="12" y="26" width="2" height="2" fill="#FF8C42"/>
+  <rect x="18" y="26" width="2" height="2" fill="#FF8C42"/>
+
+  <!-- Queue tombante (pas dressée) -->
+  <rect x="20" y="23" width="2" height="4" fill="#FF8C42"/>
+  <rect x="22" y="25" width="2" height="2" fill="#FF8C42"/>
+  <rect x="23" y="26" width="1" height="1" fill="#FFB366"/>
+</svg>
