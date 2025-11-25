@@ -121,7 +121,7 @@ export const playWithAnimal = async (id: string) => {
   const prisma = getPrismaClient()
   const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
-  if (animal.energy < 10) throw new Error('Not enough energy')
+  if (animal.energy < 20) throw new Error('Not enough energy')
 
   // Capture stats before
   const statsBefore = {
@@ -224,6 +224,7 @@ export const sleepAnimal = async (id: string) => {
   const prisma = getPrismaClient()
   const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
+  if (animal.energy > 80) throw new Error('Not tired enough')
 
   // Capture stats before
   const statsBefore = {
