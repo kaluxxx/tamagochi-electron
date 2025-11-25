@@ -1,0 +1,41 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Happiness Stat - Coeur rose -->
+
+  <!-- Partie gauche du coeur -->
+  <rect x="10" y="9" width="4" height="2" fill="#E91E63"/>
+  <rect x="9" y="11" width="6" height="4" fill="#E91E63"/>
+  <rect x="10" y="15" width="5" height="2" fill="#E91E63"/>
+
+  <!-- Partie droite du coeur -->
+  <rect x="18" y="9" width="4" height="2" fill="#E91E63"/>
+  <rect x="17" y="11" width="6" height="4" fill="#E91E63"/>
+  <rect x="17" y="15" width="5" height="2" fill="#E91E63"/>
+
+  <!-- Centre du coeur -->
+  <rect x="14" y="9" width="4" height="2" fill="#E91E63"/>
+  <rect x="11" y="17" width="4" height="2" fill="#E91E63"/>
+  <rect x="17" y="17" width="4" height="2" fill="#E91E63"/>
+  <rect x="12" y="19" width="3" height="2" fill="#E91E63"/>
+  <rect x="17" y="19" width="3" height="2" fill="#E91E63"/>
+  <rect x="13" y="21" width="2" height="2" fill="#E91E63"/>
+  <rect x="17" y="21" width="2" height="2" fill="#E91E63"/>
+  <rect x="14" y="23" width="2" height="2" fill="#E91E63"/>
+  <rect x="16" y="23" width="2" height="2" fill="#E91E63"/>
+  <rect x="15" y="25" width="2" height="1" fill="#C2185B"/>
+
+  <!-- Remplissage intérieur rose clair -->
+  <rect x="11" y="11" width="4" height="4" fill="#F06292"/>
+  <rect x="17" y="11" width="4" height="4" fill="#F06292"/>
+  <rect x="15" y="11" width="2" height="6" fill="#F06292"/>
+  <rect x="12" y="15" width="8" height="2" fill="#F06292"/>
+  <rect x="13" y="17" width="6" height="2" fill="#F06292"/>
+  <rect x="14" y="19" width="4" height="2" fill="#F06292"/>
+  <rect x="15" y="21" width="2" height="2" fill="#F06292"/>
+
+  <!-- Reflet brillant -->
+  <rect x="12" y="12" width="2" height="2" fill="#F8BBD0"/>
+  <rect x="13" y="13" width="1" height="1" fill="#FFFFFF"/>
+
+  <!-- Ombre au sol -->
+  <rect x="13" y="27" width="6" height="1" fill="#D0D0D0" opacity="0.6"/>
+</svg>

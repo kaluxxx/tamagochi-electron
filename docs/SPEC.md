@@ -12,58 +12,81 @@ Créer une application desktop (Electron) de gestion d'animaux virtuels type Tam
 
 ## Contrainte projet
 
-**Durée** : 3.5 jours  
-**Contrainte académique** : Au moins 2 entités en base de données (`Animal` + `Action`)
+**Durée** : 3.5 jours
+**Contrainte académique** : Au moins 2 entités en base de données
+**Réalisé** : 4 entités (`AnimalType`, `Animal`, `Action`, `Item`)
 
 ---
 
 ## User stories - MVP
 
+### Gestion des types d'animaux
+
+**US1 : Voir les types d'animaux disponibles**
+En tant qu'utilisateur, je veux voir la liste des types d'animaux disponibles (chat, chien, alien) avec leurs caractéristiques spécifiques (taux de dégradation, emoji)
+
 ### Gestion des animaux
 
-**US2 : Création d'un animal**  
-En tant qu'utilisateur, je veux créer un nouvel animal avec un nom et un type (chat/chien/alien)
+**US2 : Création d'un animal**
+En tant qu'utilisateur, je veux créer un nouvel animal en choisissant un nom et un type parmi les types disponibles
 
-**US3 : Liste des animaux**  
-En tant qu'utilisateur, je veux voir la liste de tous mes animaux (vivants et morts séparés)
+**US3 : Liste des animaux**
+En tant qu'utilisateur, je veux voir la liste de tous mes animaux avec leur type, leurs stats actuelles (vivants et morts séparés)
 
-**US4 : Détail d'un animal**  
-En tant qu'utilisateur, je veux voir le détail complet d'un animal avec toutes ses stats en temps réel
+**US4 : Détail d'un animal**
+En tant qu'utilisateur, je veux voir le détail complet d'un animal avec toutes ses stats en temps réel, son type, son âge et son emoji
 
-### Actions & Interactions
+### Actions de base
 
-**US5 : Nourrir un animal**  
-En tant qu'utilisateur, je veux nourrir mon animal pour augmenter sa faim
+**US5 : Nourrir un animal**
+En tant qu'utilisateur, je veux nourrir mon animal pour augmenter sa faim (+20), son bonheur (+5) au coût de son énergie (-5)
 
-**US6 : Jouer avec un animal**  
-En tant qu'utilisateur, je veux jouer avec mon animal pour augmenter son bonheur
+**US6 : Jouer avec un animal**
+En tant qu'utilisateur, je veux jouer avec mon animal pour augmenter son bonheur (+15) au coût de son énergie (-10) et de sa faim (-5)
 
-**US7 : Soigner un animal**  
-En tant qu'utilisateur, je veux soigner mon animal pour restaurer sa santé
+**US7 : Soigner un animal**
+En tant qu'utilisateur, je veux soigner mon animal pour restaurer sa santé (+20)
 
-**US8 : Mettre un animal au repos**  
-En tant qu'utilisateur, je veux mettre mon animal au repos pour restaurer son énergie
+**US8 : Mettre un animal au repos**
+En tant qu'utilisateur, je veux mettre mon animal au repos pour restaurer son énergie (+30) et son bonheur (+5)
+
+### Système d'items
+
+**US9 : Voir l'inventaire d'items**
+En tant qu'utilisateur, je veux voir la liste de tous les items disponibles (nourriture, jouets, médicaments) avec leurs effets
+
+**US10 : Filtrer les items par type**
+En tant qu'utilisateur, je veux filtrer les items par catégorie (food, toy, medicine) pour trouver facilement ce dont j'ai besoin
+
+**US11 : Utiliser un item sur un animal**
+En tant qu'utilisateur, je veux utiliser un item sur mon animal pour appliquer ses effets (boosts de stats) en fonction du type d'item
+
+**US12 : Vérifier le coût énergétique**
+En tant qu'utilisateur, je veux être informé si mon animal n'a pas assez d'énergie pour utiliser un item
+
+**US13 : Voir l'historique des items utilisés**
+En tant qu'utilisateur, je veux voir dans l'historique des actions quels items ont été utilisés sur mon animal
 
 ### Système de temps
 
-**US9 : Dégradation passive des stats**  
-En tant qu'utilisateur, je veux que les stats de mon animal se dégradent automatiquement avec le temps
+**US14 : Dégradation passive des stats**
+En tant qu'utilisateur, je veux que les stats de mon animal se dégradent automatiquement avec le temps selon les taux de son type (chat: faim -2.5/h, chien: bonheur -2/h, alien: moins de dégradation)
 
-**US10 : Calcul du temps écoulé offline**  
-En tant qu'utilisateur, je veux que les stats de mon animal se dégradent même quand l'app est fermée
+**US15 : Calcul du temps écoulé offline**
+En tant qu'utilisateur, je veux que les stats de mon animal se dégradent même quand l'app est fermée, en fonction du temps réellement écoulé
 
 ### Notifications
 
-**US11 : Notifications desktop**  
+**US16 : Notifications desktop**
 En tant qu'utilisateur, je veux recevoir des notifications quand les stats de mon animal sont critiques (< 30%)
 
 ### Statistiques
 
-**US12 : Historique des actions**  
-En tant qu'utilisateur, je veux voir l'historique des actions effectuées sur mon animal
+**US17 : Historique des actions**
+En tant qu'utilisateur, je veux voir l'historique des 20 dernières actions effectuées sur mon animal (type d'action, item utilisé si applicable, timestamp)
 
-**US13 : Statistiques globales** (optionnel)  
-En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (total créés, vivants/morts, actions effectuées)
+**US18 : Statistiques globales** (optionnel)
+En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (total créés par type, vivants/morts, actions effectuées, items les plus utilisés)
 
 ---
 
@@ -219,21 +242,34 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 ## Modèle de données
 
+### Table `AnimalType`
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | UUID | Identifiant unique |
+| `name` | String | Nom technique unique (cat/dog/alien) |
+| `displayName` | String | Nom d'affichage (Chat/Chien/Alien) |
+| `hungerDecayRate` | Float | Taux de dégradation de la faim par heure (défaut: 2.0) |
+| `happinessDecayRate` | Float | Taux de dégradation du bonheur par heure (défaut: 1.5) |
+| `energyDecayRate` | Float | Taux de dégradation de l'énergie par heure (défaut: 1.0) |
+| `healthDecayRate` | Float | Taux de dégradation de la santé par heure (défaut: 3.0) |
+| `emoji` | String | Emoji représentant le type (🐱/🐶/👽) |
+
 ### Table `Animal`
 
 | Champ | Type | Description |
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
-| `nom` | String | Nom de l'animal (3-20 caractères) |
-| `type` | String | Type (chat/chien/alien) |
-| `faim` | Integer | Niveau de faim (0-100) |
-| `bonheur` | Integer | Niveau de bonheur (0-100) |
-| `sante` | Integer | Niveau de santé (0-100) |
-| `energie` | Integer | Niveau d'énergie (0-100) |
+| `name` | String | Nom de l'animal (3-20 caractères) |
+| `typeId` | UUID | Référence vers AnimalType |
+| `hunger` | Integer | Niveau de faim (0-100) |
+| `happiness` | Integer | Niveau de bonheur (0-100) |
+| `health` | Integer | Niveau de santé (0-100) |
+| `energy` | Integer | Niveau d'énergie (0-100) |
 | `age` | Integer | Âge en heures |
-| `dateCreation` | DateTime | Date de création |
-| `derniereUpdate` | DateTime | Dernière mise à jour des stats |
-| `vivant` | Boolean | Statut vivant/mort |
+| `createdAt` | DateTime | Date de création |
+| `updatedAt` | DateTime | Dernière mise à jour des stats |
+| `isAlive` | Boolean | Statut vivant/mort |
 
 ### Table `Action`
 
@@ -241,13 +277,50 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
 | `animalId` | UUID | Référence vers Animal |
-| `typeAction` | String | Type (nourrir/jouer/soigner/dormir) |
+| `actionType` | String | Type (feed/play/heal/sleep) |
+| `itemId` | UUID (nullable) | Référence vers Item utilisé (optionnel) |
 | `timestamp` | DateTime | Horodatage de l'action |
+
+### Table `Item`
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | UUID | Identifiant unique |
+| `name` | String | Nom de l'objet |
+| `type` | String | Type (food/toy/medicine) |
+| `hungerBoost` | Integer | Bonus de faim (0-100) |
+| `happinessBoost` | Integer | Bonus de bonheur (0-100) |
+| `healthBoost` | Integer | Bonus de santé (0-100) |
+| `energyBoost` | Integer | Bonus d'énergie (0-100) |
+| `energyCost` | Integer | Coût en énergie pour utiliser l'objet |
+| `emoji` | String | Emoji représentant l'objet |
+| `description` | String | Description de l'objet |
 
 ### Relations
 
+- Un `AnimalType` a plusieurs `Animal` (One-to-Many)
 - Un `Animal` a plusieurs `Action` (One-to-Many)
+- Un `Animal` appartient à un `AnimalType` (Many-to-One)
+- Un `Item` peut être utilisé dans plusieurs `Action` (One-to-Many)
+- Une `Action` peut utiliser un `Item` (Many-to-One, optionnel)
 - Suppression en cascade : si animal supprimé → actions supprimées
+
+### Exemples d'items
+
+**Nourriture (food):**
+- 🍖 Steak : +30 hunger, -5 energy
+- 🥛 Lait : +15 hunger, +10 happiness
+- 🍎 Pomme : +10 hunger, +5 health
+
+**Jouets (toy):**
+- 🎾 Balle : +20 happiness, -15 energy
+- 🧸 Peluche : +15 happiness, -5 energy
+- 🎮 Console : +25 happiness, -20 energy
+
+**Médicaments (medicine):**
+- 💊 Vitamine : +20 health, +10 energy
+- 💉 Vaccin : +30 health
+- 🩹 Bandage : +15 health
 
 ---
 

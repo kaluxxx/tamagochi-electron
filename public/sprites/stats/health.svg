@@ -1,0 +1,30 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Health Stat - Croix médicale rouge -->
+
+  <!-- Barre verticale (contour) -->
+  <rect x="13" y="8" width="6" height="16" fill="#C0392B"/>
+
+  <!-- Barre horizontale (contour) -->
+  <rect x="8" y="13" width="16" height="6" fill="#C0392B"/>
+
+  <!-- Barre verticale (intérieur rouge vif) -->
+  <rect x="14" y="9" width="4" height="14" fill="#E74C3C"/>
+
+  <!-- Barre horizontale (intérieur rouge vif) -->
+  <rect x="9" y="14" width="14" height="4" fill="#E74C3C"/>
+
+  <!-- Centre de la croix (rouge plus foncé) -->
+  <rect x="14" y="14" width="4" height="4" fill="#C0392B"/>
+
+  <!-- Reflet brillant -->
+  <rect x="14" y="10" width="2" height="2" fill="#EC7063"/>
+  <rect x="15" y="11" width="1" height="1" fill="#FADBD8"/>
+  <rect x="10" y="15" width="2" height="1" fill="#EC7063"/>
+
+  <!-- Ombres pour donner du relief -->
+  <rect x="17" y="9" width="1" height="14" fill="#922B21"/>
+  <rect x="9" y="17" width="14" height="1" fill="#922B21"/>
+
+  <!-- Ombre au sol -->
+  <rect x="12" y="25" width="8" height="1" fill="#D0D0D0" opacity="0.6"/>
+</svg>

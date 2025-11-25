@@ -1,0 +1,50 @@
+erDiagram
+    AnimalType ||--o{ Animal : "has"
+    Animal ||--o{ Action : "performs"
+    Item ||--o{ Action : "used in"
+
+    AnimalType {
+        uuid id PK
+        string name UK "cat, dog, alien"
+        string displayName "Chat, Chien, Alien"
+        float hungerDecayRate "default: 2.0"
+        float happinessDecayRate "default: 1.5"
+        float energyDecayRate "default: 1.0"
+        float healthDecayRate "default: 3.0"
+        string emoji "🐱 🐶 👽"
+    }
+
+    Animal {
+        uuid id PK
+        string name
+        uuid typeId FK
+        int hunger "default: 100"
+        int happiness "default: 100"
+        int health "default: 100"
+        int energy "default: 100"
+        int age "in hours, default: 0"
+        datetime createdAt "default: now()"
+        datetime updatedAt "default: now()"
+        boolean isAlive "default: true"
+    }
+
+    Action {
+        uuid id PK
+        uuid animalId FK "CASCADE on delete"
+        string actionType "feed, play, heal, sleep"
+        uuid itemId FK "nullable"
+        datetime timestamp "default: now()"
+    }
+
+    Item {
+        uuid id PK
+        string name
+        string type "food, toy, medicine"
+        int hungerBoost "default: 0"
+        int happinessBoost "default: 0"
+        int healthBoost "default: 0"
+        int energyBoost "default: 0"
+        int energyCost "default: 0"
+        string emoji
+        string description
+    }

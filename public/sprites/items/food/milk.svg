@@ -1,0 +1,43 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Milk - Bouteille de lait -->
+
+  <!-- Ombre -->
+  <rect x="13" y="26" width="6" height="1" fill="#D0D0D0"/>
+
+  <!-- Contour bouteille -->
+  <rect x="11" y="10" width="10" height="2" fill="#E8E8E8"/>
+  <rect x="10" y="12" width="12" height="12" fill="#E8E8E8"/>
+  <rect x="11" y="24" width="10" height="2" fill="#D0D0D0"/>
+
+  <!-- Corps bouteille (blanc lait) -->
+  <rect x="12" y="11" width="8" height="14" fill="#FFFFFF"/>
+  <rect x="13" y="12" width="6" height="12" fill="#FEFEFE"/>
+
+  <!-- Niveau de lait -->
+  <rect x="13" y="14" width="6" height="9" fill="#F8F8FF"/>
+  <rect x="14" y="15" width="4" height="7" fill="#FFFAFA"/>
+
+  <!-- Highlights (brillance) -->
+  <rect x="14" y="13" width="1" height="8" fill="#FFFFFF"/>
+  <rect x="15" y="14" width="1" height="6" fill="#FAFAFA"/>
+
+  <!-- Ombres internes -->
+  <rect x="18" y="16" width="1" height="5" fill="#F0F0F0"/>
+
+  <!-- Col de la bouteille -->
+  <rect x="13" y="8" width="6" height="2" fill="#E8E8E8"/>
+  <rect x="14" y="7" width="4" height="1" fill="#D0D0D0"/>
+
+  <!-- Bouchon -->
+  <rect x="14" y="5" width="4" height="2" fill="#FFB3BA"/>
+  <rect x="15" y="6" width="2" height="1" fill="#FF8A8F"/>
+
+  <!-- Étiquette -->
+  <rect x="13" y="17" width="6" height="4" fill="#87CEEB"/>
+  <rect x="14" y="18" width="4" height="2" fill="#B0E0E6"/>
+
+  <!-- Texte "MILK" stylisé -->
+  <rect x="14" y="18" width="1" height="2" fill="#4682B4"/>
+  <rect x="17" y="18" width="1" height="2" fill="#4682B4"/>
+  <rect x="15" y="19" width="2" height="1" fill="#4682B4"/>
+</svg>

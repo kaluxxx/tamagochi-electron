@@ -1,0 +1,67 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Alien Sad - Triste avec antennes tombantes -->
+
+  <!-- Antennes tombantes gauche -->
+  <rect x="11" y="8" width="1" height="3" fill="#2ECC71"/>
+  <rect x="10" y="9" width="1" height="2" fill="#27AE60"/>
+  <rect x="9" y="10" width="2" height="1" fill="#2ECC71"/>
+  <!-- Boule antenne gauche (basse) -->
+  <rect x="8" y="11" width="2" height="2" fill="#9B59B6"/>
+  <rect x="8" y="11" width="1" height="1" fill="#7F4DA3"/>
+
+  <!-- Antennes tombantes droite -->
+  <rect x="20" y="8" width="1" height="3" fill="#2ECC71"/>
+  <rect x="21" y="9" width="1" height="2" fill="#27AE60"/>
+  <rect x="21" y="10" width="2" height="1" fill="#2ECC71"/>
+  <!-- Boule antenne droite (basse) -->
+  <rect x="22" y="11" width="2" height="2" fill="#9B59B6"/>
+  <rect x="23" y="11" width="1" height="1" fill="#7F4DA3"/>
+
+  <!-- Contour tête -->
+  <rect x="10" y="10" width="12" height="2" fill="#27AE60"/>
+  <rect x="9" y="12" width="14" height="12" fill="#27AE60"/>
+
+  <!-- Tête principale -->
+  <rect x="11" y="11" width="10" height="13" fill="#2ECC71"/>
+  <rect x="12" y="12" width="8" height="11" fill="#52D981"/>
+
+  <!-- Front alien -->
+  <rect x="13" y="13" width="6" height="4" fill="#7FE5A0"/>
+
+  <!-- Yeux tristes (larmes bleues) -->
+  <rect x="12" y="16" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="13" y="17" width="1" height="2" fill="#4A90E2"/>
+  <rect x="14" y="18" width="1" height="1" fill="#7F8C8D"/>
+
+  <rect x="17" y="16" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="18" y="17" width="1" height="2" fill="#4A90E2"/>
+  <rect x="19" y="18" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- Larmes qui coulent -->
+  <rect x="13" y="20" width="1" height="3" fill="#4A90E2"/>
+  <rect x="12" y="21" width="1" height="2" fill="#6CB4E8"/>
+  <rect x="13" y="23" width="1" height="1" fill="#4A90E2"/>
+
+  <rect x="18" y="20" width="1" height="3" fill="#4A90E2"/>
+  <rect x="19" y="21" width="1" height="2" fill="#6CB4E8"/>
+  <rect x="18" y="23" width="1" height="1" fill="#4A90E2"/>
+
+  <!-- Petit nez -->
+  <rect x="16" y="20" width="1" height="1" fill="#27AE60"/>
+
+  <!-- Bouche triste -->
+  <rect x="14" y="22" width="1" height="1" fill="#1C1C1C"/>
+  <rect x="15" y="21" width="2" height="1" fill="#1C1C1C"/>
+  <rect x="17" y="22" width="1" height="1" fill="#1C1C1C"/>
+
+  <!-- Corps affaissé -->
+  <rect x="12" y="24" width="8" height="4" fill="#2ECC71"/>
+  <rect x="13" y="25" width="6" height="2" fill="#52D981"/>
+
+  <!-- Pieds -->
+  <rect x="12" y="27" width="2" height="1" fill="#27AE60"/>
+  <rect x="18" y="27" width="2" height="1" fill="#27AE60"/>
+
+  <!-- Marques de tristesse (lignes) -->
+  <rect x="15" y="14" width="2" height="1" fill="#27AE60"/>
+</svg>

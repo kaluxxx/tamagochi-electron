@@ -1,0 +1,67 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Alien Neutral - Calme et observateur -->
+
+  <!-- Antennes droites (attention) -->
+  <rect x="12" y="5" width="1" height="4" fill="#2ECC71"/>
+  <rect x="11" y="6" width="1" height="2" fill="#27AE60"/>
+  <rect x="11" y="4" width="2" height="1" fill="#2ECC71"/>
+  <rect x="11" y="3" width="2" height="1" fill="#52D981"/>
+  <!-- Boule antenne gauche -->
+  <rect x="11" y="2" width="2" height="2" fill="#9B59B6"/>
+  <rect x="11" y="2" width="1" height="1" fill="#C89EDB"/>
+
+  <rect x="19" y="5" width="1" height="4" fill="#2ECC71"/>
+  <rect x="20" y="6" width="1" height="2" fill="#27AE60"/>
+  <rect x="19" y="4" width="2" height="1" fill="#2ECC71"/>
+  <rect x="19" y="3" width="2" height="1" fill="#52D981"/>
+  <!-- Boule antenne droite -->
+  <rect x="19" y="2" width="2" height="2" fill="#9B59B6"/>
+  <rect x="20" y="2" width="1" height="1" fill="#C89EDB"/>
+
+  <!-- Contour tête -->
+  <rect x="10" y="9" width="12" height="2" fill="#27AE60"/>
+  <rect x="9" y="11" width="14" height="12" fill="#27AE60"/>
+
+  <!-- Tête principale -->
+  <rect x="11" y="10" width="10" height="13" fill="#2ECC71"/>
+  <rect x="12" y="11" width="8" height="11" fill="#52D981"/>
+
+  <!-- Grand front alien (intelligence) -->
+  <rect x="13" y="12" width="6" height="4" fill="#7FE5A0"/>
+  <rect x="14" y="13" width="4" height="2" fill="#A3EEC2"/>
+
+  <!-- Yeux calmes et observateurs -->
+  <rect x="12" y="16" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="13" y="17" width="1" height="2" fill="#4A90E2"/>
+  <rect x="14" y="18" width="1" height="1" fill="#FFFFFF"/>
+
+  <rect x="17" y="16" width="3" height="4" fill="#1C1C1C"/>
+  <rect x="18" y="17" width="1" height="2" fill="#4A90E2"/>
+  <rect x="19" y="18" width="1" height="1" fill="#FFFFFF"/>
+
+  <!-- Petit nez alien -->
+  <rect x="16" y="20" width="1" height="1" fill="#27AE60"/>
+
+  <!-- Bouche neutre (ligne droite) -->
+  <rect x="15" y="21" width="2" height="1" fill="#1C1C1C"/>
+
+  <!-- Marques aliens sur le front (trois lignes) -->
+  <rect x="15" y="13" width="2" height="1" fill="#27AE60"/>
+  <rect x="14" y="14" width="4" height="1" fill="#52D981"/>
+
+  <!-- Corps équilibré -->
+  <rect x="11" y="23" width="10" height="6" fill="#2ECC71"/>
+  <rect x="12" y="24" width="8" height="4" fill="#52D981"/>
+  <rect x="13" y="25" width="6" height="2" fill="#7FE5A0"/>
+
+  <!-- Petits bras/appendices -->
+  <rect x="10" y="25" width="2" height="2" fill="#2ECC71"/>
+  <rect x="20" y="25" width="2" height="2" fill="#2ECC71"/>
+
+  <!-- Pieds stables -->
+  <rect x="13" y="28" width="2" height="1" fill="#27AE60"/>
+  <rect x="17" y="28" width="2" height="1" fill="#27AE60"/>
+
+  <!-- Détail ventre -->
+  <rect x="14" y="26" width="4" height="1" fill="#A3EEC2"/>
+</svg>

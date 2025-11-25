@@ -1,0 +1,60 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Console - Manette de jeu -->
+
+  <!-- Ombre -->
+  <rect x="9" y="24" width="14" height="1" fill="#D0D0D0"/>
+
+  <!-- Contour manette -->
+  <rect x="8" y="14" width="16" height="2" fill="#5D6D7E"/>
+  <rect x="7" y="16" width="18" height="6" fill="#5D6D7E"/>
+  <rect x="8" y="22" width="16" height="2" fill="#34495E"/>
+
+  <!-- Corps principal -->
+  <rect x="9" y="15" width="14" height="8" fill="#7F8C8D"/>
+  <rect x="10" y="16" width="12" height="6" fill="#95A5A6"/>
+
+  <!-- Zone centrale -->
+  <rect x="11" y="17" width="10" height="4" fill="#BDC3C7"/>
+
+  <!-- Poignées gauche et droite -->
+  <rect x="7" y="19" width="2" height="3" fill="#5D6D7E"/>
+  <rect x="8" y="20" width="1" height="1" fill="#7F8C8D"/>
+
+  <rect x="23" y="19" width="2" height="3" fill="#5D6D7E"/>
+  <rect x="23" y="20" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- D-pad (croix directionnelle) gauche -->
+  <rect x="11" y="18" width="1" height="3" fill="#34495E"/>
+  <rect x="10" y="19" width="3" height="1" fill="#34495E"/>
+  <rect x="11" y="19" width="1" height="1" fill="#2C3E50"/>
+
+  <!-- Boutons droite (4 boutons) -->
+  <!-- Bouton haut -->
+  <rect x="19" y="18" width="2" height="2" fill="#E74C3C"/>
+  <rect x="19" y="18" width="1" height="1" fill="#EC7063"/>
+
+  <!-- Bouton bas -->
+  <rect x="19" y="21" width="2" height="2" fill="#2ECC71"/>
+  <rect x="19" y="21" width="1" height="1" fill="#52D981"/>
+
+  <!-- Bouton gauche -->
+  <rect x="17" y="19" width="2" height="2" fill="#3498DB"/>
+  <rect x="17" y="19" width="1" height="1" fill="#5DADE2"/>
+
+  <!-- Bouton droite -->
+  <rect x="21" y="19" width="2" height="2" fill="#F39C12"/>
+  <rect x="21" y="19" width="1" height="1" fill="#F8C471"/>
+
+  <!-- Boutons L/R (gâchettes) -->
+  <rect x="9" y="15" width="3" height="1" fill="#34495E"/>
+  <rect x="20" y="15" width="3" height="1" fill="#34495E"/>
+
+  <!-- LED/écran -->
+  <rect x="15" y="17" width="2" height="1" fill="#52D981"/>
+
+  <!-- Détails/vis -->
+  <rect x="10" y="17" width="1" height="1" fill="#34495E"/>
+  <rect x="21" y="17" width="1" height="1" fill="#34495E"/>
+  <rect x="10" y="20" width="1" height="1" fill="#34495E"/>
+  <rect x="21" y="20" width="1" height="1" fill="#34495E"/>
+</svg>
