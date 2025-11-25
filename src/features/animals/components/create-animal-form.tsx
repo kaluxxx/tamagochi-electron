@@ -49,6 +49,15 @@ export function CreateAnimalForm() {
       {/* Contenu centré */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-8">
         <div className="w-full max-w-[500px] bg-[#FFF4E6] border-8 border-black p-8 pixel-panel">
+          {/* Bouton retour */}
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/' })}
+            className="mb-4 px-3 py-1.5 bg-gray-200 border-2 border-black font-pixel text-[10px] uppercase hover:bg-gray-300 active:translate-y-0.5 transition-all"
+          >
+            RETOUR
+          </button>
+
           {/* Header */}
           <div className="border-b-4 border-black pb-4 mb-6">
             <h1 className="text-2xl font-pixel text-black text-center tracking-wider">

@@ -1,0 +1,53 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Multiplier Upgrade - Etoile doree x2 -->
+
+  <!-- Ombre au sol -->
+  <rect x="10" y="27" width="12" height="1" fill="#D0D0D0" opacity="0.6"/>
+
+  <!-- Etoile exterieure (contour) -->
+  <rect x="15" y="4" width="2" height="2" fill="#C0392B"/>
+  <rect x="14" y="6" width="4" height="2" fill="#C0392B"/>
+  <rect x="13" y="8" width="6" height="2" fill="#C0392B"/>
+  <rect x="6" y="10" width="20" height="2" fill="#C0392B"/>
+  <rect x="8" y="12" width="16" height="2" fill="#C0392B"/>
+  <rect x="10" y="14" width="12" height="2" fill="#C0392B"/>
+  <rect x="9" y="16" width="14" height="2" fill="#C0392B"/>
+  <rect x="8" y="18" width="7" height="2" fill="#C0392B"/>
+  <rect x="17" y="18" width="7" height="2" fill="#C0392B"/>
+  <rect x="7" y="20" width="6" height="2" fill="#C0392B"/>
+  <rect x="19" y="20" width="6" height="2" fill="#C0392B"/>
+  <rect x="6" y="22" width="5" height="2" fill="#C0392B"/>
+  <rect x="21" y="22" width="5" height="2" fill="#C0392B"/>
+
+  <!-- Etoile interieure (doree) -->
+  <rect x="15" y="5" width="2" height="2" fill="#FFD700"/>
+  <rect x="14" y="7" width="4" height="2" fill="#FFD700"/>
+  <rect x="13" y="9" width="6" height="1" fill="#FFD700"/>
+  <rect x="7" y="10" width="18" height="2" fill="#FFD700"/>
+  <rect x="9" y="12" width="14" height="2" fill="#FFD700"/>
+  <rect x="11" y="14" width="10" height="2" fill="#FFD700"/>
+  <rect x="10" y="16" width="12" height="2" fill="#FFD700"/>
+  <rect x="9" y="18" width="5" height="2" fill="#FFD700"/>
+  <rect x="18" y="18" width="5" height="2" fill="#FFD700"/>
+  <rect x="8" y="20" width="4" height="2" fill="#FFD700"/>
+  <rect x="20" y="20" width="4" height="2" fill="#FFD700"/>
+  <rect x="7" y="22" width="3" height="2" fill="#FFD700"/>
+  <rect x="22" y="22" width="3" height="2" fill="#FFD700"/>
+
+  <!-- Reflet brillant -->
+  <rect x="15" y="6" width="1" height="1" fill="#FFFDE7"/>
+  <rect x="14" y="8" width="2" height="1" fill="#FFF9C4"/>
+  <rect x="10" y="11" width="6" height="1" fill="#FFF9C4"/>
+  <rect x="11" y="12" width="3" height="1" fill="#FFFDE7"/>
+
+  <!-- x2 symbole -->
+  <rect x="12" y="14" width="1" height="1" fill="#E74C3C"/>
+  <rect x="14" y="14" width="1" height="1" fill="#E74C3C"/>
+  <rect x="13" y="15" width="1" height="1" fill="#E74C3C"/>
+  <rect x="12" y="16" width="1" height="1" fill="#E74C3C"/>
+  <rect x="14" y="16" width="1" height="1" fill="#E74C3C"/>
+  <rect x="17" y="14" width="2" height="1" fill="#E74C3C"/>
+  <rect x="17" y="15" width="1" height="1" fill="#E74C3C"/>
+  <rect x="18" y="15" width="1" height="1" fill="#E74C3C"/>
+  <rect x="17" y="16" width="2" height="1" fill="#E74C3C"/>
+</svg>

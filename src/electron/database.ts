@@ -86,7 +86,11 @@ export const feedAnimal = async (id: string) => {
     energy: Math.max(0, animal.energy - 5)
   }
 
-  // Transaction: update animal and record action
+  // Calculate coin reward
+  const coinsEarned = ECONOMY_CONFIG.actionRewards.feed
+  const wallet = await getWallet()
+
+  // Transaction: update animal, record action, add coins
   const [updatedAnimal] = await prisma.$transaction([
     prisma.animal.update({
       where: { id },
@@ -109,12 +113,17 @@ export const feedAnimal = async (id: string) => {
         hungerAfter: statsAfter.hunger,
         happinessAfter: statsAfter.happiness,
         healthAfter: statsAfter.health,
-        energyAfter: statsAfter.energy
+        energyAfter: statsAfter.energy,
+        coinsEarned
       }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
     })
   ])
 
-  return updatedAnimal
+  return { animal: updatedAnimal, coinsEarned }
 }
 
 export const playWithAnimal = async (id: string) => {
@@ -139,7 +148,11 @@ export const playWithAnimal = async (id: string) => {
     energy: Math.max(0, animal.energy - 10)
   }
 
-  // Transaction: update animal and record action
+  // Calculate coin reward
+  const coinsEarned = ECONOMY_CONFIG.actionRewards.play
+  const wallet = await getWallet()
+
+  // Transaction: update animal, record action, add coins
   const [updatedAnimal] = await prisma.$transaction([
     prisma.animal.update({
       where: { id },
@@ -162,12 +175,17 @@ export const playWithAnimal = async (id: string) => {
         hungerAfter: statsAfter.hunger,
         happinessAfter: statsAfter.happiness,
         healthAfter: statsAfter.health,
-        energyAfter: statsAfter.energy
+        energyAfter: statsAfter.energy,
+        coinsEarned
       }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
     })
   ])
 
-  return updatedAnimal
+  return { animal: updatedAnimal, coinsEarned }
 }
 
 export const healAnimal = async (id: string) => {
@@ -191,7 +209,11 @@ export const healAnimal = async (id: string) => {
     energy: animal.energy
   }
 
-  // Transaction: update animal and record action
+  // Calculate coin reward
+  const coinsEarned = ECONOMY_CONFIG.actionRewards.heal
+  const wallet = await getWallet()
+
+  // Transaction: update animal, record action, add coins
   const [updatedAnimal] = await prisma.$transaction([
     prisma.animal.update({
       where: { id },
@@ -212,12 +234,17 @@ export const healAnimal = async (id: string) => {
         hungerAfter: statsAfter.hunger,
         happinessAfter: statsAfter.happiness,
         healthAfter: statsAfter.health,
-        energyAfter: statsAfter.energy
+        energyAfter: statsAfter.energy,
+        coinsEarned
       }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
     })
   ])
 
-  return updatedAnimal
+  return { animal: updatedAnimal, coinsEarned }
 }
 
 export const sleepAnimal = async (id: string) => {
@@ -242,7 +269,11 @@ export const sleepAnimal = async (id: string) => {
     energy: Math.min(100, animal.energy + 30)
   }
 
-  // Transaction: update animal and record action
+  // Calculate coin reward
+  const coinsEarned = ECONOMY_CONFIG.actionRewards.sleep
+  const wallet = await getWallet()
+
+  // Transaction: update animal, record action, add coins
   const [updatedAnimal] = await prisma.$transaction([
     prisma.animal.update({
       where: { id },
@@ -264,12 +295,17 @@ export const sleepAnimal = async (id: string) => {
         hungerAfter: statsAfter.hunger,
         happinessAfter: statsAfter.happiness,
         healthAfter: statsAfter.health,
-        energyAfter: statsAfter.energy
+        energyAfter: statsAfter.energy,
+        coinsEarned
       }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
     })
   ])
 
-  return updatedAnimal
+  return { animal: updatedAnimal, coinsEarned }
 }
 
 export interface TickResult {
@@ -429,7 +465,11 @@ export const useItem = async (animalId: string, itemId: string) => {
     energy: Math.max(0, animal.energy + item.energyBoost - item.energyCost)
   }
 
-  // Transaction: update animal, decrement inventory, record action
+  // Calculate coin reward
+  const coinsEarned = ECONOMY_CONFIG.actionRewards.use_item
+  const wallet = await getWallet()
+
+  // Transaction: update animal, decrement inventory, record action, add coins
   const [updatedAnimal] = await prisma.$transaction([
     prisma.animal.update({
       where: { id: animalId },
@@ -455,12 +495,17 @@ export const useItem = async (animalId: string, itemId: string) => {
         hungerAfter: statsAfter.hunger,
         happinessAfter: statsAfter.happiness,
         healthAfter: statsAfter.health,
-        energyAfter: statsAfter.energy
+        energyAfter: statsAfter.energy,
+        coinsEarned
       }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
     })
   ])
 
-  return updatedAnimal
+  return { animal: updatedAnimal, coinsEarned }
 }
 
 // Inventory operations
@@ -486,4 +531,247 @@ export const getActionHistory = async (animalId: string, limit = 20) => {
     orderBy: { timestamp: 'desc' },
     take: limit
   })
+}
+
+// ============== ECONOMY SYSTEM ==============
+
+// Economy configuration
+const ECONOMY_CONFIG = {
+  passiveGainRate: 10, // Coins per hour
+  actionRewards: {
+    feed: 2,
+    play: 5,
+    heal: 3,
+    sleep: 8,
+    use_item: 1
+  } as Record<string, number>
+}
+
+// Wallet operations
+export const getWallet = async () => {
+  const prisma = getPrismaClient()
+  let wallet = await prisma.wallet.findFirst()
+
+  // Create wallet if it doesn't exist
+  if (!wallet) {
+    wallet = await prisma.wallet.create({
+      data: {
+        coins: 100,
+        lastPassiveGain: new Date()
+      }
+    })
+  }
+
+  return wallet
+}
+
+export const collectPassiveGains = async () => {
+  const prisma = getPrismaClient()
+  const wallet = await getWallet()
+
+  const now = new Date()
+  const hoursElapsed = (now.getTime() - wallet.lastPassiveGain.getTime()) / (1000 * 60 * 60)
+  const coinsEarned = Math.floor(hoursElapsed * ECONOMY_CONFIG.passiveGainRate)
+
+  if (coinsEarned > 0) {
+    return prisma.wallet.update({
+      where: { id: wallet.id },
+      data: {
+        coins: { increment: coinsEarned },
+        lastPassiveGain: now
+      }
+    })
+  }
+
+  return wallet
+}
+
+export const addCoins = async (amount: number) => {
+  const wallet = await getWallet()
+  return getPrismaClient().wallet.update({
+    where: { id: wallet.id },
+    data: { coins: { increment: amount } }
+  })
+}
+
+export const spendCoins = async (amount: number) => {
+  const wallet = await getWallet()
+  if (wallet.coins < amount) {
+    throw new Error('INSUFFICIENT_FUNDS')
+  }
+  return getPrismaClient().wallet.update({
+    where: { id: wallet.id },
+    data: { coins: { decrement: amount } }
+  })
+}
+
+export const getActionReward = (actionType: string): number => {
+  return ECONOMY_CONFIG.actionRewards[actionType] || 0
+}
+
+// Shop operations
+export const getShopItems = async () => {
+  return getPrismaClient().item.findMany({
+    orderBy: [{ type: 'asc' }, { price: 'asc' }]
+  })
+}
+
+export const purchaseItem = async (itemId: string, quantity: number = 1) => {
+  const prisma = getPrismaClient()
+  const item = await prisma.item.findUnique({ where: { id: itemId } })
+  if (!item) throw new Error('Item not found')
+
+  const totalCost = item.price * quantity
+  const wallet = await getWallet()
+
+  if (wallet.coins < totalCost) {
+    throw new Error('INSUFFICIENT_FUNDS')
+  }
+
+  // Transaction: deduct coins + add to inventory
+  const [updatedWallet, updatedInventory] = await prisma.$transaction([
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { decrement: totalCost } }
+    }),
+    prisma.inventory.upsert({
+      where: { itemId },
+      update: { quantity: { increment: quantity } },
+      create: { itemId, quantity },
+      include: { item: true }
+    })
+  ])
+
+  return { wallet: updatedWallet, inventory: updatedInventory, item }
+}
+
+// Minigame operations
+export const saveMinigameScore = async (gameType: string, score: number, coinsEarned: number) => {
+  const prisma = getPrismaClient()
+  const wallet = await getWallet()
+
+  // Transaction: save score and add coins to wallet
+  const [savedScore, updatedWallet] = await prisma.$transaction([
+    prisma.minigameScore.create({
+      data: { gameType, score, coinsEarned }
+    }),
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { increment: coinsEarned } }
+    })
+  ])
+
+  return { score: savedScore, wallet: updatedWallet }
+}
+
+export const getMinigameHighScores = async (gameType: string, limit: number = 10) => {
+  return getPrismaClient().minigameScore.findMany({
+    where: { gameType },
+    orderBy: { score: 'desc' },
+    take: limit
+  })
+}
+
+// ============== CLICKER UPGRADES SYSTEM ==============
+
+export const CLICKER_UPGRADE_CONFIG = {
+  multiplier: {
+    baseCost: 50,
+    costMultiplier: 1.5,
+    baseEffect: 1,
+    effectPerLevel: 0.5,
+    displayName: 'Multiplicateur',
+    description: 'Multiplie les pieces gagnees',
+    icon: '/sprites/upgrades/multiplier.svg'
+  },
+  time_bonus: {
+    baseCost: 30,
+    costMultiplier: 1.4,
+    baseEffect: 10,
+    effectPerLevel: 5,
+    displayName: 'Temps Bonus',
+    description: '+5 secondes par niveau',
+    icon: '/sprites/upgrades/time.svg'
+  },
+  auto_clicker: {
+    baseCost: 100,
+    costMultiplier: 1.8,
+    baseEffect: 0,
+    effectPerLevel: 1,
+    displayName: 'Auto-Clicker',
+    description: '+1 clic auto par seconde',
+    icon: '/sprites/upgrades/auto.svg'
+  }
+} as const
+
+export type UpgradeType = keyof typeof CLICKER_UPGRADE_CONFIG
+
+export function calculateUpgradeCost(type: UpgradeType, currentLevel: number): number {
+  const config = CLICKER_UPGRADE_CONFIG[type]
+  return Math.floor(config.baseCost * Math.pow(config.costMultiplier, currentLevel))
+}
+
+export function calculateUpgradeEffect(type: UpgradeType, level: number): number {
+  const config = CLICKER_UPGRADE_CONFIG[type]
+  return config.baseEffect + (config.effectPerLevel * level)
+}
+
+export const getClickerUpgrades = async () => {
+  const prisma = getPrismaClient()
+  const types: UpgradeType[] = ['multiplier', 'time_bonus', 'auto_clicker']
+
+  return Promise.all(types.map(async (type) => {
+    let upgrade = await prisma.clickerUpgrade.findUnique({ where: { type } })
+    if (!upgrade) {
+      upgrade = await prisma.clickerUpgrade.create({ data: { type, level: 0 } })
+    }
+    return upgrade
+  }))
+}
+
+export const getClickerUpgradeByType = async (type: UpgradeType) => {
+  const prisma = getPrismaClient()
+  let upgrade = await prisma.clickerUpgrade.findUnique({ where: { type } })
+  if (!upgrade) {
+    upgrade = await prisma.clickerUpgrade.create({ data: { type, level: 0 } })
+  }
+  return upgrade
+}
+
+export const purchaseClickerUpgrade = async (type: UpgradeType) => {
+  const prisma = getPrismaClient()
+
+  const upgrade = await getClickerUpgradeByType(type)
+  const cost = calculateUpgradeCost(type, upgrade.level)
+  const wallet = await getWallet()
+
+  if (wallet.coins < cost) {
+    throw new Error('INSUFFICIENT_FUNDS')
+  }
+
+  const [updatedWallet, updatedUpgrade] = await prisma.$transaction([
+    prisma.wallet.update({
+      where: { id: wallet.id },
+      data: { coins: { decrement: cost } }
+    }),
+    prisma.clickerUpgrade.update({
+      where: { type },
+      data: { level: { increment: 1 } }
+    })
+  ])
+
+  return { wallet: updatedWallet, upgrade: updatedUpgrade, cost }
+}
+
+export const getClickerGameStats = async () => {
+  const upgrades = await getClickerUpgrades()
+
+  const getLevel = (upgradeType: UpgradeType) =>
+    upgrades.find(u => u.type === upgradeType)?.level || 0
+
+  return {
+    multiplier: calculateUpgradeEffect('multiplier', getLevel('multiplier')),
+    gameDuration: calculateUpgradeEffect('time_bonus', getLevel('time_bonus')),
+    autoClicksPerSecond: calculateUpgradeEffect('auto_clicker', getLevel('auto_clicker'))
+  }
 }

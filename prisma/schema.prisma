@@ -53,6 +53,8 @@ model Action {
   happinessAfter  Int?
   healthAfter     Int?
   energyAfter     Int?
+  // Economy
+  coinsEarned     Int?     // Coins earned from this action
   animal          Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
   item            Item?    @relation(fields: [itemId], references: [id])
 }
@@ -66,6 +68,7 @@ model Item {
   healthBoost    Int         @default(0)
   energyBoost    Int         @default(0)
   energyCost     Int         @default(0)
+  price          Int         @default(10) // Price in coins
   emoji          String
   description    String
   actions        Action[]
@@ -77,4 +80,29 @@ model Inventory {
   itemId   String @unique
   quantity Int    @default(0)
   item     Item   @relation(fields: [itemId], references: [id])
+}
+
+// Economy System
+model Wallet {
+  id              String   @id @default(uuid())
+  coins           Int      @default(100) // Starting coins
+  lastPassiveGain DateTime @default(now())
+  createdAt       DateTime @default(now())
+}
+
+model MinigameScore {
+  id          String   @id @default(uuid())
+  gameType    String   // "clicker", etc.
+  score       Int
+  coinsEarned Int
+  playedAt    DateTime @default(now())
+}
+
+// Clicker Upgrades System
+model ClickerUpgrade {
+  id        String   @id @default(uuid())
+  type      String   @unique // "multiplier", "time_bonus", "auto_clicker"
+  level     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

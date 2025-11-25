@@ -9,12 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MinigamesIndexRouteImport } from './routes/minigames/index'
+import { Route as MinigamesClickerRouteImport } from './routes/minigames/clicker'
 import { Route as AnimalsCreateRouteImport } from './routes/animals/create'
 
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinigamesIndexRoute = MinigamesIndexRouteImport.update({
+  id: '/minigames/',
+  path: '/minigames/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinigamesClickerRoute = MinigamesClickerRouteImport.update({
+  id: '/minigames/clicker',
+  path: '/minigames/clicker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnimalsCreateRoute = AnimalsCreateRouteImport.update({
@@ -25,37 +43,81 @@ const AnimalsCreateRoute = AnimalsCreateRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
+  '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames': typeof MinigamesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
+  '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames': typeof MinigamesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
+  '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames/': typeof MinigamesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/animals/create'
+  fullPaths:
+    | '/'
+    | '/shop'
+    | '/animals/create'
+    | '/minigames/clicker'
+    | '/minigames'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/animals/create'
-  id: '__root__' | '/' | '/animals/create'
+  to: '/' | '/shop' | '/animals/create' | '/minigames/clicker' | '/minigames'
+  id:
+    | '__root__'
+    | '/'
+    | '/shop'
+    | '/animals/create'
+    | '/minigames/clicker'
+    | '/minigames/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ShopRoute: typeof ShopRoute
   AnimalsCreateRoute: typeof AnimalsCreateRoute
+  MinigamesClickerRoute: typeof MinigamesClickerRoute
+  MinigamesIndexRoute: typeof MinigamesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minigames/': {
+      id: '/minigames/'
+      path: '/minigames'
+      fullPath: '/minigames'
+      preLoaderRoute: typeof MinigamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minigames/clicker': {
+      id: '/minigames/clicker'
+      path: '/minigames/clicker'
+      fullPath: '/minigames/clicker'
+      preLoaderRoute: typeof MinigamesClickerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/animals/create': {
@@ -70,7 +132,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ShopRoute: ShopRoute,
   AnimalsCreateRoute: AnimalsCreateRoute,
+  MinigamesClickerRoute: MinigamesClickerRoute,
+  MinigamesIndexRoute: MinigamesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

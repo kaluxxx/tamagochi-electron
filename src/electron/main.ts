@@ -68,6 +68,10 @@ function notifyRenderer(channel: string, data: unknown) {
 
 async function runTick() {
   try {
+    // Collect passive coin gains
+    const wallet = await animalService.collectPassiveGains()
+    notifyRenderer('wallet:updated', wallet)
+
     const animals = await animalService.getAllAnimals()
     const aliveAnimals = animals.filter(a => a.isAlive)
 
@@ -297,6 +301,52 @@ ipcMain.handle('inventory:getByType', async (_, type: string) => {
 // IPC Handlers - History
 ipcMain.handle('history:getByAnimalId', async (_, animalId: string, limit?: number) => {
   return animalService.getActionHistory(animalId, limit)
+})
+
+// IPC Handlers - Wallet
+ipcMain.handle('wallet:get', async () => {
+  return animalService.getWallet()
+})
+
+ipcMain.handle('wallet:collectPassive', async () => {
+  return animalService.collectPassiveGains()
+})
+
+ipcMain.handle('wallet:addCoins', async (_, amount: number) => {
+  return animalService.addCoins(amount)
+})
+
+// IPC Handlers - Shop
+ipcMain.handle('shop:getItems', async () => {
+  return animalService.getShopItems()
+})
+
+ipcMain.handle('shop:purchase', async (_, itemId: string, quantity: number) => {
+  return animalService.purchaseItem(itemId, quantity)
+})
+
+// IPC Handlers - Minigame
+ipcMain.handle('minigame:saveScore', async (_, gameType: string, score: number, coinsEarned: number) => {
+  return animalService.saveMinigameScore(gameType, score, coinsEarned)
+})
+
+ipcMain.handle('minigame:getHighScores', async (_, gameType: string) => {
+  return animalService.getMinigameHighScores(gameType)
+})
+
+// IPC Handlers - Clicker Upgrades
+ipcMain.handle('clickerUpgrades:getAll', async () => {
+  return animalService.getClickerUpgrades()
+})
+
+ipcMain.handle('clickerUpgrades:purchase', async (_, type: string) => {
+  const result = await animalService.purchaseClickerUpgrade(type as animalService.UpgradeType)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+ipcMain.handle('clickerUpgrades:getGameStats', async () => {
+  return animalService.getClickerGameStats()
 })
 
 app.whenReady().then(createWindow)
