@@ -2,7 +2,7 @@ import { SpriteImage } from '@/shared/components/ui/sprite-image'
 import { getAnimalSprite, calculateMood } from '@/shared/utils/sprite-loader'
 import { cn } from '@/shared/lib/utils'
 import type { Animal } from '../types'
-import type { ActiveAction } from '../hooks/use-animal-actions'
+import type { ActiveAction } from '@/features/actions/types'
 
 interface GameZoneProps {
   animal: Animal
