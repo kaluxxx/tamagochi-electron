@@ -107,32 +107,14 @@ function stopTickSystem() {
 
 // ============== TRAY ICON ==============
 
+// Icône Tamagotchi 32x32 PNG en base64 (boîtier rose avec écran vert et créature)
+const TRAY_ICON_BASE64 = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKbSURBVFhH7ZY9aBRBFMf/M3t3uTMXk0gUCxFBEBRBsLBQsBEbwUoQBBsLGxs7wcrGwsLCRrCwECwsLETBQrAQBEGwEAQLQRDBQvEjxt8xtzv7xpm7vWRvd/aOCxb+YJi5N/Pm/WfezOwuEUL8V0I0ARYWFjA7O4vp6WnMzMxgamoKExMTGB8fx9jYGEZHRzEyMoLh4WEMDQ1hcHAQAwMD6O/vR19fH3p7e9HT04Pu7m50dXWhs7MTCoUC2tvb0dbWhtbWVrS0tKC5uRlNTU1obGxEQ0MD6uvrUVdXh9raWtTU1KC6uhpVVVWorKxERUUFysvLUVZWhtLSUpSUlKC4uBhFRUUoLCxEQUEB8vPzkZeXh9zcXOTk5CA7OxtZWVnIzMxERkYG0tPTkZaWhtTUVKSkpCA5ORlJSUlITExEQkIC4uPjERcXh9jYWMTExCA6OhpRUVGIjIxEREQEwsPDERYWhtDQUISEhCA4OBhBQUEIDAxEQEAA/P394efnB19fX/j4+MDb2xteXl7w9PSEh4cH3N3d4ebmBldXV7i4uMDZ2RlOTk5wdHSEg4MD7O3tYWdnB1tbW9jY2MDa2hpWVlawtLSEhYUFzM3NYWZmBlNTU5iYmMDY2BhGRkYwNDSEgYEB9PX1oaenBx0dHWhra0NLSwuampqgo6MDLS0taGhoQF1dHaqqqkJFRQXKy8tRWlqKkpISpKenIy0tDVFRUcjOzkZmZiYyMjKQlpaG1NRUpKSkICkpCQkJCYiLi8Mvb2f8+DKB79+/Y3l5GcvLy/j27Ru+fv2KL1++4PPnz/j06RM+fvyIDx8+4P3793j37h3evn2LN2/e4PXr13j16hVevnyJFy9e4Pnz53j27BmePn2KJ0+e4PHjx3j06BEePnyIBw8e4P79+7h37x7u3r2LO3fu4Pbt2/i7/gAbfKdSIVuJSwAAAABJRU5ErkJggg==`
+
 function createTray() {
-  // Charger l'icône depuis le dossier public
-  // En développement : public/sprites/ui/logo.svg
-  // En production : resources/public/sprites/ui/logo.svg
-  let iconPath: string
+  // Créer l'icône depuis le PNG base64
+  const icon = nativeImage.createFromDataURL(TRAY_ICON_BASE64)
 
-  if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
-    iconPath = path.join(__dirname, '../../public/sprites/ui/logo.svg')
-  } else {
-    iconPath = path.join(process.resourcesPath, 'public/sprites/ui/logo.svg')
-  }
-
-  // Créer l'icône - nativeImage supporte SVG sur certaines plateformes
-  // Fallback vers une icône par défaut si le fichier n'existe pas
-  let icon = nativeImage.createFromPath(iconPath)
-
-  // Si l'icône est vide (SVG non supporté), utiliser un fallback PNG encodé en base64
-  if (icon.isEmpty()) {
-    // Fallback: icône Tamagotchi simple en base64 PNG (16x16)
-    icon = nativeImage.createFromDataURL('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANnSURBVFiFtZdNaBNBFMf/M5vdTdK0TdOmtbZVW6pVsKIIXhQRFRQPevCgeBFBEAQRwYMHD+LBg+hBEDx4UBQED4oHQRAUFMGDIIhQBT9QqdZWa5s0H5vdzYyHbJLdbDZN6h/CzszOe7+Zefvm7RKMMfDCGEMgEBh2u92lHo8nSSldAnJIURTPAPgDAFVVVUei0Wg4GAzKiqI4OOeuXbt27SQBbJdleTuA7TRdCYIgHHO5XMccDoerqakpHI1Go8FgkCqK4szLAIDMy0bjxoWCJXVdP5OXgMfjSfKGJElBr9cbCQaDsqIoLq77zBoIh8NhVVVVl8tFOOdYLkXX9TO8BPx+f5QDSDQ0NPjD4XBMURQXqSFr/sN+d/r9fu7z+UIOhyMRiUSi4XCYybIsE8YYrOB5ngEI+nw+v9/v17q7u6WOjo6Ex+NJ8iZrIAgCBYC2trZEV1eX1NnZmXA6nUmeBJKC6wBgaWlJAIDW1tZERIhIXV1dCZ7LAJ/PR9ra2hJdXV1SZ2dnwul0JnkJqDkHMkuSJAFA0ufzSTabLb506dJZp9OZ4CUgiD4fJ4C4z+eLuVyumN1uj9lstuXX2LIsAkA+fPjwjM1miy9cuHC2oaEhIUlSaGBgQJs7d+5gfX39oMPhSBRKQLSCpwSCIAgMQHzOnDkyALS3t8fn5ubOS5LkDwQC8smTJ2MbNmwItrW1RWtra0O8CIKAPwkhJAAEOjo6EgDiNTU1YQCx2bNnywCwa9euWG9vb2Du3LkSL4FkwQ4hOQEiImkPMMYYEonEAABp3rx5EgBUV1cnZ86cmfD7/QleAprhCYIQAIBQKBQBgNraWrG1tTUxe/Zs2d/fH66oqBjknP8XPyNJktDf3x8GgKamJgkAqqqqHDNmzIg3NjYGpk+fHuYlwOsMJsAYCxJCIgAwbdo0GQAmT548WlZWNupyuWKJRMKmKIrAOecCALIFl2UZDocj6nK5hi0A6qWsadOmCQBQXl4+6nK5YoZhSAAkQRBCAPKu8nJBnhASDMMQAeDWrVtBAGhoaJCrq6vjLpeLWY1vtfnI6urqUQCor6+XAWDSpEmjJSUlY4IgJAghCUJI4vjx4zEASbfbLbe2to5WVVXFc6m/AgCTJk0aBYC6ujrZ7XYP5vq/rIA8hfb0n3sUmJf4H/kHKHINmBlCHH0AAAAASUVORK5CYII=')
-  }
-
-  // Redimensionner pour le tray (16x16 sur Windows, peut varier)
-  const resizedIcon = icon.resize({ width: 16, height: 16 })
-
-  tray = new Tray(resizedIcon)
+  tray = new Tray(icon)
 
   const contextMenu = Menu.buildFromTemplate([
     {
