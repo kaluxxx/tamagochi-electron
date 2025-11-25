@@ -199,7 +199,7 @@ export function useActionsStore(animalId: string) {
     // Programmer la fin
     const timeout = globalThis.setTimeout(async () => {
       try {
-        await window.api.inventory.useItem(animalId, itemId)
+        await window.api.items.useItem(animalId, itemId)
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
         await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
         await queryClient.invalidateQueries({ queryKey: ['inventory'] })
