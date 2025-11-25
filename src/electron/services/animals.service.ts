@@ -1,4 +1,4 @@
-import { getPrismaClient } from '@/electron/database/prisma'
+import { getPrismaClient } from '../database/prisma'
 
 // ============== ANIMAL TYPES ==============
 

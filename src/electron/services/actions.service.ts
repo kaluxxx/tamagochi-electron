@@ -1,4 +1,4 @@
-import { getPrismaClient } from '@/electron/database/prisma'
+import { getPrismaClient } from '../database/prisma'
 import { getWallet, ECONOMY_CONFIG } from './economy.service'
 
 // ============== ANIMAL ACTIONS ==============

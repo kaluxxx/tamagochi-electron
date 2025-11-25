@@ -1,5 +1,5 @@
 // Database
-export { initializeDatabase, closeDatabase } from '@/electron/database/prisma'
+export { initializeDatabase, closeDatabase } from '../database/prisma'
 
 // Animals
 export {
