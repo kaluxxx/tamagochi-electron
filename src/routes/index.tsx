@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAnimals } from '@/features/animals/hooks/use-animals'
 import { AnimalTabs } from '@/features/animals/components/animal-tabs'
-import { AnimalGameView } from '@/features/animals/components/animal-game-view'
+import { GameView } from '@/shared/components/layout/game-view.tsx'
 
 export const Route = createFileRoute('/')({
   component: IndexComponent,
@@ -73,7 +73,7 @@ function IndexComponent() {
 
       {/* Zone de jeu principale */}
       <div className="flex-1 bg-[#FFF4E6] border-4 border-black p-4 overflow-hidden">
-        <AnimalGameView animal={selectedAnimal} />
+        <GameView animal={selectedAnimal} />
       </div>
     </main>
   )

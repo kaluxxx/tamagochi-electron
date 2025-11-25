@@ -102,6 +102,20 @@ ipcMain.handle('items:useItem', async (_, animalId: string, itemId: string) => {
   return animalService.useItem(animalId, itemId)
 })
 
+// IPC Handlers - Inventory
+ipcMain.handle('inventory:getAll', async () => {
+  return animalService.getInventory()
+})
+
+ipcMain.handle('inventory:getByType', async (_, type: string) => {
+  return animalService.getInventoryByType(type)
+})
+
+// IPC Handlers - History
+ipcMain.handle('history:getByAnimalId', async (_, animalId: string, limit?: number) => {
+  return animalService.getActionHistory(animalId, limit)
+})
+
 app.whenReady().then(createWindow)
 
 app.on('window-all-closed', async () => {

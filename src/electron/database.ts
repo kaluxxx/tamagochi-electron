@@ -66,61 +66,209 @@ export const createAnimal = async (data: { name: string; typeId: string }) => {
 }
 
 export const feedAnimal = async (id: string) => {
-  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
+  const prisma = getPrismaClient()
+  const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return getPrismaClient().animal.update({
-    where: { id },
-    data: {
-      hunger: Math.min(100, animal.hunger + 20),
-      happiness: Math.min(100, animal.happiness + 5),
-      energy: Math.max(0, animal.energy - 5),
-      updatedAt: new Date()
-    }
-  })
+  // Capture stats before
+  const statsBefore = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: animal.health,
+    energy: animal.energy
+  }
+
+  // Calculate new stats
+  const statsAfter = {
+    hunger: Math.min(100, animal.hunger + 20),
+    happiness: Math.min(100, animal.happiness + 5),
+    health: animal.health,
+    energy: Math.max(0, animal.energy - 5)
+  }
+
+  // Transaction: update animal and record action
+  const [updatedAnimal] = await prisma.$transaction([
+    prisma.animal.update({
+      where: { id },
+      data: {
+        hunger: statsAfter.hunger,
+        happiness: statsAfter.happiness,
+        energy: statsAfter.energy,
+        updatedAt: new Date()
+      },
+      include: { type: true }
+    }),
+    prisma.action.create({
+      data: {
+        animalId: id,
+        actionType: 'feed',
+        hungerBefore: statsBefore.hunger,
+        happinessBefore: statsBefore.happiness,
+        healthBefore: statsBefore.health,
+        energyBefore: statsBefore.energy,
+        hungerAfter: statsAfter.hunger,
+        happinessAfter: statsAfter.happiness,
+        healthAfter: statsAfter.health,
+        energyAfter: statsAfter.energy
+      }
+    })
+  ])
+
+  return updatedAnimal
 }
 
 export const playWithAnimal = async (id: string) => {
-  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
+  const prisma = getPrismaClient()
+  const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
   if (animal.energy < 10) throw new Error('Not enough energy')
 
-  return getPrismaClient().animal.update({
-    where: { id },
-    data: {
-      happiness: Math.min(100, animal.happiness + 15),
-      energy: Math.max(0, animal.energy - 10),
-      hunger: Math.max(0, animal.hunger - 5),
-      updatedAt: new Date()
-    }
-  })
+  // Capture stats before
+  const statsBefore = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: animal.health,
+    energy: animal.energy
+  }
+
+  // Calculate new stats
+  const statsAfter = {
+    hunger: Math.max(0, animal.hunger - 5),
+    happiness: Math.min(100, animal.happiness + 15),
+    health: animal.health,
+    energy: Math.max(0, animal.energy - 10)
+  }
+
+  // Transaction: update animal and record action
+  const [updatedAnimal] = await prisma.$transaction([
+    prisma.animal.update({
+      where: { id },
+      data: {
+        happiness: statsAfter.happiness,
+        energy: statsAfter.energy,
+        hunger: statsAfter.hunger,
+        updatedAt: new Date()
+      },
+      include: { type: true }
+    }),
+    prisma.action.create({
+      data: {
+        animalId: id,
+        actionType: 'play',
+        hungerBefore: statsBefore.hunger,
+        happinessBefore: statsBefore.happiness,
+        healthBefore: statsBefore.health,
+        energyBefore: statsBefore.energy,
+        hungerAfter: statsAfter.hunger,
+        happinessAfter: statsAfter.happiness,
+        healthAfter: statsAfter.health,
+        energyAfter: statsAfter.energy
+      }
+    })
+  ])
+
+  return updatedAnimal
 }
 
 export const healAnimal = async (id: string) => {
-  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
+  const prisma = getPrismaClient()
+  const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return getPrismaClient().animal.update({
-    where: { id },
-    data: {
-      health: Math.min(100, animal.health + 20),
-      updatedAt: new Date()
-    }
-  })
+  // Capture stats before
+  const statsBefore = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: animal.health,
+    energy: animal.energy
+  }
+
+  // Calculate new stats
+  const statsAfter = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: Math.min(100, animal.health + 20),
+    energy: animal.energy
+  }
+
+  // Transaction: update animal and record action
+  const [updatedAnimal] = await prisma.$transaction([
+    prisma.animal.update({
+      where: { id },
+      data: {
+        health: statsAfter.health,
+        updatedAt: new Date()
+      },
+      include: { type: true }
+    }),
+    prisma.action.create({
+      data: {
+        animalId: id,
+        actionType: 'heal',
+        hungerBefore: statsBefore.hunger,
+        happinessBefore: statsBefore.happiness,
+        healthBefore: statsBefore.health,
+        energyBefore: statsBefore.energy,
+        hungerAfter: statsAfter.hunger,
+        happinessAfter: statsAfter.happiness,
+        healthAfter: statsAfter.health,
+        energyAfter: statsAfter.energy
+      }
+    })
+  ])
+
+  return updatedAnimal
 }
 
 export const sleepAnimal = async (id: string) => {
-  const animal = await getPrismaClient().animal.findUnique({ where: { id } })
+  const prisma = getPrismaClient()
+  const animal = await prisma.animal.findUnique({ where: { id } })
   if (!animal) throw new Error('Animal not found')
 
-  return getPrismaClient().animal.update({
-    where: { id },
-    data: {
-      energy: Math.min(100, animal.energy + 30),
-      happiness: Math.min(100, animal.happiness + 5),
-      updatedAt: new Date()
-    }
-  })
+  // Capture stats before
+  const statsBefore = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: animal.health,
+    energy: animal.energy
+  }
+
+  // Calculate new stats
+  const statsAfter = {
+    hunger: animal.hunger,
+    happiness: Math.min(100, animal.happiness + 5),
+    health: animal.health,
+    energy: Math.min(100, animal.energy + 30)
+  }
+
+  // Transaction: update animal and record action
+  const [updatedAnimal] = await prisma.$transaction([
+    prisma.animal.update({
+      where: { id },
+      data: {
+        energy: statsAfter.energy,
+        happiness: statsAfter.happiness,
+        updatedAt: new Date()
+      },
+      include: { type: true }
+    }),
+    prisma.action.create({
+      data: {
+        animalId: id,
+        actionType: 'sleep',
+        hungerBefore: statsBefore.hunger,
+        happinessBefore: statsBefore.happiness,
+        healthBefore: statsBefore.health,
+        energyBefore: statsBefore.energy,
+        hungerAfter: statsAfter.hunger,
+        happinessAfter: statsAfter.happiness,
+        healthAfter: statsAfter.health,
+        energyAfter: statsAfter.energy
+      }
+    })
+  ])
+
+  return updatedAnimal
 }
 
 export const tickAnimal = async (id: string) => {
@@ -202,28 +350,87 @@ export const getItemsByType = async (type: string) => {
 }
 
 export const useItem = async (animalId: string, itemId: string) => {
-  const animal = await getPrismaClient().animal.findUnique({ where: { id: animalId } })
-  const item = await getPrismaClient().item.findUnique({ where: { id: itemId } })
+  const prisma = getPrismaClient()
+  const animal = await prisma.animal.findUnique({ where: { id: animalId } })
+  const item = await prisma.item.findUnique({ where: { id: itemId } })
+  const inventoryEntry = await prisma.inventory.findUnique({ where: { itemId } })
 
   if (!animal) throw new Error('Animal not found')
   if (!item) throw new Error('Item not found')
-  if (animal.energy < item.energyCost) throw new Error('Not enough energy')
+  if (!inventoryEntry || inventoryEntry.quantity <= 0) throw new Error('Item out of stock')
+  if (animal.energy < item.energyCost) throw new Error('NOT_ENOUGH_ENERGY')
 
-  // Apply item effects
-  const updatedAnimal = await getPrismaClient().animal.update({
-    where: { id: animalId },
-    data: {
-      hunger: Math.min(100, animal.hunger + item.hungerBoost),
-      happiness: Math.min(100, animal.happiness + item.happinessBoost),
-      health: Math.min(100, animal.health + item.healthBoost),
-      energy: Math.max(0, animal.energy + item.energyBoost - item.energyCost),
-      updatedAt: new Date()
-    },
-    include: { type: true }
-  })
+  // Capture stats before
+  const statsBefore = {
+    hunger: animal.hunger,
+    happiness: animal.happiness,
+    health: animal.health,
+    energy: animal.energy
+  }
 
-  // Record action
-  await recordAction(animalId, 'use_item', itemId)
+  // Calculate new stats
+  const statsAfter = {
+    hunger: Math.min(100, animal.hunger + item.hungerBoost),
+    happiness: Math.min(100, animal.happiness + item.happinessBoost),
+    health: Math.min(100, animal.health + item.healthBoost),
+    energy: Math.max(0, animal.energy + item.energyBoost - item.energyCost)
+  }
+
+  // Transaction: update animal, decrement inventory, record action
+  const [updatedAnimal] = await prisma.$transaction([
+    prisma.animal.update({
+      where: { id: animalId },
+      data: {
+        ...statsAfter,
+        updatedAt: new Date()
+      },
+      include: { type: true }
+    }),
+    prisma.inventory.update({
+      where: { itemId },
+      data: { quantity: { decrement: 1 } }
+    }),
+    prisma.action.create({
+      data: {
+        animalId,
+        actionType: 'use_item',
+        itemId,
+        hungerBefore: statsBefore.hunger,
+        happinessBefore: statsBefore.happiness,
+        healthBefore: statsBefore.health,
+        energyBefore: statsBefore.energy,
+        hungerAfter: statsAfter.hunger,
+        happinessAfter: statsAfter.happiness,
+        healthAfter: statsAfter.health,
+        energyAfter: statsAfter.energy
+      }
+    })
+  ])
 
   return updatedAnimal
+}
+
+// Inventory operations
+export const getInventory = async () => {
+  return getPrismaClient().inventory.findMany({
+    include: { item: true },
+    orderBy: { item: { type: 'asc' } }
+  })
+}
+
+export const getInventoryByType = async (type: string) => {
+  return getPrismaClient().inventory.findMany({
+    where: { item: { type } },
+    include: { item: true }
+  })
+}
+
+// Action history with stats delta
+export const getActionHistory = async (animalId: string, limit = 20) => {
+  return getPrismaClient().action.findMany({
+    where: { animalId },
+    include: { item: true },
+    orderBy: { timestamp: 'desc' },
+    take: limit
+  })
 }

@@ -4,8 +4,11 @@ import { useCallback } from 'react'
 
 const SLEEP_DURATION_MS = 30000 // 30 secondes
 const PLAY_DURATION_MS = 20000  // 20 secondes
+const FEED_DURATION_MS = 5000   // 5 secondes
+const HEAL_DURATION_MS = 8000   // 8 secondes
+const USE_ITEM_DURATION_MS = 3000 // 3 secondes
 
-export type ActiveActionType = 'sleeping' | 'playing'
+export type ActiveActionType = 'sleeping' | 'playing' | 'feeding' | 'healing' | 'using_item'
 
 interface ActiveAction {
   type: ActiveActionType
@@ -60,6 +63,9 @@ export function useAnimalActionsStore(animalId: string) {
   const activeAction = activeActions[animalId]
   const isSleeping = activeAction?.type === 'sleeping'
   const isPlaying = activeAction?.type === 'playing'
+  const isFeeding = activeAction?.type === 'feeding'
+  const isHealing = activeAction?.type === 'healing'
+  const isUsingItem = activeAction?.type === 'using_item'
 
   const handleStartSleep = useCallback(() => {
     // Nettoyer le timer existant si présent
@@ -80,6 +86,7 @@ export function useAnimalActionsStore(animalId: string) {
       try {
         await window.api.animals.sleep(animalId)
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
+        await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
         endAction(animalId)
         actionTimeouts.delete(animalId)
@@ -108,11 +115,101 @@ export function useAnimalActionsStore(animalId: string) {
       try {
         await window.api.animals.play(animalId)
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
+        await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
     }, PLAY_DURATION_MS)
+
+    actionTimeouts.set(animalId, timeout)
+  }, [animalId, queryClient, startAction, endAction])
+
+  const handleStartFeed = useCallback(() => {
+    // Nettoyer le timer existant si présent
+    const existingTimeout = actionTimeouts.get(animalId)
+    if (existingTimeout) {
+      globalThis.clearTimeout(existingTimeout)
+    }
+
+    // Démarrer l'action
+    startAction(animalId, {
+      type: 'feeding',
+      startTime: Date.now(),
+      duration: FEED_DURATION_MS,
+    })
+
+    // Programmer la fin
+    const timeout = globalThis.setTimeout(async () => {
+      try {
+        await window.api.animals.feed(animalId)
+        await queryClient.invalidateQueries({ queryKey: ['animals'] })
+        await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
+      } finally {
+        endAction(animalId)
+        actionTimeouts.delete(animalId)
+      }
+    }, FEED_DURATION_MS)
+
+    actionTimeouts.set(animalId, timeout)
+  }, [animalId, queryClient, startAction, endAction])
+
+  const handleStartHeal = useCallback(() => {
+    // Nettoyer le timer existant si présent
+    const existingTimeout = actionTimeouts.get(animalId)
+    if (existingTimeout) {
+      globalThis.clearTimeout(existingTimeout)
+    }
+
+    // Démarrer l'action
+    startAction(animalId, {
+      type: 'healing',
+      startTime: Date.now(),
+      duration: HEAL_DURATION_MS,
+    })
+
+    // Programmer la fin
+    const timeout = globalThis.setTimeout(async () => {
+      try {
+        await window.api.animals.heal(animalId)
+        await queryClient.invalidateQueries({ queryKey: ['animals'] })
+        await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
+      } finally {
+        endAction(animalId)
+        actionTimeouts.delete(animalId)
+      }
+    }, HEAL_DURATION_MS)
+
+    actionTimeouts.set(animalId, timeout)
+  }, [animalId, queryClient, startAction, endAction])
+
+  const handleStartUseItem = useCallback((itemId: string, onComplete: () => void) => {
+    // Nettoyer le timer existant si présent
+    const existingTimeout = actionTimeouts.get(animalId)
+    if (existingTimeout) {
+      globalThis.clearTimeout(existingTimeout)
+    }
+
+    // Démarrer l'action
+    startAction(animalId, {
+      type: 'using_item',
+      startTime: Date.now(),
+      duration: USE_ITEM_DURATION_MS,
+    })
+
+    // Programmer la fin
+    const timeout = globalThis.setTimeout(async () => {
+      try {
+        await window.api.inventory.useItem(animalId, itemId)
+        await queryClient.invalidateQueries({ queryKey: ['animals'] })
+        await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
+        await queryClient.invalidateQueries({ queryKey: ['inventory'] })
+        onComplete()
+      } finally {
+        endAction(animalId)
+        actionTimeouts.delete(animalId)
+      }
+    }, USE_ITEM_DURATION_MS)
 
     actionTimeouts.set(animalId, timeout)
   }, [animalId, queryClient, startAction, endAction])
@@ -124,10 +221,16 @@ export function useAnimalActionsStore(animalId: string) {
   return {
     isSleeping,
     isPlaying,
+    isFeeding,
+    isHealing,
+    isUsingItem,
     activeActionType: activeAction?.type,
     getProgress: getProgressForAnimal,
     handleStartSleep,
     handleStartPlay,
+    handleStartFeed,
+    handleStartHeal,
+    handleStartUseItem,
     hasActiveAction: !!activeAction,
   }
 }

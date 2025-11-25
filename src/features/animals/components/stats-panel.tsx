@@ -56,8 +56,8 @@ export function StatsPanel({ animal, isSleeping, isPlaying }: StatsPanelProps) {
   }
 
   return (
-    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col">
-      <div className="border-b-4 border-black pb-3 mb-4">
+    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col flex-1 min-h-0">
+      <div className="border-b-4 border-black pb-3 mb-4 shrink-0">
         <div className="flex items-center justify-center gap-2">
           <h2 className="font-pixel text-[12px] text-black text-center uppercase tracking-wider">
             {animal.name}
@@ -77,7 +77,7 @@ export function StatsPanel({ animal, isSleeping, isPlaying }: StatsPanelProps) {
       </div>
 
       {/* Infos */}
-      <div className="space-y-2 mb-4">
+      <div className="space-y-2 mb-4 shrink-0">
         <div className="flex justify-between">
           <span className="font-pixel text-[8px] text-black">AGE</span>
           <span className="font-pixel text-[8px] text-black">{ageInDays} JOUR{ageInDays > 1 ? 'S' : ''}</span>
@@ -90,8 +90,8 @@ export function StatsPanel({ animal, isSleeping, isPlaying }: StatsPanelProps) {
         </div>
       </div>
 
-      {/* Stats Bars */}
-      <div className="space-y-3 flex-1">
+      {/* Stats Bars - scrollable with pixel scrollbar */}
+      <div className="space-y-3 flex-1 p-1 overflow-y-auto pixel-scrollbar">
         <StatBar
           label="Santé"
           value={animal.health}
