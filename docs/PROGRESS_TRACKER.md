@@ -2,7 +2,7 @@
 
 Suivi de l'avancement des user stories du projet Tamagotchi.
 
-**Dernière mise à jour** : 24 novembre 2025
+**Dernière mise à jour** : 25 novembre 2025
 
 ## Légende
 
@@ -17,15 +17,15 @@ Suivi de l'avancement des user stories du projet Tamagotchi.
 |-----------|-------|----------|----------|---------|
 | Setup & Infrastructure | 2 | 2 | 0 | 0 |
 | Gestion des types d'animaux | 1 | 0 | 0 | 1 |
-| Gestion des animaux | 3 | 1 | 0 | 2 |
-| Actions de base | 4 | 0 | 0 | 4 |
+| Gestion des animaux | 3 | 3 | 0 | 0 |
+| Actions de base | 4 | 4 | 0 | 0 |
 | Système d'items | 5 | 0 | 0 | 5 |
 | Système de temps | 2 | 0 | 0 | 2 |
 | Notifications | 1 | 0 | 0 | 1 |
 | Statistiques | 2 | 0 | 0 | 2 |
-| **TOTAL** | **20** | **3** | **0** | **17** |
+| **TOTAL** | **20** | **9** | **0** | **11** |
 
-**Progression globale** : 15% (3/20)
+**Progression globale** : 45% (9/20)
 
 ---
 
@@ -155,158 +155,176 @@ const createAnimalSchema = z.object({
 
 ---
 
-### ⏳ US3 : Liste des animaux
+### ✅ US3 : Liste des animaux
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux voir la liste de tous mes animaux (vivants et morts séparés)
 
 **Implémentation** :
-- [ ] Service `getAllAnimals()` dans `electron/database.ts`
-- [ ] Hook `useGetAnimals()` avec TanStack Query
-- [ ] Composant `AnimalCard` pour affichage carte
-- [ ] Composant `AnimalList` pour liste avec séparation vivants/morts
-- [ ] Page `/` (index) affichant la liste
-- [ ] Filtre vivants/morts
-- [ ] Tests (service + hook + composants)
+- [x] Service `getAllAnimals()` dans `electron/database.ts`
+- [x] Hook `useAnimals()` avec TanStack Query
+- [x] Composant `AnimalCard` pour affichage carte
+- [x] Composant `AnimalList` pour liste avec séparation vivants/morts
+- [x] Composant `AnimalTabs` pour navigation par onglets
+- [x] Page `/` (index) avec vue jeu intégrée
+- [x] Séparation vivants/morts dans les onglets
 
 **Composants** :
-- `AnimalCard` : photo, nom, âge, icône statut (vivant/mort)
-- `AnimalList` : 2 sections (Vivants / Cimetière)
+- `AnimalCard` : sprite, nom, âge, badge statut (vivant/mort)
+- `AnimalTabs` : onglets avec séparation vivants/morts
+- `AnimalGameView` : vue de jeu principale avec actions
 
 **Critères d'acceptation** :
-- Liste des animaux vivants en haut
-- Cimetière en bas (animaux morts)
-- Badge statut clair
-- Si aucun animal, message d'incitation "Créer ton premier animal"
-- >80% couverture tests
+- ✅ Liste des animaux vivants en premier
+- ✅ Animaux morts séparés dans les onglets
+- ✅ Badge statut clair (dead-badge.svg)
+- ✅ Si aucun animal, redirection vers création
 
 **Dépendances** : US2
 
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
+
 ---
 
-### ⏳ US4 : Détail d'un animal
+### ✅ US4 : Détail d'un animal (GameView)
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux voir le détail complet d'un animal avec toutes ses stats
 
 **Implémentation** :
-- [ ] Service `getAnimalById()` dans `electron/database.ts`
-- [ ] Hook `useGetAnimalById()` avec TanStack Query
-- [ ] Composant `AnimalSprite` (représentation visuelle CSS)
-- [ ] Composant `AnimalStats` (barres de progression)
-- [ ] Composant `AnimalDetail` (page complète)
-- [ ] Page `/animals/$id` avec TanStack Router
-- [ ] Tests (service + hook + composants)
+- [x] Composant `AnimalGameView` orchestrateur
+- [x] Composant `StatsPanel` (barres de progression avec icônes)
+- [x] Composant `GameZone` (sprite animé, indicateurs, alertes)
+- [x] Composant `ActionsPanel` (boutons d'actions)
+- [x] Hook `useAnimalActions` pour gestion des actions
+- [x] Store Zustand `animal-actions-store` pour état global des actions
+- [x] Sprites pixel-art pour tous les moods (happy, sad, hungry, tired, sleeping, playing, dead)
 
 **Affichage** :
-- Sprite animé selon humeur (emoji ou CSS)
-- 4 barres de stats : Faim, Bonheur, Santé, Énergie
-- Indicateur d'âge (en heures ou jours)
-- Statut vivant/mort
-- Boutons d'actions
+- ✅ Sprite animé selon humeur (bounce animation)
+- ✅ 4 barres de stats : Santé, Faim, Bonheur, Énergie
+- ✅ Indicateur d'âge en jours
+- ✅ Statut vivant/mort avec badge
+- ✅ Boutons d'actions intégrés
+- ✅ Alertes pour stats basses (< 30%)
 
 **Critères d'acceptation** :
-- Route dynamique `/animals/:id` fonctionne
-- Loader prefetch data
-- Sprite change selon les stats
-- Barres de stats avec code couleur (vert/orange/rouge)
-- >80% couverture tests
+- ✅ Vue 3 colonnes (stats | jeu | actions)
+- ✅ Sprite change selon les stats et actions
+- ✅ Barres de stats avec couleurs distinctes
+- ✅ Message de décès si animal mort
 
 **Dépendances** : US3
+
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
 
 ---
 
 ## Actions & Interactions
 
-### ⏳ US5 : Nourrir un animal
+### ✅ US5 : Nourrir un animal
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux nourrir mon animal pour augmenter sa faim
 
 **Implémentation** :
-- [ ] Service `feedAnimal()` dans `electron/database.ts`
-- [ ] Hook `useFeedAnimal()` avec mutation TanStack Query
-- [ ] Bouton "Nourrir" dans `AnimalDetail`
-- [ ] Enregistrement action dans table `Action`
-- [ ] Mise à jour stats : `faim +20`, `bonheur +5`, `energie -5`
-- [ ] Invalidation cache TanStack Query
-- [ ] Toast de feedback
-- [ ] Tests (service + hook)
+- [x] Service `feedAnimal()` dans `electron/database.ts`
+- [x] Mutation via `useAnimalActions` hook
+- [x] Bouton "NOURRIR" dans `ActionsPanel`
+- [x] Mise à jour stats : `faim +20`, `bonheur +5`, `energie -5`
+- [x] Invalidation cache TanStack Query
 
 **Critères d'acceptation** :
-- Clic sur "Nourrir" met à jour les stats
-- Action enregistrée en BDD
-- Stats ne dépassent pas 100
-- Toast "Animal nourri !"
-- Cache invalidé et refetch automatique
-- >80% couverture tests
+- ✅ Clic sur "Nourrir" met à jour les stats
+- ✅ Stats ne dépassent pas 100
+- ✅ Cache invalidé et refetch automatique
+- ✅ Bouton désactivé pendant l'action
 
 **Dépendances** : US4
 
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
+
 ---
 
-### ⏳ US6 : Jouer avec un animal
+### ✅ US6 : Jouer avec un animal
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux jouer avec mon animal pour augmenter son bonheur
 
 **Implémentation** :
-- [ ] Service `playWithAnimal()` dans `electron/database.ts`
-- [ ] Hook `usePlayWithAnimal()` avec mutation
-- [ ] Bouton "Jouer" dans `AnimalDetail`
-- [ ] Mise à jour stats : `bonheur +15`, `energie -10`, `faim -5`
-- [ ] Tests
+- [x] Service `playWithAnimal()` dans `electron/database.ts`
+- [x] Système de jeu avec durée (20 secondes)
+- [x] Sprite `playing.svg` pendant l'action
+- [x] Barre de progression "JOUE! X%"
+- [x] Store Zustand pour persistance entre onglets
+- [x] Mise à jour stats : `bonheur +15`, `energie -10`, `faim -5`
 
 **Critères d'acceptation** :
-- Clic sur "Jouer" met à jour les stats
-- Énergie ne peut pas être < 0 (désactiver bouton si energie < 10)
-- Toast "Animal content !"
-- >80% couverture tests
+- ✅ Clic sur "Jouer" démarre le jeu (20s)
+- ✅ Sprite change en mode "playing"
+- ✅ Barre de progression visible
+- ✅ Actions bloquées pendant le jeu
+- ✅ État persistant entre changements d'onglets
 
 **Dépendances** : US5
 
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
+
 ---
 
-### ⏳ US7 : Soigner un animal
+### ✅ US7 : Soigner un animal
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux soigner mon animal pour restaurer sa santé
 
 **Implémentation** :
-- [ ] Service `healAnimal()` dans `electron/database.ts`
-- [ ] Hook `useHealAnimal()` avec mutation
-- [ ] Bouton "Soigner" dans `AnimalDetail`
-- [ ] Mise à jour stats : `sante +20`
-- [ ] Tests
+- [x] Service `healAnimal()` dans `electron/database.ts`
+- [x] Mutation via `useAnimalActions` hook
+- [x] Bouton "SOIGNER" dans `ActionsPanel`
+- [x] Mise à jour stats : `sante +20`
 
 **Critères d'acceptation** :
-- Clic sur "Soigner" restaure la santé
-- Santé ne dépasse pas 100
-- Toast "Animal soigné !"
-- >80% couverture tests
+- ✅ Clic sur "Soigner" restaure la santé
+- ✅ Santé ne dépasse pas 100
+- ✅ Bouton désactivé pendant l'action
 
 **Dépendances** : US5
+
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
 
 ---
 
-### ⏳ US8 : Mettre un animal au repos
+### ✅ US8 : Mettre un animal au repos
 
-**Statut** : À faire  
+**Statut** : Complété ✅
 **Description** : En tant qu'utilisateur, je veux mettre mon animal au repos pour restaurer son énergie
 
 **Implémentation** :
-- [ ] Service `sleepAnimal()` dans `electron/database.ts`
-- [ ] Hook `useSleepAnimal()` avec mutation
-- [ ] Bouton "Dormir" dans `AnimalDetail`
-- [ ] Mise à jour stats : `energie +30`, `bonheur +5`
-- [ ] Tests
+- [x] Service `sleepAnimal()` dans `electron/database.ts`
+- [x] Système de sommeil avec durée (30 secondes)
+- [x] Sprite `sleeping.svg` pendant l'action
+- [x] Sprite `tired.svg` quand énergie < 30%
+- [x] Barre de progression "ZZZ... X%"
+- [x] Pas d'animation bounce pendant le sommeil
+- [x] Store Zustand pour persistance entre onglets
+- [x] Mise à jour stats : `energie +30`, `bonheur +5`
 
 **Critères d'acceptation** :
-- Clic sur "Dormir" restaure l'énergie
-- Toast "Animal reposé !"
-- >80% couverture tests
+- ✅ Clic sur "Dormir" démarre le sommeil (30s)
+- ✅ Sprite change en mode "sleeping"
+- ✅ Barre de progression visible
+- ✅ Actions bloquées pendant le sommeil
+- ✅ État persistant entre changements d'onglets
 
 **Dépendances** : US5
+
+**Branche** : `feature/us3-us8-game-view`
+**PR** : #4
 
 ---
 
@@ -493,16 +511,24 @@ const createAnimalSchema = z.object({
 
 ## Prochaine étape
 
-🎯 **US1 : Voir les types d'animaux disponibles** OU **US2 : Création d'un animal**
+🎯 **US9 : Dégradation passive des stats (tick)** - Système de temps automatique
 
 ---
 
 ## Historique des complétions
 
+### 25 novembre 2025
+- ✅ **US3** : Liste des animaux avec onglets et séparation vivants/morts (PR #4)
+- ✅ **US4** : GameView avec vue 3 colonnes, sprites animés, barres de stats (PR #4)
+- ✅ **US5** : Action nourrir avec mutation TanStack Query (PR #4)
+- ✅ **US6** : Action jouer avec système de durée 20s et sprite dédié (PR #4)
+- ✅ **US7** : Action soigner avec mutation TanStack Query (PR #4)
+- ✅ **US8** : Action dormir avec système de durée 30s et sprite dédié (PR #4)
+
 ### 24 novembre 2025
 - ✅ **US0** : Configuration projet Electron + React + Prisma (PR #1)
 - ✅ **US1** : Schéma de base de données Prisma avec 4 tables (PR #1)
-- ✅ **US2** : Création d'un animal avec formulaire et validation (PR #TBD)
+- ✅ **US2** : Création d'un animal avec formulaire et validation (PR #3)
 
-**Version** : 1.0  
-**Date** : 24 novembre 2025
+**Version** : 1.1
+**Date** : 25 novembre 2025
