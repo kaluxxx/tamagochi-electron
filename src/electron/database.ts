@@ -271,7 +271,40 @@ export const sleepAnimal = async (id: string) => {
   return updatedAnimal
 }
 
-export const tickAnimal = async (id: string) => {
+export interface TickResult {
+  animal: {
+    id: string
+    name: string
+    typeId: string
+    hunger: number
+    happiness: number
+    health: number
+    energy: number
+    age: number
+    createdAt: Date
+    updatedAt: Date
+    isAlive: boolean
+    type: {
+      id: string
+      name: string
+      displayName: string
+      hungerDecayRate: number
+      happinessDecayRate: number
+      energyDecayRate: number
+      healthDecayRate: number
+      emoji: string
+    }
+  }
+  justDied: boolean
+  criticalStats: {
+    hunger: boolean
+    happiness: boolean
+    energy: boolean
+    health: boolean
+  }
+}
+
+export const tickAnimal = async (id: string): Promise<TickResult> => {
   const animal = await getPrismaClient().animal.findUnique({
     where: { id },
     include: { type: true }
@@ -288,15 +321,23 @@ export const tickAnimal = async (id: string) => {
   const newHappiness = Math.max(0, animal.happiness - hoursElapsed * animal.type.happinessDecayRate)
   const newEnergy = Math.max(0, animal.energy - hoursElapsed * animal.type.energyDecayRate)
 
-  // Health decreases only if hunger or happiness < 20
-  const newHealth = (newHunger < 20 || newHappiness < 20)
-    ? Math.max(0, animal.health - hoursElapsed * animal.type.healthDecayRate)
+  // Count critical stats (< 20) for health degradation multiplier
+  const criticalStatsCount = [
+    newHunger < 20,
+    newHappiness < 20,
+    newEnergy < 20
+  ].filter(Boolean).length
+
+  // Health decreases when any stat < 20, multiplied by number of critical stats
+  const newHealth = criticalStatsCount > 0
+    ? Math.max(0, animal.health - hoursElapsed * animal.type.healthDecayRate * criticalStatsCount)
     : animal.health
 
   // Death if health = 0
   const isAlive = newHealth > 0
+  const wasAlive = animal.isAlive
 
-  return getPrismaClient().animal.update({
+  const updatedAnimal = await getPrismaClient().animal.update({
     where: { id },
     data: {
       hunger: newHunger,
@@ -309,6 +350,17 @@ export const tickAnimal = async (id: string) => {
     },
     include: { type: true }
   })
+
+  return {
+    animal: updatedAnimal,
+    justDied: wasAlive && !isAlive,
+    criticalStats: {
+      hunger: newHunger < 30,
+      happiness: newHappiness < 30,
+      energy: newEnergy < 30,
+      health: newHealth < 30
+    }
+  }
 }
 
 // Action operations
