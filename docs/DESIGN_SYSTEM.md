@@ -150,13 +150,29 @@ small: Nunito Regular, 14px
 
 ### États émotionnels (expressions)
 
-Chaque animal a **5 états** :
+Chaque animal a **9 états** organisés par priorité :
 
-1. **Content** 😊 : Yeux en forme de U, bouche souriante, animation de sautillement
-2. **Triste** 😢 : Yeux tombants, larme qui coule, posture affaissée
-3. **Affamé** 😫 : Yeux écarquillés, bouche ouverte, ventre qui gargouille (animation)
-4. **Endormi** 😴 : Yeux fermés, "ZZZ" au-dessus de la tête, respiration lente
-5. **Neutre** 😐 : Expression par défaut, yeux ouverts, posture droite
+**États d'action** (priorité maximale) :
+1. **Sleeping** 😴 : Yeux fermés, "ZZZ" au-dessus de la tête, respiration lente
+2. **Playing** 🎮 : Animation joyeuse, mouvement actif
+3. **Feeding** 🍖 : Animation de mastication
+4. **Healing** 💊 : Animation de soin
+5. **Using Item** 🎁 : Animation d'utilisation
+
+**États basés sur les stats** :
+6. **Sick** 🤒 : si `sante < 30` - spirale animation, visage malade
+7. **Tired** 😪 : si `energie < 30` - yeux mi-clos, bâillement
+8. **Hungry** 😫 : si `faim < 30` - ventre qui gargouille, yeux écarquillés
+9. **Sad** 😢 : si `bonheur < 30` - larme qui coule, posture affaissée
+
+**État positif** :
+10. **Happy** 😊 : si `bonheur > 60` ET `faim > 60` - cœurs, sautillement
+
+**État par défaut** :
+11. **Neutral** 😐 : Expression par défaut, yeux ouverts, posture droite
+
+**État terminal** :
+12. **Dead** 💀 : Yeux en croix, grisé, pas d'animation
 
 ### Animations
 
@@ -376,30 +392,42 @@ Endormi : 2 frames, loop 3s
 
 ## 📱 Layout & Grille
 
-### Structure de page
+### Structure de page - GameView (3 colonnes)
 
 ```
-┌─────────────────────────────────┐
-│         Header (64px)            │
-│  Logo | Titre | Bouton Créer     │
-├─────────────────────────────────┤
-│                                  │
-│         Main Content             │
-│    (Grid ou Flex selon page)    │
-│                                  │
-│                                  │
-└─────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Header / Tabs animaux                      │
+├──────────────┬──────────────────────┬───────────────────────┤
+│              │                      │                        │
+│  Left Panel  │    Center Zone       │    Right Panel         │
+│  (collapsible)│    (Game View)       │    (collapsible)       │
+│              │                      │                        │
+│  - StatsPanel│  - AnimalSprite      │  - ActionsPanel        │
+│  - HistoryPanel│  - Progress bars    │  - InventoryPanel      │
+│              │  - Death message     │                        │
+│              │                      │                        │
+└──────────────┴──────────────────────┴───────────────────────┘
 ```
 
-### Grille (liste animaux)
+### Responsive Panels
+
+Les panels gauche et droite sont collapsibles via des boutons chevron.
+Sur petits écrans, ils s'affichent en overlay.
+
+### Grille (liste animaux via Tabs)
 
 ```css
-.animals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  padding: 24px;
+/* Onglets animaux */
+.animal-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px;
 }
+
+/* Séparation vivants / morts dans les tabs */
+.animal-tab.alive { /* Normal styling */ }
+.animal-tab.dead { opacity: 0.6; /* Badge cimetière */ }
 ```
 
 ### Espacements (système 8px)
@@ -471,25 +499,37 @@ Pour une utilisation le soir sans fatiguer les yeux.
 
 ## 📦 Assets à préparer
 
-### Sprites (3 animaux × 5 états = 15 sprites)
-- `cat-happy.png` (64×64px)
-- `cat-sad.png`
-- `cat-hungry.png`
-- `cat-sleeping.png`
-- `cat-neutral.png`
-- `dog-*.png` (×5)
-- `alien-*.png` (×5)
+### Sprites (3 animaux × 12 états = 36 sprites)
 
-### Icônes d'actions (4 icônes)
-- `icon-feed.svg` (🍖)
-- `icon-play.svg` (🎮)
-- `icon-heal.svg` (💊)
-- `icon-sleep.svg` (😴)
+**Par animal (cat, dog, alien):**
+- `{animal}-happy.svg` - État content (cœurs)
+- `{animal}-sad.svg` - État triste (larmes)
+- `{animal}-hungry.svg` - État affamé
+- `{animal}-tired.svg` - État fatigué
+- `{animal}-sick.svg` - État malade
+- `{animal}-neutral.svg` - État par défaut
+- `{animal}-sleeping.svg` - Action dormir
+- `{animal}-playing.svg` - Action jouer
+- `{animal}-feeding.svg` - Action nourrir
+- `{animal}-healing.svg` - Action soigner
+- `{animal}-using-item.svg` - Utilisation item
+- `{animal}-dead.svg` - État mort
+
+### Icônes d'actions
+- `icon-feed.svg` (🍖 Nourrir)
+- `icon-play.svg` (🎮 Jouer)
+- `icon-heal.svg` (💊 Soigner)
+- `icon-sleep.svg` (😴 Dormir)
+
+### Icônes items
+- `icon-food.svg` - Catégorie nourriture
+- `icon-toy.svg` - Catégorie jouets
+- `icon-medicine.svg` - Catégorie médicaments
 
 ### UI Elements
 - `logo.svg` (logo de l'app)
 - `empty-state.svg` (illustration écran vide)
-- `tombstone.svg` (pierre tombale pour cimetière)
+- `dead-badge.svg` (badge cimetière pour onglets)
 
 ---
 
@@ -527,6 +567,6 @@ Avant de lancer le développement :
 
 ---
 
-**Version** : 1.0  
-**Date** : 24 novembre 2025  
-**Statut** : Charte graphique validée
+**Version** : 2.0
+**Date** : 25 novembre 2025
+**Statut** : Charte graphique mise à jour (post-implémentation)
