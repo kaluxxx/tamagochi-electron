@@ -5,7 +5,7 @@
  * All sprites are stored in public/sprites/ directory.
  */
 
-export type MoodType = 'happy' | 'sad' | 'hungry' | 'sleeping' | 'playing' | 'tired' | 'neutral' | 'dead'
+export type MoodType = 'happy' | 'sad' | 'hungry' | 'sleeping' | 'playing' | 'tired' | 'neutral' | 'dead' | 'sick'
 export type ItemType = 'food' | 'toy' | 'medicine'
 export type StatType = 'hunger' | 'happiness' | 'health' | 'energy'
 export type ActionType = 'feed' | 'play' | 'heal' | 'sleep'
@@ -60,7 +60,7 @@ export const getUISprite = (uiElement: string): string => {
 /**
  * Calculate the mood of an animal based on its stats
  * @param stats - The animal's current stats
- * @param activeAction - Current active action ('sleeping' | 'playing')
+ * @param activeAction - Current active action
  * @returns The appropriate mood type
  */
 export const calculateMood = (stats: {
@@ -68,14 +68,15 @@ export const calculateMood = (stats: {
   happiness: number
   energy: number
   health: number
-}, activeAction?: 'sleeping' | 'playing'): MoodType => {
+}, activeAction?: 'sleeping' | 'playing' | 'feeding' | 'healing' | 'using_item'): MoodType => {
   // Actions actives prioritaires
   if (activeAction === 'sleeping') return 'sleeping'
   if (activeAction === 'playing') return 'playing'
 
-  const { hunger, happiness, energy } = stats
+  const { hunger, happiness, energy, health } = stats
 
-  // Priority: tired > hungry > sad > happy > neutral
+  // Priority: sick > tired > hungry > sad > happy > neutral
+  if (health < 30) return 'sick'
   if (energy < 30) return 'tired'
   if (hunger < 30) return 'hungry'
   if (happiness < 30) return 'sad'

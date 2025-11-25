@@ -23,5 +23,12 @@ contextBridge.exposeInMainWorld('api', {
     getById: (id: string) => ipcRenderer.invoke('items:getById', id),
     getByType: (type: string) => ipcRenderer.invoke('items:getByType', type),
     useItem: (animalId: string, itemId: string) => ipcRenderer.invoke('items:useItem', animalId, itemId),
+  },
+  inventory: {
+    getAll: () => ipcRenderer.invoke('inventory:getAll'),
+    getByType: (type: string) => ipcRenderer.invoke('inventory:getByType', type),
+  },
+  history: {
+    getByAnimalId: (animalId: string, limit?: number) => ipcRenderer.invoke('history:getByAnimalId', animalId, limit),
   }
 })

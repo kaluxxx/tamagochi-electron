@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useCallback, useMemo } from 'react'
+import { useState } from 'react'
 import { useAnimalActionsStore } from '../stores/animal-actions-store'
 
 export type ActionType = 'feed' | 'play' | 'sleep' | 'heal'
-export type ActiveAction = 'sleeping' | 'playing' | undefined
+export type ActiveAction = 'sleeping' | 'playing' | 'feeding' | 'healing' | 'using_item' | undefined
 
 interface UseAnimalActionsProps {
   animalId: string
@@ -16,24 +16,35 @@ interface UseAnimalActionsReturn {
   sleepProgress: number
   isPlaying: boolean
   playProgress: number
+  isFeeding: boolean
+  feedProgress: number
+  isHealing: boolean
+  healProgress: number
+  isUsingItem: boolean
+  useItemProgress: number
   activeAction: ActiveAction
   handleAction: (action: ActionType) => void
+  handleUseItem: (itemId: string, onComplete: () => void) => void
   isActionDisabled: boolean
 }
 
 export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): UseAnimalActionsReturn {
-  const queryClient = useQueryClient()
-  const [instantActionInProgress, setInstantActionInProgress] = useState<'feed' | 'heal' | null>(null)
   // Compteur pour forcer le re-render toutes les secondes
   const [tick, setTick] = useState(0)
 
   const {
     isSleeping,
     isPlaying,
+    isFeeding,
+    isHealing,
+    isUsingItem,
     activeActionType,
     getProgress,
     handleStartSleep,
     handleStartPlay,
+    handleStartFeed,
+    handleStartHeal,
+    handleStartUseItem,
     hasActiveAction,
   } = useAnimalActionsStore(animalId)
 
@@ -57,26 +68,12 @@ export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): 
     return hasActiveAction ? getProgress() : 0
   }, [hasActiveAction, getProgress, tick])
 
-  // Mutations pour les actions instantanées
-  const feedMutation = useMutation({
-    mutationFn: () => window.api.animals.feed(animalId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['animals'] }),
-    onSettled: () => setInstantActionInProgress(null),
-  })
-
-  const healMutation = useMutation({
-    mutationFn: () => window.api.animals.heal(animalId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['animals'] }),
-    onSettled: () => setInstantActionInProgress(null),
-  })
-
   const handleAction = useCallback((action: ActionType) => {
-    if (!isAlive || instantActionInProgress || hasActiveAction) return
+    if (!isAlive || hasActiveAction) return
 
     switch (action) {
       case 'feed':
-        setInstantActionInProgress('feed')
-        feedMutation.mutate()
+        handleStartFeed()
         break
       case 'play':
         handleStartPlay()
@@ -85,22 +82,27 @@ export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): 
         handleStartSleep()
         break
       case 'heal':
-        setInstantActionInProgress('heal')
-        healMutation.mutate()
+        handleStartHeal()
         break
     }
-  }, [isAlive, instantActionInProgress, hasActiveAction, feedMutation, healMutation, handleStartPlay, handleStartSleep])
+  }, [isAlive, hasActiveAction, handleStartFeed, handleStartPlay, handleStartSleep, handleStartHeal])
 
   // Dériver actionInProgress depuis les états
   const actionInProgress = useMemo((): ActionType | null => {
-    if (instantActionInProgress) return instantActionInProgress
+    if (isFeeding) return 'feed'
+    if (isHealing) return 'heal'
     if (isSleeping) return 'sleep'
     if (isPlaying) return 'play'
     return null
-  }, [instantActionInProgress, isSleeping, isPlaying])
+  }, [isFeeding, isHealing, isSleeping, isPlaying])
+
+  const handleUseItem = useCallback((itemId: string, onComplete: () => void) => {
+    if (!isAlive || hasActiveAction) return
+    handleStartUseItem(itemId, onComplete)
+  }, [isAlive, hasActiveAction, handleStartUseItem])
 
   const activeAction: ActiveAction = activeActionType
-  const isActionDisabled = !isAlive || !!actionInProgress || hasActiveAction
+  const isActionDisabled = !isAlive || hasActiveAction
 
   return {
     actionInProgress,
@@ -108,8 +110,15 @@ export function useAnimalActions({ animalId, isAlive }: UseAnimalActionsProps): 
     sleepProgress: isSleeping ? currentProgress : 0,
     isPlaying,
     playProgress: isPlaying ? currentProgress : 0,
+    isFeeding,
+    feedProgress: isFeeding ? currentProgress : 0,
+    isHealing,
+    healProgress: isHealing ? currentProgress : 0,
+    isUsingItem,
+    useItemProgress: isUsingItem ? currentProgress : 0,
     activeAction,
     handleAction,
+    handleUseItem,
     isActionDisabled,
   }
 }

@@ -129,6 +129,53 @@
     box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
   }
 
+  /* Pixel-style scrollbar - retro game style */
+  .pixel-scrollbar::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pixel-scrollbar::-webkit-scrollbar-track {
+    background: #2C2C2C;
+    border: 2px solid #000;
+    border-radius: 0;
+  }
+
+  .pixel-scrollbar::-webkit-scrollbar-thumb {
+    background: #8B7355;
+    border: 2px solid #000;
+    border-radius: 0;
+    box-shadow:
+      inset -2px -2px 0 #5C4A3D,
+      inset 2px 2px 0 #BFA98A;
+  }
+
+  .pixel-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #A08060;
+    box-shadow:
+      inset -2px -2px 0 #6B5A4D,
+      inset 2px 2px 0 #D4C4A8;
+  }
+
+  .pixel-scrollbar::-webkit-scrollbar-thumb:active {
+    background: #6B5A4D;
+    box-shadow:
+      inset 2px 2px 0 #5C4A3D,
+      inset -2px -2px 0 #8B7355;
+  }
+
+  .pixel-scrollbar::-webkit-scrollbar-corner {
+    background: #2C2C2C;
+    border: 2px solid #000;
+    border-radius: 0;
+  }
+
+  /* Firefox scrollbar */
+  .pixel-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #8B7355 #2C2C2C;
+  }
+
   @keyframes fadeSlideUp {
     from {
       opacity: 0;
@@ -176,6 +223,205 @@
     }
   }
 
+  /* === ANIMATIONS SOMMEIL === */
+  @keyframes sleeping-breathe {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-8px) scale(1.03);
+    }
+  }
+
+  @keyframes zzz-float {
+    0% {
+      opacity: 0;
+      transform: translateY(0) translateX(0) scale(0.5);
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-60px) translateX(20px) scale(1);
+    }
+  }
+
+  /* === ANIMATIONS JEU === */
+  @keyframes playing-jump {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-20px) rotate(-5deg);
+    }
+    50% {
+      transform: translateY(0) rotate(0deg);
+    }
+    75% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(180deg);
+    }
+  }
+
+  /* === ANIMATIONS MANGER === */
+  @keyframes eating-chomp {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.1) rotate(-3deg);
+    }
+    50% {
+      transform: scale(0.95) rotate(0deg);
+    }
+    75% {
+      transform: scale(1.1) rotate(3deg);
+    }
+  }
+
+  @keyframes food-particle {
+    0% {
+      opacity: 1;
+      transform: translateY(0) translateX(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px) translateX(var(--particle-x, 10px)) scale(0.5);
+    }
+  }
+
+  /* === ANIMATIONS SOIN === */
+  @keyframes healing-glow {
+    0%, 100% {
+      transform: scale(1);
+      filter: brightness(1) drop-shadow(0 0 0 transparent);
+    }
+    50% {
+      transform: scale(1.05);
+      filter: brightness(1.2) drop-shadow(0 0 20px rgba(46, 204, 113, 0.6));
+    }
+  }
+
+  @keyframes heal-cross {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.5);
+    }
+    30% {
+      opacity: 1;
+      transform: translateY(-10px) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-40px) scale(0.8);
+    }
+  }
+
+  /* === ANIMATIONS ÉTATS DE MOOD === */
+  @keyframes happy-bounce {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-12px) scale(1.05);
+    }
+  }
+
+  @keyframes sad-droop {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(5px) rotate(-2deg);
+    }
+  }
+
+  @keyframes sick-wobble {
+    0%, 100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    25% {
+      transform: translateX(-5px) rotate(-2deg);
+    }
+    75% {
+      transform: translateX(5px) rotate(2deg);
+    }
+  }
+
+  @keyframes dead-fade {
+    0%, 100% {
+      opacity: 0.6;
+      filter: grayscale(100%);
+    }
+    50% {
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+  }
+
+  /* === ANIMATIONS PARTICULES COEUR (HAPPY) === */
+  @keyframes heart-float {
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0);
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(-10px) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.6);
+    }
+  }
+
+  /* === ANIMATIONS PARTICULES LARMES (SAD) === */
+  @keyframes tear-fall {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.5);
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.8);
+    }
+  }
+
+  /* === ANIMATIONS PARTICULES SPIRALES (SICK) === */
+  @keyframes sick-spiral {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg) scale(0.5);
+    }
+    25% {
+      opacity: 1;
+      transform: rotate(90deg) scale(1);
+    }
+    75% {
+      opacity: 1;
+      transform: rotate(270deg) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(360deg) scale(0.5);
+    }
+  }
+
   .animate-fade-slide-up {
     animation: fadeSlideUp 0.3s ease-out;
   }
@@ -190,5 +436,116 @@
 
   .animate-pulse-notify {
     animation: pulse 2s ease-in-out infinite;
+  }
+
+  .animate-sleeping {
+    animation: sleeping-breathe 3s ease-in-out infinite;
+  }
+
+  .animate-zzz {
+    animation: zzz-float 2s ease-out infinite;
+  }
+
+  .animate-zzz-delay-1 {
+    animation: zzz-float 2s ease-out infinite 0.6s;
+  }
+
+  .animate-zzz-delay-2 {
+    animation: zzz-float 2s ease-out infinite 1.2s;
+  }
+
+  /* Animations Jeu */
+  .animate-playing {
+    animation: playing-jump 0.6s ease-in-out infinite;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 0.8s ease-in-out infinite;
+  }
+
+  .animate-sparkle-delay-1 {
+    animation: sparkle 0.8s ease-in-out infinite 0.2s;
+  }
+
+  .animate-sparkle-delay-2 {
+    animation: sparkle 0.8s ease-in-out infinite 0.4s;
+  }
+
+  /* Animations Manger */
+  .animate-eating {
+    animation: eating-chomp 0.4s ease-in-out infinite;
+  }
+
+  .animate-food-particle {
+    animation: food-particle 0.8s ease-out forwards;
+  }
+
+  /* Animations Soin */
+  .animate-healing {
+    animation: healing-glow 1.5s ease-in-out infinite;
+  }
+
+  .animate-heal-cross {
+    animation: heal-cross 1.2s ease-out infinite;
+  }
+
+  .animate-heal-cross-delay-1 {
+    animation: heal-cross 1.2s ease-out infinite 0.4s;
+  }
+
+  /* Animations Mood */
+  .animate-happy {
+    animation: happy-bounce 1s ease-in-out infinite;
+  }
+
+  .animate-sad {
+    animation: sad-droop 2s ease-in-out infinite;
+  }
+
+  .animate-sick {
+    animation: sick-wobble 1s ease-in-out infinite;
+  }
+
+  .animate-dead {
+    animation: dead-fade 3s ease-in-out infinite;
+  }
+
+  /* Animations Coeurs */
+  .animate-heart {
+    animation: heart-float 2s ease-out infinite;
+  }
+
+  .animate-heart-delay-1 {
+    animation: heart-float 2s ease-out infinite 0.5s;
+  }
+
+  .animate-heart-delay-2 {
+    animation: heart-float 2s ease-out infinite 1s;
+  }
+
+  /* Animations Larmes (Sad) */
+  .animate-tear {
+    animation: tear-fall 1.5s ease-in infinite;
+  }
+
+  .animate-tear-delay-1 {
+    animation: tear-fall 1.5s ease-in infinite 0.5s;
+  }
+
+  .animate-tear-delay-2 {
+    animation: tear-fall 1.5s ease-in infinite 1s;
+  }
+
+  /* Animations Spirales (Sick) */
+  .animate-sick-spiral {
+    animation: sick-spiral 2s ease-in-out infinite;
+  }
+
+  .animate-sick-spiral-delay-1 {
+    animation: sick-spiral 2s ease-in-out infinite 0.6s;
+  }
+
+  .animate-sick-spiral-delay-2 {
+    animation: sick-spiral 2s ease-in-out infinite 1.2s;
   }
 }

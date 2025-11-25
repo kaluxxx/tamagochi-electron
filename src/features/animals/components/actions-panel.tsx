@@ -9,6 +9,8 @@ interface ActionsPanelProps {
   actionInProgress: ActionType | null
   isSleeping: boolean
   isPlaying: boolean
+  isFeeding: boolean
+  isHealing: boolean
 }
 
 interface ActionButtonProps {
@@ -42,26 +44,27 @@ function ActionButton({ label, activeLabel, icon, onClick, isDisabled, isActive 
 export function ActionsPanel({
   onAction,
   isDisabled,
-  actionInProgress,
   isSleeping,
   isPlaying,
+  isFeeding,
+  isHealing,
 }: ActionsPanelProps) {
   return (
-    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col">
-      <div className="border-b-4 border-black pb-3 mb-4">
+    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col flex-1 min-h-0">
+      <div className="border-b-4 border-black pb-3 mb-4 shrink-0">
         <h2 className="font-pixel text-[12px] text-black text-center uppercase tracking-wider">
           Actions
         </h2>
       </div>
 
-      <div className="space-y-3 flex-1">
+      <div className="space-y-3 flex-1 overflow-y-auto p-1 pixel-scrollbar">
         <ActionButton
           label="NOURRIR"
-          activeLabel="EN COURS..."
+          activeLabel="MANGE..."
           icon={getActionSprite('feed')}
           onClick={() => onAction('feed')}
           isDisabled={isDisabled}
-          isActive={actionInProgress === 'feed'}
+          isActive={isFeeding}
         />
 
         <ActionButton
@@ -84,11 +87,11 @@ export function ActionsPanel({
 
         <ActionButton
           label="SOIGNER"
-          activeLabel="EN COURS..."
+          activeLabel="SOIGNE..."
           icon={getActionSprite('heal')}
           onClick={() => onAction('heal')}
           isDisabled={isDisabled}
-          isActive={actionInProgress === 'heal'}
+          isActive={isHealing}
         />
       </div>
     </div>

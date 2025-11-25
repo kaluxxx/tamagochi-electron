@@ -32,6 +32,27 @@ export interface Action {
   actionType: string
   itemId?: string | null
   timestamp: Date
+  // Stats delta
+  hungerBefore?: number | null
+  happinessBefore?: number | null
+  healthBefore?: number | null
+  energyBefore?: number | null
+  hungerAfter?: number | null
+  happinessAfter?: number | null
+  healthAfter?: number | null
+  energyAfter?: number | null
+  item?: Item | null
+}
+
+export interface ActionWithDelta extends Action {
+  item?: Item | null
+}
+
+export interface InventoryItem {
+  id: string
+  itemId: string
+  quantity: number
+  item: Item
 }
 
 export interface Item {
@@ -77,6 +98,14 @@ declare global {
         getById: (id: string) => Promise<Item | null>
         getByType: (type: string) => Promise<Item[]>
         useItem: (animalId: string, itemId: string) => Promise<Animal>
+      }
+      inventory: {
+        getAll: () => Promise<InventoryItem[]>
+        getByType: (type: string) => Promise<InventoryItem[]>
+        useItem: (animalId: string, itemId: string) => Promise<Animal>
+      }
+      history: {
+        getByAnimalId: (animalId: string, limit?: number) => Promise<ActionWithDelta[]>
       }
     }
   }

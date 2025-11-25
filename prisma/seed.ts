@@ -6,6 +6,7 @@ async function main() {
   console.log('🌱 Seeding database...')
 
   // Clear existing data
+  await prisma.inventory.deleteMany()
   await prisma.action.deleteMany()
   await prisma.animal.deleteMany()
   await prisma.item.deleteMany()
@@ -184,6 +185,20 @@ async function main() {
     toys: [ball, plush, gameConsole],
     medicine: [vitamin, vaccine, bandage],
   })
+
+  // Create Inventory entries with initial quantities
+  const allItems = [steak, milk, apple, ball, plush, gameConsole, vitamin, vaccine, bandage]
+
+  for (const item of allItems) {
+    await prisma.inventory.create({
+      data: {
+        itemId: item.id,
+        quantity: 10 // 10 of each item to start
+      }
+    })
+  }
+
+  console.log('✅ Inventory created with 10 of each item')
 
   console.log('🎉 Seeding completed!')
 }

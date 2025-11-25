@@ -38,25 +38,43 @@ model Animal {
 }
 
 model Action {
-  id         String   @id @default(uuid())
-  animalId   String
-  actionType String   // "feed", "play", "heal", "sleep"
-  itemId     String?
-  timestamp  DateTime @default(now())
-  animal     Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
-  item       Item?    @relation(fields: [itemId], references: [id])
+  id              String   @id @default(uuid())
+  animalId        String
+  actionType      String   // "feed", "play", "heal", "sleep", "use_item"
+  itemId          String?
+  timestamp       DateTime @default(now())
+  // Stats before action
+  hungerBefore    Int?
+  happinessBefore Int?
+  healthBefore    Int?
+  energyBefore    Int?
+  // Stats after action
+  hungerAfter     Int?
+  happinessAfter  Int?
+  healthAfter     Int?
+  energyAfter     Int?
+  animal          Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  item            Item?    @relation(fields: [itemId], references: [id])
 }
 
 model Item {
-  id             String   @id @default(uuid())
+  id             String      @id @default(uuid())
   name           String
-  type           String   // "food", "toy", "medicine"
-  hungerBoost    Int      @default(0)
-  happinessBoost Int      @default(0)
-  healthBoost    Int      @default(0)
-  energyBoost    Int      @default(0)
-  energyCost     Int      @default(0)
+  type           String      // "food", "toy", "medicine"
+  hungerBoost    Int         @default(0)
+  happinessBoost Int         @default(0)
+  healthBoost    Int         @default(0)
+  energyBoost    Int         @default(0)
+  energyCost     Int         @default(0)
   emoji          String
   description    String
   actions        Action[]
+  inventory      Inventory?
+}
+
+model Inventory {
+  id       String @id @default(uuid())
+  itemId   String @unique
+  quantity Int    @default(0)
+  item     Item   @relation(fields: [itemId], references: [id])
 }
