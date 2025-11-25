@@ -32,6 +32,26 @@ contextBridge.exposeInMainWorld('api', {
   history: {
     getByAnimalId: (animalId: string, limit?: number) => ipcRenderer.invoke('history:getByAnimalId', animalId, limit),
   },
+  // Economy System
+  wallet: {
+    get: () => ipcRenderer.invoke('wallet:get'),
+    collectPassive: () => ipcRenderer.invoke('wallet:collectPassive'),
+    addCoins: (amount: number) => ipcRenderer.invoke('wallet:addCoins', amount),
+  },
+  shop: {
+    getItems: () => ipcRenderer.invoke('shop:getItems'),
+    purchase: (itemId: string, quantity?: number) => ipcRenderer.invoke('shop:purchase', itemId, quantity || 1),
+  },
+  minigame: {
+    saveScore: (gameType: string, score: number, coinsEarned: number) =>
+      ipcRenderer.invoke('minigame:saveScore', gameType, score, coinsEarned),
+    getHighScores: (gameType: string) => ipcRenderer.invoke('minigame:getHighScores', gameType),
+  },
+  clickerUpgrades: {
+    getAll: () => ipcRenderer.invoke('clickerUpgrades:getAll'),
+    purchase: (type: string) => ipcRenderer.invoke('clickerUpgrades:purchase', type),
+    getGameStats: () => ipcRenderer.invoke('clickerUpgrades:getGameStats'),
+  },
   // Event listeners for Main → Renderer communication
   onAnimalsUpdated: (callback: () => void) => {
     const handler = () => callback()
@@ -42,5 +62,10 @@ contextBridge.exposeInMainWorld('api', {
     const handler = (_event: Electron.IpcRendererEvent, animal: unknown) => callback(animal)
     ipcRenderer.on('animal:died', handler)
     return () => ipcRenderer.removeListener('animal:died', handler)
+  },
+  onWalletUpdated: (callback: (wallet: unknown) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, wallet: unknown) => callback(wallet)
+    ipcRenderer.on('wallet:updated', handler)
+    return () => ipcRenderer.removeListener('wallet:updated', handler)
   }
 })
