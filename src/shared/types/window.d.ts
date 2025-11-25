@@ -102,6 +102,7 @@ declare global {
       inventory: {
         getAll: () => Promise<InventoryItem[]>
         getByType: (type: string) => Promise<InventoryItem[]>
+        useItem: (animalId: string, itemId: string) => Promise<Animal>
       }
       history: {
         getByAnimalId: (animalId: string, limit?: number) => Promise<ActionWithDelta[]>

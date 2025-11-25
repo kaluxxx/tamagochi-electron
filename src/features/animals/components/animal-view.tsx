@@ -2,12 +2,11 @@ import { SpriteImage } from '@/shared/components/ui/sprite-image'
 import { getAnimalSprite, calculateMood } from '@/shared/utils/sprite-loader'
 import { cn } from '@/shared/lib/utils'
 import type { Animal } from '../types'
-import type { ActiveAction, ActionType } from '../hooks/use-animal-actions'
+import type { ActiveAction } from '../hooks/use-animal-actions'
 
 interface GameZoneProps {
   animal: Animal
   activeAction: ActiveAction
-  actionInProgress: ActionType | null
   isSleeping: boolean
   sleepProgress: number
   isPlaying: boolean
@@ -53,7 +52,6 @@ function getAnimationClass(
 export function AnimalView({
   animal,
   activeAction,
-  actionInProgress,
   isSleeping,
   sleepProgress,
   isPlaying,

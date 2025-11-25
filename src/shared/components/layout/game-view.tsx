@@ -57,7 +57,6 @@ export function GameView({ animal }: AnimalGameViewProps) {
       <AnimalView
         animal={animal}
         activeAction={activeAction}
-        actionInProgress={actionInProgress}
         isSleeping={isSleeping}
         sleepProgress={sleepProgress}
         isPlaying={isPlaying}
@@ -82,7 +81,6 @@ export function GameView({ animal }: AnimalGameViewProps) {
           isHealing={isHealing}
         />
         <InventoryPanel
-          animalId={animal.id}
           animalEnergy={animal.energy}
           isAlive={animal.isAlive}
           isActionDisabled={isActionDisabled}

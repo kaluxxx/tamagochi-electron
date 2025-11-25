@@ -6,7 +6,6 @@ import {InventoryItem} from './inventory-item'
 import type {ItemFilter, InventoryItem as InventoryItemType} from '../types'
 
 interface InventoryPanelProps {
-    animalId: string
     animalEnergy: number
     isAlive: boolean
     isActionDisabled: boolean
@@ -14,7 +13,7 @@ interface InventoryPanelProps {
     onItemUsed?: () => void
 }
 
-export function InventoryPanel({animalId, animalEnergy, isAlive, isActionDisabled, onUseItem, onItemUsed}: InventoryPanelProps) {
+export function InventoryPanel({animalEnergy, isAlive, isActionDisabled, onUseItem, onItemUsed}: InventoryPanelProps) {
     const [filter, setFilter] = useState<ItemFilter>('all')
     const [selectedItem, setSelectedItem] = useState<InventoryItemType | null>(null)
 
