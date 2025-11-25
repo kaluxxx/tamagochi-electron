@@ -41,14 +41,8 @@ export function InventoryPanel({animalEnergy, isAlive, isActionDisabled, onUseIt
     }
 
     return (
-        <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col flex-1 min-h-0">
-            <div className="border-b-4 border-black pb-3 mb-4 shrink-0">
-                <h2 className="font-pixel text-[12px] text-black text-center uppercase tracking-wider">
-                    Inventaire
-                </h2>
-            </div>
-
-            <div className="shrink-0 p-1">
+        <div className="flex flex-col flex-1 min-h-0">
+            <div className="shrink-0 mb-2">
                 <InventoryFilter selected={filter} onChange={setFilter}/>
             </div>
 

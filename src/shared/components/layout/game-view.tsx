@@ -1,11 +1,16 @@
+import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { StatsPanel } from '@/features/animals/components/stats-panel.tsx'
 import { AnimalView } from '@/features/animals/components/animal-view.tsx'
-import { ActionsPanel } from '@/features/animals/components/actions-panel.tsx'
-import { useAnimalActions } from '@/features/animals/hooks/use-animal-actions.ts'
+import { ActionsPanel } from '@/features/actions/components/actions-panel.tsx'
+import { useActions } from '@/features/actions/hooks/use-actions.ts'
 import { InventoryPanel } from '@/features/inventory/components/inventory-panel.tsx'
 import { HistoryPanel } from '@/features/history/components/history-panel.tsx'
+import { CollapsiblePanel } from '@/shared/components/ui/collapsible-panel.tsx'
 import type { Animal } from '@/shared/types/window'
+
+type LeftPanel = 'stats' | 'history' | null
+type RightPanel = 'actions' | 'inventory' | null
 
 interface AnimalGameViewProps {
   animal: Animal
@@ -13,6 +18,16 @@ interface AnimalGameViewProps {
 
 export function GameView({ animal }: AnimalGameViewProps) {
   const queryClient = useQueryClient()
+  const [leftPanel, setLeftPanel] = useState<LeftPanel>('stats')
+  const [rightPanel, setRightPanel] = useState<RightPanel>('actions')
+
+  const toggleLeftPanel = (panel: LeftPanel) => {
+    setLeftPanel((current) => (current === panel ? null : panel))
+  }
+
+  const toggleRightPanel = (panel: RightPanel) => {
+    setRightPanel((current) => (current === panel ? null : panel))
+  }
 
   const {
     actionInProgress,
@@ -30,7 +45,7 @@ export function GameView({ animal }: AnimalGameViewProps) {
     handleAction,
     handleUseItem,
     isActionDisabled,
-  } = useAnimalActions({
+  } = useActions({
     animalId: animal.id,
     isAlive: animal.isAlive,
   })
@@ -43,14 +58,26 @@ export function GameView({ animal }: AnimalGameViewProps) {
 
   return (
     <div className="flex gap-4 h-full">
-      {/* Left Column: Stats + History - each 50% height */}
-      <div className="flex flex-col gap-4 h-full">
-        <StatsPanel
-          animal={animal}
-          isSleeping={isSleeping}
-          isPlaying={isPlaying}
-        />
-        <HistoryPanel animalId={animal.id} />
+      {/* Left Column: Stats + History - collapsible */}
+      <div className="flex flex-col gap-2 h-full w-72">
+        <CollapsiblePanel
+          title="Stats"
+          isOpen={leftPanel === 'stats'}
+          onToggle={() => toggleLeftPanel('stats')}
+        >
+          <StatsPanel
+            animal={animal}
+            isSleeping={isSleeping}
+            isPlaying={isPlaying}
+          />
+        </CollapsiblePanel>
+        <CollapsiblePanel
+          title="Historique"
+          isOpen={leftPanel === 'history'}
+          onToggle={() => toggleLeftPanel('history')}
+        >
+          <HistoryPanel animalId={animal.id} />
+        </CollapsiblePanel>
       </div>
 
       {/* Center: Game Zone */}
@@ -69,24 +96,36 @@ export function GameView({ animal }: AnimalGameViewProps) {
         useItemProgress={useItemProgress}
       />
 
-      {/* Right Column: Actions + Inventory - each 50% height */}
-      <div className="flex flex-col gap-4 h-full">
-        <ActionsPanel
-          onAction={handleAction}
-          isDisabled={isActionDisabled}
-          actionInProgress={actionInProgress}
-          isSleeping={isSleeping}
-          isPlaying={isPlaying}
-          isFeeding={isFeeding}
-          isHealing={isHealing}
-        />
-        <InventoryPanel
-          animalEnergy={animal.energy}
-          isAlive={animal.isAlive}
-          isActionDisabled={isActionDisabled}
-          onUseItem={handleUseItem}
-          onItemUsed={handleItemUsed}
-        />
+      {/* Right Column: Actions + Inventory - collapsible */}
+      <div className="flex flex-col gap-2 h-full w-72">
+        <CollapsiblePanel
+          title="Actions"
+          isOpen={rightPanel === 'actions'}
+          onToggle={() => toggleRightPanel('actions')}
+        >
+          <ActionsPanel
+            onAction={handleAction}
+            isDisabled={isActionDisabled}
+            actionInProgress={actionInProgress}
+            isSleeping={isSleeping}
+            isPlaying={isPlaying}
+            isFeeding={isFeeding}
+            isHealing={isHealing}
+          />
+        </CollapsiblePanel>
+        <CollapsiblePanel
+          title="Inventaire"
+          isOpen={rightPanel === 'inventory'}
+          onToggle={() => toggleRightPanel('inventory')}
+        >
+          <InventoryPanel
+            animalEnergy={animal.energy}
+            isAlive={animal.isAlive}
+            isActionDisabled={isActionDisabled}
+            onUseItem={handleUseItem}
+            onItemUsed={handleItemUsed}
+          />
+        </CollapsiblePanel>
       </div>
     </div>
   )

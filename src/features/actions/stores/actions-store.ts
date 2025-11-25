@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import type { ActiveActionType } from '../types'
 
 const SLEEP_DURATION_MS = 30000 // 30 secondes
 const PLAY_DURATION_MS = 20000  // 20 secondes
@@ -8,15 +9,13 @@ const FEED_DURATION_MS = 5000   // 5 secondes
 const HEAL_DURATION_MS = 8000   // 8 secondes
 const USE_ITEM_DURATION_MS = 3000 // 3 secondes
 
-export type ActiveActionType = 'sleeping' | 'playing' | 'feeding' | 'healing' | 'using_item'
-
 interface ActiveAction {
   type: ActiveActionType
   startTime: number
   duration: number
 }
 
-interface AnimalActionsState {
+interface ActionsState {
   activeActions: Record<string, ActiveAction>
   startAction: (animalId: string, action: ActiveAction) => void
   endAction: (animalId: string) => void
@@ -26,7 +25,7 @@ interface AnimalActionsState {
 // Timers pour chaque animal (hors du store pour éviter la sérialisation)
 const actionTimeouts: Map<string, ReturnType<typeof globalThis.setTimeout>> = new Map()
 
-export const useAnimalActionsStoreBase = create<AnimalActionsState>((set, get) => ({
+export const useActionsStoreBase = create<ActionsState>((set, get) => ({
   activeActions: {},
 
   startAction: (animalId, action) => {
@@ -56,9 +55,9 @@ export const useAnimalActionsStoreBase = create<AnimalActionsState>((set, get) =
 }))
 
 // Hook pour utiliser le store avec les actions
-export function useAnimalActionsStore(animalId: string) {
+export function useActionsStore(animalId: string) {
   const queryClient = useQueryClient()
-  const { activeActions, startAction, endAction, getProgress } = useAnimalActionsStoreBase()
+  const { activeActions, startAction, endAction, getProgress } = useActionsStoreBase()
 
   const activeAction = activeActions[animalId]
   const isSleeping = activeAction?.type === 'sleeping'

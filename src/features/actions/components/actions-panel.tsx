@@ -1,7 +1,7 @@
 import { SpriteImage } from '@/shared/components/ui/sprite-image'
 import { getActionSprite } from '@/shared/utils/sprite-loader'
 import { cn } from '@/shared/lib/utils'
-import type { ActionType } from '../hooks/use-animal-actions'
+import type { ActionType } from '../types'
 
 interface ActionsPanelProps {
   onAction: (action: ActionType) => void
@@ -50,14 +50,8 @@ export function ActionsPanel({
   isHealing,
 }: ActionsPanelProps) {
   return (
-    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col flex-1 min-h-0">
-      <div className="border-b-4 border-black pb-3 mb-4 shrink-0">
-        <h2 className="font-pixel text-[12px] text-black text-center uppercase tracking-wider">
-          Actions
-        </h2>
-      </div>
-
-      <div className="space-y-3 flex-1 overflow-y-auto p-1 pixel-scrollbar">
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="space-y-3 flex-1">
         <ActionButton
           label="NOURRIR"
           activeLabel="MANGE..."

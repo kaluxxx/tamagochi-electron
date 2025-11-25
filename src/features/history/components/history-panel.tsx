@@ -9,13 +9,7 @@ export function HistoryPanel({ animalId }: HistoryPanelProps) {
   const { data: actions, isLoading } = useActionHistory(animalId)
 
   return (
-    <div className="w-72 bg-[#FFF4E6] border-4 border-black pixel-panel p-4 flex flex-col flex-1 min-h-0">
-      <div className="border-b-4 border-black pb-3 mb-4 shrink-0">
-        <h2 className="font-pixel text-[12px] text-black text-center uppercase tracking-wider">
-          Historique
-        </h2>
-      </div>
-
+    <div className="flex flex-col flex-1 min-h-0">
       {isLoading ? (
         <div className="flex-1 flex items-center justify-center">
           <span className="font-pixel text-[10px] text-gray-500">Chargement...</span>
