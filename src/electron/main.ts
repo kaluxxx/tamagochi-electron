@@ -108,10 +108,31 @@ function stopTickSystem() {
 // ============== TRAY ICON ==============
 
 function createTray() {
-  // Create a simple 16x16 icon programmatically (fallback if no icon file)
-  const icon = nativeImage.createEmpty()
+  // Charger l'icône depuis le dossier public
+  // En développement : public/sprites/ui/logo.svg
+  // En production : resources/public/sprites/ui/logo.svg
+  let iconPath: string
 
-  tray = new Tray(icon.isEmpty() ? nativeImage.createFromDataURL('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEESURBVDiNpZMxTsQwEEX/OBtFQjQUdJQ0dJQ0nIEjcARuwBG4wR6BI3AEjtBQYgoKChASBVI2TLGOstlELPxm5Pn+M+PxGP4oEgB8cEpKKQeQu/vyH4CZ1UnI5wq1Ag4TtLgDcA/gWDLfW4CXkA8VqgRwlaBYA3gDcCKZby3AS8gHCtUCOEjQxgK8Jii2AB4SnEjmWwvwEvKBQq0A9hO0tgCvCYoNgPsEJ5L51gK8hLyvUMsA9hK0sgAvCYo1gLsEJ5L51gK8hLynUIsAdhO0NACvCYoVgNsEJ5L51gK8hLyrUPMAdkqwNACvCdIKwE2CE8l8awFeQt5RqDkAuyVY/gXegF/gE1blOdYVpgAAAABJRU5ErkJggg==') : icon)
+  if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+    iconPath = path.join(__dirname, '../../public/sprites/ui/logo.svg')
+  } else {
+    iconPath = path.join(process.resourcesPath, 'public/sprites/ui/logo.svg')
+  }
+
+  // Créer l'icône - nativeImage supporte SVG sur certaines plateformes
+  // Fallback vers une icône par défaut si le fichier n'existe pas
+  let icon = nativeImage.createFromPath(iconPath)
+
+  // Si l'icône est vide (SVG non supporté), utiliser un fallback PNG encodé en base64
+  if (icon.isEmpty()) {
+    // Fallback: icône Tamagotchi simple en base64 PNG (16x16)
+    icon = nativeImage.createFromDataURL('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANnSURBVFiFtZdNaBNBFMf/M5vdTdK0TdOmtbZVW6pVsKIIXhQRFRQPevCgeBFBEAQRwYMHD+LBg+hBEDx4UBQED4oHQRAUFMGDIIhQBT9QqdZWa5s0H5vdzYyHbJLdbDZN6h/CzszOe7+Zefvm7RKMMfDCGEMgEBh2u92lHo8nSSldAnJIURTPAPgDAFVVVUei0Wg4GAzKiqI4OOeuXbt27SQBbJdleTuA7TRdCYIgHHO5XMccDoerqakpHI1Go8FgkCqK4szLAIDMy0bjxoWCJXVdP5OXgMfjSfKGJElBr9cbCQaDsqIoLq77zBoIh8NhVVVVl8tFOOdYLkXX9TO8BPx+f5QDSDQ0NPjD4XBMURQXqSFr/sN+d/r9fu7z+UIOhyMRiUSi4XCYybIsE8YYrOB5ngEI+nw+v9/v17q7u6WOjo6Ex+NJ8iZrIAgCBYC2trZEV1eX1NnZmXA6nUmeBJKC6wBgaWlJAIDW1tZERIhIXV1dCZ7LAJ/PR9ra2hJdXV1SZ2dnwul0JnkJqDkHMkuSJAFA0ufzSTabLb506dJZp9OZ4CUgiD4fJ4C4z+eLuVyumN1uj9lstuXX2LIsAkA+fPjwjM1miy9cuHC2oaEhIUlSaGBgQJs7d+5gfX39oMPhSBRKQLSCpwSCIAgMQHzOnDkyALS3t8fn5ubOS5LkDwQC8smTJ2MbNmwItrW1RWtra0O8CIKAPwkhJAAEOjo6EgDiNTU1YQCx2bNnywCwa9euWG9vb2Du3LkSL4FkwQ4hOQEiImkPMMYYEonEAABp3rx5EgBUV1cnZ86cmfD7/QleAprhCYIQAIBQKBQBgNraWrG1tTUxe/Zs2d/fH66oqBjknP8XPyNJktDf3x8GgKamJgkAqqqqHDNmzIg3NjYGpk+fHuYlwOsMJsAYCxJCIgAwbdo0GQAmT548WlZWNupyuWKJRMKmKIrAOecCALIFl2UZDocj6nK5hi0A6qWsadOmCQBQXl4+6nK5YoZhSAAkQRBCAPKu8nJBnhASDMMQAeDWrVtBAGhoaJCrq6vjLpeLWY1vtfnI6urqUQCor6+XAWDSpEmjJSUlY4IgJAghCUJI4vjx4zEASbfbLbe2to5WVVXFc6m/AgCTJk0aBYC6ujrZ7XYP5vq/rIA8hfb0n3sUmJf4H/kHKHINmBlCHH0AAAAASUVORK5CYII=')
+  }
+
+  // Redimensionner pour le tray (16x16 sur Windows, peut varier)
+  const resizedIcon = icon.resize({ width: 16, height: 16 })
+
+  tray = new Tray(resizedIcon)
 
   const contextMenu = Menu.buildFromTemplate([
     {
