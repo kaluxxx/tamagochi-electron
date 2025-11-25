@@ -14,7 +14,7 @@ Créer une application desktop (Electron) de gestion d'animaux virtuels type Tam
 
 **Durée** : 3.5 jours
 **Contrainte académique** : Au moins 2 entités en base de données
-**Réalisé** : 4 entités (`AnimalType`, `Animal`, `Action`, `Item`)
+**Réalisé** : 5 entités (`AnimalType`, `Animal`, `Action`, `Item`, `Inventory`)
 
 ---
 
@@ -170,17 +170,32 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 ### Actions
 
 - **Nourrir** : `faim +20`, `bonheur +5`, `energie -5`
+    - Durée animation : 5 secondes
 - **Jouer** : `bonheur +15`, `energie -10`, `faim -5`
-    - Bouton désactivé si `energie < 10`
+    - Bouton désactivé si `energie < 20`
+    - Tooltip : "Énergie insuffisante (min 20%)"
+    - Durée animation : 20 secondes
 - **Soigner** : `sante +20`
+    - Durée animation : 8 secondes
 - **Dormir** : `energie +30`, `bonheur +5`
+    - Bouton désactivé si `energie > 80`
+    - Tooltip : "Pas assez fatigué (max 80%)"
+    - Durée animation : 30 secondes
+- **Utiliser Item** : effets variables selon l'item
+    - Durée animation : 3 secondes
 
-### Dégradation (par heure)
+### Dégradation (par heure) - Taux par type d'animal
 
-- `faim`: -2
-- `bonheur`: -1.5
-- `energie`: -1
-- `sante`: -3 (uniquement si `faim < 20` ou `bonheur < 20`)
+| Type | Faim | Bonheur | Énergie | Santé |
+|------|------|---------|---------|-------|
+| **Chat** 🐱 | -2.5 | -1.5 | -0.8 | -3.0 |
+| **Chien** 🐶 | -2.0 | -2.0 | -1.2 | -3.0 |
+| **Alien** 👽 | -1.5 | -1.0 | -1.5 | -2.5 |
+
+**Règle santé** : La santé diminue uniquement si une stat est critique (< 20).
+Le taux de dégradation est **multiplié par le nombre de stats critiques**.
+
+Exemple : Si faim ET bonheur < 20 pour un Chat → santé diminue de 3.0 × 2 = **6.0/heure**
 
 ### Âge
 
@@ -195,11 +210,29 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 ### Humeurs (affichage sprite)
 
-- **Content** : si `bonheur > 60` et `faim > 60` → 😊
-- **Triste** : si `bonheur < 30` → 😢
-- **Affamé** : si `faim < 30` → 😫
-- **Endormi** : si `energie < 30` → 😴
-- **Neutre** : sinon → 😐
+Priorité d'affichage (de la plus haute à la plus basse) :
+
+1. **Actions actives** (override tout) :
+   - `sleeping` : si action dormir en cours
+   - `playing` : si action jouer en cours
+   - `feeding` : si action nourrir en cours
+   - `healing` : si action soigner en cours
+   - `using_item` : si utilisation d'item en cours
+
+2. **États critiques** :
+   - `sick` : si `sante < 30` → spirale animation
+   - `tired` : si `energie < 30` → yeux endormis
+   - `hungry` : si `faim < 30` → triste avec focus nourriture
+   - `sad` : si `bonheur < 30` → larmes
+
+3. **État positif** :
+   - `happy` : si `bonheur > 60` ET `faim > 60` → cœurs
+
+4. **État par défaut** :
+   - `neutral` : sinon
+
+5. **État mort** :
+   - `dead` : si `isAlive = false` → yeux en croix
 
 ---
 
@@ -277,9 +310,17 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 |-------|------|-------------|
 | `id` | UUID | Identifiant unique |
 | `animalId` | UUID | Référence vers Animal |
-| `actionType` | String | Type (feed/play/heal/sleep) |
+| `actionType` | String | Type (feed/play/heal/sleep/use_item) |
 | `itemId` | UUID (nullable) | Référence vers Item utilisé (optionnel) |
 | `timestamp` | DateTime | Horodatage de l'action |
+| `hungerBefore` | Int (nullable) | Faim avant l'action |
+| `happinessBefore` | Int (nullable) | Bonheur avant l'action |
+| `healthBefore` | Int (nullable) | Santé avant l'action |
+| `energyBefore` | Int (nullable) | Énergie avant l'action |
+| `hungerAfter` | Int (nullable) | Faim après l'action |
+| `happinessAfter` | Int (nullable) | Bonheur après l'action |
+| `healthAfter` | Int (nullable) | Santé après l'action |
+| `energyAfter` | Int (nullable) | Énergie après l'action |
 
 ### Table `Item`
 
@@ -296,6 +337,16 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 | `emoji` | String | Emoji représentant l'objet |
 | `description` | String | Description de l'objet |
 
+### Table `Inventory`
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | UUID | Identifiant unique |
+| `itemId` | UUID (unique) | Référence vers Item |
+| `quantity` | Int | Quantité disponible (défaut: 0) |
+
+**Note** : Relation 1:1 avec Item. Chaque item a exactement une entrée d'inventaire.
+
 ### Relations
 
 - Un `AnimalType` a plusieurs `Animal` (One-to-Many)
@@ -303,24 +354,36 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 - Un `Animal` appartient à un `AnimalType` (Many-to-One)
 - Un `Item` peut être utilisé dans plusieurs `Action` (One-to-Many)
 - Une `Action` peut utiliser un `Item` (Many-to-One, optionnel)
+- Un `Item` a une entrée `Inventory` (One-to-One)
 - Suppression en cascade : si animal supprimé → actions supprimées
 
-### Exemples d'items
+### Exemples d'items (Seed Data)
 
 **Nourriture (food):**
-- 🍖 Steak : +30 hunger, -5 energy
-- 🥛 Lait : +15 hunger, +10 happiness
-- 🍎 Pomme : +10 hunger, +5 health
+
+| Item | Faim | Bonheur | Santé | Énergie | Coût énergie |
+|------|------|---------|-------|---------|--------------|
+| 🍖 Steak | +30 | +5 | - | - | 5 |
+| 🥛 Lait | +15 | +10 | +5 | - | 3 |
+| 🍎 Pomme | +10 | +5 | +10 | +5 | 2 |
 
 **Jouets (toy):**
-- 🎾 Balle : +20 happiness, -15 energy
-- 🧸 Peluche : +15 happiness, -5 energy
-- 🎮 Console : +25 happiness, -20 energy
+
+| Item | Faim | Bonheur | Santé | Énergie | Coût énergie |
+|------|------|---------|-------|---------|--------------|
+| 🎾 Balle | - | +20 | - | - | 15 |
+| 🧸 Peluche | - | +15 | - | - | 5 |
+| 🎮 Console | - | +25 | - | - | 20 |
 
 **Médicaments (medicine):**
-- 💊 Vitamine : +20 health, +10 energy
-- 💉 Vaccin : +30 health
-- 🩹 Bandage : +15 health
+
+| Item | Faim | Bonheur | Santé | Énergie | Coût énergie |
+|------|------|---------|-------|---------|--------------|
+| 💊 Vitamine | - | - | +20 | +10 | 0 |
+| 💉 Vaccin | - | - | +30 | - | 0 |
+| 🩹 Bandage | - | +5 | +15 | - | 0 |
+
+**Note** : Le coût énergie est déduit lors de l'utilisation. Si l'animal n'a pas assez d'énergie, l'item ne peut pas être utilisé.
 
 ---
 
@@ -403,6 +466,6 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 ---
 
-**Version** : 1.0  
-**Date** : 24 novembre 2025  
-**Statut** : Spécifications validées pour développement MVP
+**Version** : 2.0
+**Date** : 25 novembre 2025
+**Statut** : Spécifications mises à jour (post-implémentation)
