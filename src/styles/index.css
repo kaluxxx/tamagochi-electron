@@ -548,4 +548,180 @@
   .animate-sick-spiral-delay-2 {
     animation: sick-spiral 2s ease-in-out infinite 1.2s;
   }
+
+  /* === ANIMATIONS CLICKER ARCADE === */
+
+  /* Pop de clic flottant (+1) */
+  @keyframes click-pop {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.6);
+    }
+  }
+
+  /* Pulse auto-clicker actif */
+  @keyframes auto-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
+    }
+    50% {
+      box-shadow: 0 0 20px 10px rgba(46, 204, 113, 0.3);
+    }
+  }
+
+  /* Timer urgence (<5s) */
+  @keyframes timer-urgent {
+    0%, 100% {
+      color: #E74C3C;
+      transform: scale(1);
+    }
+    50% {
+      color: #FF0000;
+      transform: scale(1.1);
+    }
+  }
+
+  /* Flash achat reussi */
+  @keyframes upgrade-flash {
+    0% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    50% {
+      transform: scale(1.1);
+      filter: brightness(1.5);
+    }
+    100% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+  }
+
+  /* Coin spin animation */
+  @keyframes coin-spin {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+
+  /* Bouton arcade press */
+  @keyframes arcade-press {
+    0% {
+      transform: translateY(0);
+      box-shadow: 0 8px 0 #8B0051, 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #8B0051, 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 8px 0 #8B0051, 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* Score count up */
+  @keyframes score-bump {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  .animate-click-pop {
+    animation: click-pop 0.6s ease-out forwards;
+  }
+
+  .animate-auto-pulse {
+    animation: auto-pulse 1s ease-in-out infinite;
+  }
+
+  .animate-timer-urgent {
+    animation: timer-urgent 0.5s ease-in-out infinite;
+  }
+
+  .animate-upgrade-flash {
+    animation: upgrade-flash 0.3s ease-out;
+  }
+
+  .animate-coin-spin {
+    animation: coin-spin 0.5s ease-out;
+  }
+
+  .animate-arcade-press {
+    animation: arcade-press 0.15s ease-out;
+  }
+
+  .animate-score-bump {
+    animation: score-bump 0.2s ease-out;
+  }
+
+  /* Arcade button base style */
+  .arcade-btn {
+    width: 176px;
+    height: 176px;
+    border-radius: 50%;
+    border: 8px solid #000;
+    background: linear-gradient(135deg, #FF85C8 0%, #FF69B4 50%, #E91E8C 100%);
+    box-shadow:
+      0 8px 0 #8B0051,
+      inset 0 -12px 20px rgba(0, 0, 0, 0.3),
+      inset 0 12px 20px rgba(255, 255, 255, 0.3);
+    font-family: var(--font-pixel);
+    color: white;
+    text-shadow: 2px 2px 0 #000;
+    transition: all 0.1s;
+    cursor: pointer;
+  }
+
+  .arcade-btn:hover {
+    background: linear-gradient(135deg, #FF9BD4 0%, #FF85C8 50%, #FF69B4 100%);
+  }
+
+  .arcade-btn:active {
+    transform: translateY(6px);
+    box-shadow:
+      0 2px 0 #8B0051,
+      inset 0 -12px 20px rgba(0, 0, 0, 0.3),
+      inset 0 12px 20px rgba(255, 255, 255, 0.3);
+  }
+
+  /* Arcade background grid */
+  .arcade-bg {
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255, 105, 180, 0.08) 20px),
+      repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 105, 180, 0.08) 20px),
+      linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  }
+
+  /* Upgrade card style */
+  .upgrade-card {
+    @apply bg-white border-4 border-black p-3 transition-all;
+  }
+
+  .upgrade-card:hover:not(:disabled) {
+    @apply border-primary-yellow;
+    transform: translateY(-2px);
+  }
+
+  .upgrade-card:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .upgrade-card.can-afford {
+    @apply border-success-green;
+  }
+
+  .upgrade-card.can-afford:hover {
+    @apply bg-green-50;
+  }
 }
