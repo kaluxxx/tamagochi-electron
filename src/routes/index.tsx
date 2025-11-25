@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAnimals } from '@/features/animals/hooks/use-animals'
 import { AnimalTabs } from '@/features/animals/components/animal-tabs'
 import { GameView } from '@/shared/components/layout/game-view.tsx'
+import { CoinDisplay } from '@/features/economy'
 
 export const Route = createFileRoute('/')({
   component: IndexComponent,
@@ -64,12 +65,31 @@ function IndexComponent() {
 
   return (
     <main className="h-screen w-screen bg-[#FFE5EC] flex flex-col p-4 overflow-hidden">
-      {/* Barre d'onglets */}
-      <AnimalTabs
-        animals={animals}
-        selectedAnimalId={selectedAnimal.id}
-        onSelectAnimal={setSelectedAnimalId}
-      />
+      {/* Barre d'onglets avec navigation et solde */}
+      <div className="flex items-end justify-between">
+        <AnimalTabs
+          animals={animals}
+          selectedAnimalId={selectedAnimal.id}
+          onSelectAnimal={setSelectedAnimalId}
+        />
+
+        {/* Navigation économie + solde */}
+        <div className="flex items-center gap-2 mb-1">
+          <button
+            onClick={() => navigate({ to: '/shop' })}
+            className="px-3 py-1.5 bg-[#98D8AA] border-2 border-black font-pixel text-[10px] uppercase hover:bg-[#7BC77E] active:translate-y-0.5 transition-all"
+          >
+            BOUTIQUE
+          </button>
+          <button
+            onClick={() => navigate({ to: '/minigames' })}
+            className="px-3 py-1.5 bg-[#F4D35E] border-2 border-black font-pixel text-[10px] uppercase hover:bg-[#E5C04B] active:translate-y-0.5 transition-all"
+          >
+            JEUX
+          </button>
+          <CoinDisplay size="sm" />
+        </div>
+      </div>
 
       {/* Zone de jeu principale */}
       <div className="flex-1 bg-[#FFF4E6] border-4 border-black p-4 overflow-hidden">

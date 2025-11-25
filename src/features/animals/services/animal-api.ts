@@ -1,5 +1,5 @@
 import type { Animal, AnimalType, CreateAnimalInput } from '../types'
-import type { TickResult } from '@/shared/types/window'
+import type { TickResult, ActionResult } from '@/shared/types/window'
 
 /**
  * Service API pour les opérations liées aux animaux
@@ -29,19 +29,19 @@ export const animalApi = {
     return window.api.animals.create(data)
   },
 
-  feedAnimal: async (id: string): Promise<Animal> => {
+  feedAnimal: async (id: string): Promise<ActionResult> => {
     return window.api.animals.feed(id)
   },
 
-  playWithAnimal: async (id: string): Promise<Animal> => {
+  playWithAnimal: async (id: string): Promise<ActionResult> => {
     return window.api.animals.play(id)
   },
 
-  healAnimal: async (id: string): Promise<Animal> => {
+  healAnimal: async (id: string): Promise<ActionResult> => {
     return window.api.animals.heal(id)
   },
 
-  sleepAnimal: async (id: string): Promise<Animal> => {
+  sleepAnimal: async (id: string): Promise<ActionResult> => {
     return window.api.animals.sleep(id)
   },
 
