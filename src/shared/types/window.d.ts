@@ -73,6 +73,17 @@ export interface CreateAnimalInput {
   typeId: string
 }
 
+export interface TickResult {
+  animal: Animal
+  justDied: boolean
+  criticalStats: {
+    hunger: boolean
+    happiness: boolean
+    energy: boolean
+    health: boolean
+  }
+}
+
 declare global {
   interface Window {
     api: {
@@ -88,7 +99,7 @@ declare global {
         play: (id: string) => Promise<Animal>
         heal: (id: string) => Promise<Animal>
         sleep: (id: string) => Promise<Animal>
-        tick: (id: string) => Promise<Animal>
+        tick: (id: string) => Promise<TickResult>
       }
       actions: {
         getByAnimalId: (animalId: string) => Promise<Action[]>
@@ -107,6 +118,9 @@ declare global {
       history: {
         getByAnimalId: (animalId: string, limit?: number) => Promise<ActionWithDelta[]>
       }
+      // Event listeners for Main → Renderer communication
+      onAnimalsUpdated: (callback: () => void) => () => void
+      onAnimalDied: (callback: (animal: Animal) => void) => () => void
     }
   }
 }
