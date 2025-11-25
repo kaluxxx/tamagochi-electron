@@ -2,8 +2,8 @@
 import { app, BrowserWindow, ipcMain, Notification, Tray, Menu, nativeImage } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import * as animalService from './database'
-import type { TickResult } from './database'
+import * as animalService from './services'
+import type { TickResult } from './services'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
