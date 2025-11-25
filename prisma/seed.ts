@@ -6,6 +6,8 @@ async function main() {
   console.log('🌱 Seeding database...')
 
   // Clear existing data
+  await prisma.minigameScore.deleteMany()
+  await prisma.wallet.deleteMany()
   await prisma.inventory.deleteMany()
   await prisma.action.deleteMany()
   await prisma.animal.deleteMany()
@@ -51,7 +53,7 @@ async function main() {
 
   console.log('✅ Animal types created:', { cat, dog, alien })
 
-  // Create Food Items
+  // Create Food Items (with prices)
   const steak = await prisma.item.create({
     data: {
       name: 'Steak',
@@ -61,6 +63,7 @@ async function main() {
       healthBoost: 0,
       energyBoost: 0,
       energyCost: 5,
+      price: 35,
       emoji: '🍖',
       description: 'Un délicieux steak juteux',
     },
@@ -75,6 +78,7 @@ async function main() {
       healthBoost: 5,
       energyBoost: 0,
       energyCost: 3,
+      price: 20,
       emoji: '🥛',
       description: 'Du lait frais et crémeux',
     },
@@ -89,12 +93,13 @@ async function main() {
       healthBoost: 10,
       energyBoost: 5,
       energyCost: 2,
+      price: 15,
       emoji: '🍎',
       description: 'Une pomme croquante et saine',
     },
   })
 
-  // Create Toy Items
+  // Create Toy Items (with prices)
   const ball = await prisma.item.create({
     data: {
       name: 'Balle',
@@ -104,6 +109,7 @@ async function main() {
       healthBoost: 0,
       energyBoost: 0,
       energyCost: 15,
+      price: 40,
       emoji: '🎾',
       description: 'Une balle rebondissante pour jouer',
     },
@@ -118,6 +124,7 @@ async function main() {
       healthBoost: 0,
       energyBoost: 0,
       energyCost: 5,
+      price: 25,
       emoji: '🧸',
       description: 'Une peluche douce et confortable',
     },
@@ -132,12 +139,13 @@ async function main() {
       healthBoost: 0,
       energyBoost: 0,
       energyCost: 20,
+      price: 60,
       emoji: '🎮',
       description: 'Une console de jeux vidéo',
     },
   })
 
-  // Create Medicine Items
+  // Create Medicine Items (with prices)
   const vitamin = await prisma.item.create({
     data: {
       name: 'Vitamine',
@@ -147,6 +155,7 @@ async function main() {
       healthBoost: 20,
       energyBoost: 10,
       energyCost: 0,
+      price: 45,
       emoji: '💊',
       description: 'Des vitamines pour rester en forme',
     },
@@ -161,6 +170,7 @@ async function main() {
       healthBoost: 30,
       energyBoost: 0,
       energyCost: 0,
+      price: 55,
       emoji: '💉',
       description: 'Un vaccin préventif',
     },
@@ -175,6 +185,7 @@ async function main() {
       healthBoost: 15,
       energyBoost: 0,
       energyCost: 0,
+      price: 30,
       emoji: '🩹',
       description: 'Un bandage pour les petites blessures',
     },
@@ -199,6 +210,16 @@ async function main() {
   }
 
   console.log('✅ Inventory created with 10 of each item')
+
+  // Create initial Wallet
+  await prisma.wallet.create({
+    data: {
+      coins: 100,
+      lastPassiveGain: new Date(),
+    },
+  })
+
+  console.log('✅ Wallet created with 100 coins')
 
   console.log('🎉 Seeding completed!')
 }
