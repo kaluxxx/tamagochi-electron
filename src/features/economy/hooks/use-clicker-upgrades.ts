@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { economyApi } from '../services/economy-api'
-import type { ClickerUpgrade, ClickerGameStats, UpgradeType } from '../types'
+import type { ClickerUpgrade, ClickerGameStats, ClickerUpgradeType } from '../types'
 
 // Configuration des upgrades (doit matcher database.ts)
 export const CLICKER_UPGRADE_CONFIG = {
@@ -33,12 +33,12 @@ export const CLICKER_UPGRADE_CONFIG = {
   }
 } as const
 
-export function calculateUpgradeCost(type: UpgradeType, currentLevel: number): number {
+export function calculateUpgradeCost(type: ClickerUpgradeType, currentLevel: number): number {
   const config = CLICKER_UPGRADE_CONFIG[type]
   return Math.floor(config.baseCost * Math.pow(config.costMultiplier, currentLevel))
 }
 
-export function calculateUpgradeEffect(type: UpgradeType, level: number): number {
+export function calculateUpgradeEffect(type: ClickerUpgradeType, level: number): number {
   const config = CLICKER_UPGRADE_CONFIG[type]
   return config.baseEffect + (config.effectPerLevel * level)
 }
@@ -57,7 +57,7 @@ export function useClickerUpgrades() {
   })
 
   const purchaseMutation = useMutation({
-    mutationFn: (type: UpgradeType) => economyApi.purchaseClickerUpgrade(type),
+    mutationFn: (type: ClickerUpgradeType) => economyApi.purchaseClickerUpgrade(type),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clickerUpgrades'] })
       queryClient.invalidateQueries({ queryKey: ['clickerGameStats'] })
@@ -66,23 +66,23 @@ export function useClickerUpgrades() {
   })
 
   // Helper to get upgrade by type
-  const getUpgradeByType = (type: UpgradeType): ClickerUpgrade | undefined => {
+  const getUpgradeByType = (type: ClickerUpgradeType): ClickerUpgrade | undefined => {
     return upgradesQuery.data?.find(u => u.type === type)
   }
 
   // Helper to get upgrade level by type
-  const getUpgradeLevel = (type: UpgradeType): number => {
+  const getUpgradeLevel = (type: ClickerUpgradeType): number => {
     return getUpgradeByType(type)?.level ?? 0
   }
 
   // Helper to get next upgrade cost
-  const getNextCost = (type: UpgradeType): number => {
+  const getNextCost = (type: ClickerUpgradeType): number => {
     const level = getUpgradeLevel(type)
     return calculateUpgradeCost(type, level)
   }
 
   // Helper to get current effect value
-  const getCurrentEffect = (type: UpgradeType): number => {
+  const getCurrentEffect = (type: ClickerUpgradeType): number => {
     const level = getUpgradeLevel(type)
     return calculateUpgradeEffect(type, level)
   }

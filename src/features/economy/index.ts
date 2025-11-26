@@ -16,7 +16,7 @@ export type {
   PurchaseResult,
   MinigameScore,
   MinigameResult,
-  UpgradeType,
+  ClickerUpgradeType,
   ClickerUpgrade,
   ClickerGameStats,
   PurchaseUpgradeResult,

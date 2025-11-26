@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MinigamesIndexRouteImport } from './routes/minigames/index'
+import { Route as MinigamesFishingRouteImport } from './routes/minigames/fishing'
 import { Route as MinigamesClickerRouteImport } from './routes/minigames/clicker'
 import { Route as AnimalsCreateRouteImport } from './routes/animals/create'
 
@@ -30,6 +31,11 @@ const MinigamesIndexRoute = MinigamesIndexRouteImport.update({
   path: '/minigames/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MinigamesFishingRoute = MinigamesFishingRouteImport.update({
+  id: '/minigames/fishing',
+  path: '/minigames/fishing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MinigamesClickerRoute = MinigamesClickerRouteImport.update({
   id: '/minigames/clicker',
   path: '/minigames/clicker',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
   '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames/fishing': typeof MinigamesFishingRoute
   '/minigames': typeof MinigamesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
   '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames/fishing': typeof MinigamesFishingRoute
   '/minigames': typeof MinigamesIndexRoute
 }
 export interface FileRoutesById {
@@ -61,6 +69,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/animals/create': typeof AnimalsCreateRoute
   '/minigames/clicker': typeof MinigamesClickerRoute
+  '/minigames/fishing': typeof MinigamesFishingRoute
   '/minigames/': typeof MinigamesIndexRoute
 }
 export interface FileRouteTypes {
@@ -70,15 +79,23 @@ export interface FileRouteTypes {
     | '/shop'
     | '/animals/create'
     | '/minigames/clicker'
+    | '/minigames/fishing'
     | '/minigames'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/shop' | '/animals/create' | '/minigames/clicker' | '/minigames'
+  to:
+    | '/'
+    | '/shop'
+    | '/animals/create'
+    | '/minigames/clicker'
+    | '/minigames/fishing'
+    | '/minigames'
   id:
     | '__root__'
     | '/'
     | '/shop'
     | '/animals/create'
     | '/minigames/clicker'
+    | '/minigames/fishing'
     | '/minigames/'
   fileRoutesById: FileRoutesById
 }
@@ -87,6 +104,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   AnimalsCreateRoute: typeof AnimalsCreateRoute
   MinigamesClickerRoute: typeof MinigamesClickerRoute
+  MinigamesFishingRoute: typeof MinigamesFishingRoute
   MinigamesIndexRoute: typeof MinigamesIndexRoute
 }
 
@@ -113,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MinigamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/minigames/fishing': {
+      id: '/minigames/fishing'
+      path: '/minigames/fishing'
+      fullPath: '/minigames/fishing'
+      preLoaderRoute: typeof MinigamesFishingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/minigames/clicker': {
       id: '/minigames/clicker'
       path: '/minigames/clicker'
@@ -135,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   AnimalsCreateRoute: AnimalsCreateRoute,
   MinigamesClickerRoute: MinigamesClickerRoute,
+  MinigamesFishingRoute: MinigamesFishingRoute,
   MinigamesIndexRoute: MinigamesIndexRoute,
 }
 export const routeTree = rootRouteImport

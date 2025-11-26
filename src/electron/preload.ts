@@ -52,6 +52,40 @@ contextBridge.exposeInMainWorld('api', {
     purchase: (type: string) => ipcRenderer.invoke('clickerUpgrades:purchase', type),
     getGameStats: () => ipcRenderer.invoke('clickerUpgrades:getGameStats'),
   },
+  // Fishing Mini-game
+  fishing: {
+    // Fish Species
+    getAllSpecies: () => ipcRenderer.invoke('fishing:getAllSpecies'),
+    getSpeciesById: (id: string) => ipcRenderer.invoke('fishing:getSpeciesById', id),
+    // Catalog
+    getCaughtFish: () => ipcRenderer.invoke('fishing:getCaughtFish'),
+    getCaughtSpeciesIds: () => ipcRenderer.invoke('fishing:getCaughtSpeciesIds'),
+    // Game Actions
+    selectRandomFish: (locationId: string, baitId?: string) =>
+      ipcRenderer.invoke('fishing:selectRandomFish', locationId, baitId),
+    catchFish: (speciesId: string, size: number, locationId: string, rodId: string, baitId?: string) =>
+      ipcRenderer.invoke('fishing:catchFish', speciesId, size, locationId, rodId, baitId),
+    failCatch: () => ipcRenderer.invoke('fishing:failCatch'),
+    // Rods
+    getRods: () => ipcRenderer.invoke('fishing:getRods'),
+    getEquippedRod: () => ipcRenderer.invoke('fishing:getEquippedRod'),
+    purchaseRod: (rodId: string) => ipcRenderer.invoke('fishing:purchaseRod', rodId),
+    equipRod: (rodId: string) => ipcRenderer.invoke('fishing:equipRod', rodId),
+    // Baits
+    getBaits: () => ipcRenderer.invoke('fishing:getBaits'),
+    purchaseBait: (baitId: string, quantity: number) =>
+      ipcRenderer.invoke('fishing:purchaseBait', baitId, quantity),
+    // Locations
+    getLocations: () => ipcRenderer.invoke('fishing:getLocations'),
+    unlockLocation: (locationId: string) => ipcRenderer.invoke('fishing:unlockLocation', locationId),
+    // Upgrades
+    getUpgrades: () => ipcRenderer.invoke('fishing:getUpgrades'),
+    purchaseUpgrade: (type: string) => ipcRenderer.invoke('fishing:purchaseUpgrade', type),
+    getStats: () => ipcRenderer.invoke('fishing:getStats'),
+    getUpgradesWithDetails: () => ipcRenderer.invoke('fishing:getUpgradesWithDetails'),
+    // Progress
+    getProgress: () => ipcRenderer.invoke('fishing:getProgress'),
+  },
   // Event listeners for Main → Renderer communication
   onAnimalsUpdated: (callback: () => void) => {
     const handler = () => callback()
