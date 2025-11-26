@@ -57,3 +57,42 @@ export {
   CLICKER_UPGRADE_CONFIG
 } from './minigames.service'
 export type { UpgradeType } from './minigames.service'
+
+// Fishing
+export {
+  // Fish Species
+  getAllFishSpecies,
+  getFishSpeciesById,
+  getFishSpeciesByName,
+  // Catalog
+  getCaughtFish,
+  getCaughtSpeciesIds,
+  isFirstCatch,
+  // Catch
+  catchFish,
+  failCatch,
+  selectRandomFish,
+  // Rods
+  getFishingRods,
+  getEquippedRod,
+  purchaseRod,
+  equipRod,
+  // Baits
+  getFishingBaits,
+  purchaseBait,
+  // Locations
+  getFishingLocations,
+  unlockLocation,
+  // Upgrades
+  getFishingUpgrades,
+  getFishingUpgradeByType,
+  purchaseFishingUpgrade,
+  getFishingStats,
+  getFishingUpgradesWithDetails,
+  calculateFishingUpgradeCost,
+  calculateFishingUpgradeEffect,
+  FISHING_UPGRADE_CONFIG,
+  // Progress
+  getFishingProgress,
+} from './fishing.service'
+export type { FishingUpgradeType } from './fishing.service'
