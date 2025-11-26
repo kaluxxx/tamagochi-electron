@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay, useWallet, useClickerUpgrades, CLICKER_UPGRADE_CONFIG, economyApi } from '@/features/economy'
-import type { UpgradeType } from '@/features/economy'
+import type { ClickerUpgradeType } from '@/features/economy'
 import { SpriteImage } from '@/shared/components/ui/sprite-image'
+import { useSoundEffects } from '@/features/audio'
 import { cn } from '@/shared/lib/utils'
 
 export const Route = createFileRoute('/minigames/clicker')({
@@ -24,6 +25,7 @@ interface ClickPopup {
 function ClickerGame() {
   const navigate = useNavigate()
   const { refetch, coins } = useWallet()
+  const { playSfx } = useSoundEffects()
   const {
     gameStats,
     isLoading: upgradesLoading,
@@ -39,7 +41,7 @@ function ClickerGame() {
   const [timeLeft, setTimeLeft] = useState(BASE_GAME_DURATION)
   const [coinsEarned, setCoinsEarned] = useState(0)
   const [clickPopups, setClickPopups] = useState<ClickPopup[]>([])
-  const [purchaseFlash, setPurchaseFlash] = useState<UpgradeType | null>(null)
+  const [purchaseFlash, setPurchaseFlash] = useState<ClickerUpgradeType | null>(null)
 
   const hasSavedRef = useRef(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -129,6 +131,7 @@ function ClickerGame() {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (gameState === 'playing') {
+      playSfx('click')
       setClicks((prev) => prev + 1)
 
       // Add click popup
@@ -146,11 +149,12 @@ function ClickerGame() {
     }
   }
 
-  const handlePurchaseUpgrade = (type: UpgradeType) => {
+  const handlePurchaseUpgrade = (type: ClickerUpgradeType) => {
     const cost = getNextCost(type)
     if (coins >= cost) {
       purchaseUpgrade(type, {
         onSuccess: () => {
+          playSfx('upgrade_purchase')
           setPurchaseFlash(type)
           window.setTimeout(() => setPurchaseFlash(null), 300)
         },
@@ -357,7 +361,7 @@ function ClickerGame() {
           </h2>
 
           <div className="space-y-3">
-            {(['multiplier', 'time_bonus', 'auto_clicker'] as UpgradeType[]).map((type) => {
+            {(['multiplier', 'time_bonus', 'auto_clicker'] as ClickerUpgradeType[]).map((type) => {
               const config = CLICKER_UPGRADE_CONFIG[type]
               const level = getUpgradeLevel(type)
               const cost = getNextCost(type)
