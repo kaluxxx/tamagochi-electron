@@ -14,6 +14,9 @@ class AudioManager {
   private sfxSounds: Map<SfxType, Howl> = new Map()
   private currentTrackId: string | null = null
   private isInitialized = false
+  private pendingRoute: string | null = null
+  private loadedTracks = 0
+  private totalTracks = 0
   private settings: AudioSettings = {
     musicVolume: 0.5,
     sfxVolume: 0.7,
@@ -24,6 +27,9 @@ class AudioManager {
   initialize(): void {
     if (this.isInitialized) return
 
+    this.totalTracks = MUSIC_TRACKS.length
+    this.loadedTracks = 0
+
     // Preload all music tracks (sans html5 pour meilleur support autoplay)
     MUSIC_TRACKS.forEach((track) => {
       const howl = new Howl({
@@ -31,8 +37,20 @@ class AudioManager {
         loop: track.loop,
         volume: track.baseVolume * this.settings.musicVolume,
         preload: true,
+        onload: () => {
+          this.loadedTracks++
+          // Start pending music once the correct track is loaded
+          if (this.pendingRoute) {
+            const pendingTrack = getTrackForRoute(this.pendingRoute)
+            if (pendingTrack && pendingTrack.id === track.id) {
+              this.pendingRoute = null
+              this.switchTrack(track.id)
+            }
+          }
+        },
         onloaderror: (_id, error) => {
           console.warn(`Failed to load music track ${track.id}:`, error)
+          this.loadedTracks++
         },
       })
       this.musicTracks.set(track.id, howl)
@@ -78,6 +96,9 @@ class AudioManager {
   playMusicForRoute(pathname: string): void {
     if (!this.isInitialized) {
       this.initialize()
+      // Store route to play once loaded
+      this.pendingRoute = pathname
+      return
     }
 
     const track = getTrackForRoute(pathname)
@@ -86,7 +107,14 @@ class AudioManager {
     // Don't restart if already playing the same track
     if (this.currentTrackId === track.id) return
 
-    this.switchTrack(track.id)
+    // Check if track is loaded
+    const howl = this.musicTracks.get(track.id)
+    if (howl && howl.state() === 'loaded') {
+      this.switchTrack(track.id)
+    } else {
+      // Store route to play once loaded
+      this.pendingRoute = pathname
+    }
   }
 
   private switchTrack(targetTrackId: string): void {
