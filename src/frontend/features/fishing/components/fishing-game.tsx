@@ -10,42 +10,14 @@ import {
   useFailCatch,
 } from '../hooks/use-fishing'
 import { CatchingMinigame } from './catching-minigame'
-import { cn } from '@frontend/shared/lib/utils'
-
-// Helper to get rarity color
-function getRarityColor(rarity: string) {
-  switch (rarity) {
-    case 'common':
-      return 'text-gray-300'
-    case 'uncommon':
-      return 'text-green-400'
-    case 'rare':
-      return 'text-blue-400'
-    case 'epic':
-      return 'text-purple-400'
-    case 'legendary':
-      return 'text-yellow-400'
-    default:
-      return 'text-white'
-  }
-}
-
-function getRarityBgColor(rarity: string) {
-  switch (rarity) {
-    case 'common':
-      return 'bg-gray-600/50'
-    case 'uncommon':
-      return 'bg-green-600/50'
-    case 'rare':
-      return 'bg-blue-600/50'
-    case 'epic':
-      return 'bg-purple-600/50'
-    case 'legendary':
-      return 'bg-yellow-600/50 animate-pulse'
-    default:
-      return 'bg-gray-600/50'
-  }
-}
+import {
+  IdleState,
+  CastingState,
+  WaitingState,
+  BiteState,
+  SuccessState,
+  FailureState,
+} from './game-states'
 
 export function FishingGame() {
   const gameState = useFishingStore((s) => s.gameState)
@@ -202,148 +174,30 @@ export function FishingGame() {
     switch (gameState) {
       case 'idle':
         return (
-          <div className="flex flex-col items-center justify-center h-full gap-6">
-            <div className="text-6xl animate-bounce-slow">🎣</div>
-            <h2 className="text-2xl font-pixel text-blue-300">PRET A PECHER?</h2>
-
-            {/* Location selector */}
-            {currentLocation && (
-              <div className="text-center">
-                <div className="text-sm text-gray-400 font-pixel mb-1">LIEU</div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-blue-900/50 rounded-lg">
-                  <span className="text-2xl">{currentLocation.emoji}</span>
-                  <span className="font-pixel text-blue-200">{currentLocation.displayName}</span>
-                </div>
-              </div>
-            )}
-
-            {/* Equipment display */}
-            <div className="flex gap-4">
-              {equippedRod && (
-                <div className="text-center">
-                  <div className="text-xs text-gray-400 font-pixel">CANNE</div>
-                  <div className="font-pixel text-cyan-300">{equippedRod.displayName}</div>
-                </div>
-              )}
-              {currentBait && (
-                <div className="text-center">
-                  <div className="text-xs text-gray-400 font-pixel">APPAT</div>
-                  <div className="flex items-center gap-1 font-pixel text-yellow-300">
-                    <span>{currentBait.emoji}</span>
-                    <span>x{currentBait.quantity}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Bait selector */}
-            {availableBaits.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center">
-                <button
-                  onClick={() => setSelectedBait(null)}
-                  className={cn(
-                    "px-3 py-1 rounded-lg font-pixel text-sm transition-all",
-                    !selectedBaitId
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                  )}
-                >
-                  Sans appat
-                </button>
-                {availableBaits.map((bait) => (
-                  <button
-                    key={bait.id}
-                    onClick={() => setSelectedBait(bait.id)}
-                    className={cn(
-                      "px-3 py-1 rounded-lg font-pixel text-sm transition-all flex items-center gap-1",
-                      selectedBaitId === bait.id
-                        ? "bg-yellow-600 text-white"
-                        : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                    )}
-                  >
-                    <span>{bait.emoji}</span>
-                    <span>x{bait.quantity}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <button
-              onClick={handleCast}
-              disabled={!equippedRod || !currentLocation}
-              className={cn(
-                "px-8 py-4 rounded-xl font-pixel text-xl transition-all transform",
-                equippedRod && currentLocation
-                  ? "bg-gradient-to-b from-green-500 to-green-700 hover:from-green-400 hover:to-green-600 text-white shadow-lg hover:scale-105 active:scale-95"
-                  : "bg-gray-600 text-gray-400 cursor-not-allowed"
-              )}
-            >
-              LANCER!
-            </button>
-          </div>
+          <IdleState
+            currentLocation={currentLocation ?? undefined}
+            equippedRod={equippedRod ?? undefined}
+            currentBait={currentBait ?? undefined}
+            availableBaits={availableBaits}
+            selectedBaitId={selectedBaitId}
+            onCast={handleCast}
+            onSelectBait={setSelectedBait}
+          />
         )
 
       case 'casting':
-        return (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="text-6xl animate-swing origin-bottom">🎣</div>
-            <div className="text-xl font-pixel text-blue-300 animate-pulse">
-              LANCER EN COURS...
-            </div>
-          </div>
-        )
+        return <CastingState />
 
       case 'waiting':
-        return (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="relative">
-              <div className="text-6xl">🎣</div>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-gray-400 to-transparent" />
-              <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 animate-bob">
-                <span className="text-2xl">🪝</span>
-              </div>
-            </div>
-            <div className="text-xl font-pixel text-blue-300 mt-8">
-              EN ATTENTE D'UN POISSON...
-            </div>
-            <div className="flex gap-1">
-              <span className="animate-pulse delay-0">.</span>
-              <span className="animate-pulse delay-100">.</span>
-              <span className="animate-pulse delay-200">.</span>
-            </div>
-          </div>
-        )
+        return <WaitingState />
 
       case 'bite':
         return (
-          <div
-            className="flex flex-col items-center justify-center h-full gap-4 cursor-pointer"
+          <BiteState
+            reactionTimeLeft={reactionTimeLeft}
+            reflexBonus={stats?.reflexBonus ?? 0}
             onClick={handleBiteClick}
-          >
-            <div className="text-6xl animate-shake">🐟</div>
-            <div className="text-3xl font-pixel text-yellow-400 animate-pulse">
-              TOUCHE!
-            </div>
-            <div className="text-lg font-pixel text-white">
-              CLIQUE MAINTENANT!
-            </div>
-
-            {/* Reaction timer bar */}
-            <div className="w-48 h-3 bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className={cn(
-                  "h-full transition-all duration-50",
-                  reactionTimeLeft > 0.5 ? "bg-green-500" : "bg-red-500 animate-pulse"
-                )}
-                style={{
-                  width: `${(reactionTimeLeft / (QTE_CONFIG.baseReactionWindow + (stats?.reflexBonus ?? 0) / 10)) * 100}%`,
-                }}
-              />
-            </div>
-            <div className="text-sm font-pixel text-gray-400">
-              {reactionTimeLeft.toFixed(1)}s
-            </div>
-          </div>
+          />
         )
 
       case 'catching':
@@ -358,81 +212,18 @@ export function FishingGame() {
 
       case 'success':
         return (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="text-7xl animate-bounce">🎉</div>
-            <div className="text-3xl font-pixel text-green-400">
-              CAPTURE!
-            </div>
-
-            {lastResult && (
-              <div className={cn(
-                "p-6 rounded-xl text-center",
-                getRarityBgColor(lastResult.species.rarity)
-              )}>
-                <div className="text-5xl mb-2">{lastResult.species.emoji}</div>
-                <div className={cn("text-xl font-pixel", getRarityColor(lastResult.species.rarity))}>
-                  {lastResult.species.displayName}
-                </div>
-                <div className="text-sm text-gray-300 font-pixel mt-1">
-                  {lastResult.catch.size} cm
-                </div>
-
-                {lastResult.isFirstCatch && (
-                  <div className="mt-2 px-3 py-1 bg-yellow-500/50 rounded-full text-yellow-200 font-pixel text-sm">
-                    PREMIERE CAPTURE!
-                  </div>
-                )}
-
-                <div className="flex justify-center gap-6 mt-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-pixel text-yellow-400">
-                      +{lastResult.coinsEarned}
-                    </div>
-                    <div className="text-xs text-gray-400 font-pixel">PIECES</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-pixel text-cyan-400">
-                      +{lastResult.xpEarned}
-                    </div>
-                    <div className="text-xs text-gray-400 font-pixel">XP</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={handlePlayAgain}
-              className="px-8 py-3 bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 text-white rounded-xl font-pixel text-lg transition-all transform hover:scale-105 active:scale-95"
-            >
-              PECHER ENCORE
-            </button>
-          </div>
+          <SuccessState
+            lastResult={lastResult}
+            onPlayAgain={handlePlayAgain}
+          />
         )
 
       case 'failure':
         return (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="text-6xl">💨</div>
-            <div className="text-2xl font-pixel text-red-400">
-              LE POISSON S'EST ECHAPPE!
-            </div>
-
-            {currentFish && (
-              <div className="text-center opacity-50">
-                <div className="text-4xl">{currentFish.emoji}</div>
-                <div className={cn("font-pixel", getRarityColor(currentFish.rarity))}>
-                  {currentFish.displayName}
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={handlePlayAgain}
-              className="mt-4 px-8 py-3 bg-gradient-to-b from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white rounded-xl font-pixel text-lg transition-all transform hover:scale-105 active:scale-95"
-            >
-              REESSAYER
-            </button>
-          </div>
+          <FailureState
+            currentFish={currentFish}
+            onPlayAgain={handlePlayAgain}
+          />
         )
 
       default:
