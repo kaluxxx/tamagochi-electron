@@ -4,52 +4,63 @@
 
 ```
 src/
-├── features/
-│   ├── animals/
-│   │   ├── components/      # AnimalCard, AnimalSprite, AnimalTabs, CreateAnimalForm
-│   │   ├── hooks/           # useAnimals, useCreateAnimal
-│   │   ├── services/        # animal-api.ts (IPC wrappers)
-│   │   ├── schemas/         # Validation Zod
-│   │   └── types/           # Animal, AnimalType interfaces
-│   ├── actions/
-│   │   ├── components/      # ActionsPanel, GameZone
-│   │   ├── hooks/           # useActions, useActionProgress
-│   │   ├── stores/          # actions-store.ts (Zustand)
-│   │   └── types/           # ActionType definitions
-│   ├── history/
-│   │   ├── components/      # HistoryPanel, HistoryEntry
-│   │   ├── hooks/           # useHistory
-│   │   ├── services/        # history-api.ts
-│   │   └── types/           # ActionWithDelta, StatDelta
-│   └── inventory/
-│       ├── components/      # InventoryPanel, InventoryItem
-│       ├── hooks/           # useInventory
-│       ├── services/        # inventory-api.ts
-│       └── types/           # Item, InventoryItem, ItemType
-├── shared/
-│   ├── components/
-│   │   ├── ui/              # Button, Card, Progress, Input (shadcn/ui)
-│   │   └── layout/          # game-view.tsx (3-column layout)
-│   ├── lib/                 # utils.ts
-│   ├── types/               # window.d.ts (IPC types)
-│   └── utils/               # sprite-loader.ts
-├── electron/
-│   ├── main.ts              # Electron main process, tick system, notifications
-│   ├── preload.ts           # Context bridge IPC (window.api)
-│   └── database.ts          # Prisma operations
-├── routes/
-│   ├── __root.tsx           # Root layout avec Toaster
-│   ├── index.tsx            # Page principale (GameView)
-│   └── animals/
-│       └── create.tsx       # Page création animal
-├── styles/
-│   └── index.css            # Tailwind + CSS global
-├── App.tsx                  # TanStack Query + Router setup
-└── main.tsx                 # React entry point
+├── backend/
+│   ├── core/                 # Base classes, erreurs, validation
+│   │   ├── base.repository.ts
+│   │   ├── errors.ts
+│   │   └── validation.ts
+│   ├── database/
+│   │   └── prisma.ts         # Initialisation Prisma
+│   ├── features/
+│   │   ├── animals/          # Gestion des animaux
+│   │   │   ├── controllers/
+│   │   │   └── repositories/
+│   │   ├── economy/          # Wallet, Shop, Minigames
+│   │   │   ├── controllers/
+│   │   │   └── repositories/
+│   │   ├── fishing/          # Mini-jeu de pêche
+│   │   │   ├── controllers/
+│   │   │   └── repositories/
+│   │   ├── inventory/        # Items et inventaire
+│   │   │   ├── controllers/
+│   │   │   └── repositories/
+│   │   └── minigames/        # Clicker et autres mini-jeux
+│   │       ├── controllers/
+│   │       └── repositories/
+│   ├── main.ts               # Electron main process, tick system
+│   └── preload.ts            # Context bridge IPC (window.api)
+├── frontend/
+│   ├── features/
+│   │   ├── animals/          # Composants, hooks, services animaux
+│   │   ├── actions/          # Système d'actions (feed, play, etc.)
+│   │   ├── audio/            # Musique et effets sonores
+│   │   ├── economy/          # Wallet, shop, rewards
+│   │   ├── fishing/          # Mini-jeu de pêche complet
+│   │   ├── history/          # Historique des actions
+│   │   └── inventory/        # Gestion de l'inventaire
+│   ├── shared/
+│   │   ├── ui/               # Composants UI réutilisables
+│   │   ├── layout/           # game-view.tsx (3 colonnes)
+│   │   ├── lib/              # utils.ts
+│   │   └── utils/            # sprite-loader.ts
+│   ├── routes/
+│   │   ├── __root.tsx        # Root layout avec Toaster
+│   │   ├── index.tsx         # Page principale (GameView)
+│   │   ├── shop.tsx          # Page boutique
+│   │   ├── animals/
+│   │   │   └── create.tsx    # Page création animal
+│   │   └── minigames/
+│   │       ├── index.tsx     # Hub des mini-jeux
+│   │       ├── clicker.tsx   # Mini-jeu clicker
+│   │       └── fishing.tsx   # Mini-jeu pêche
+│   ├── styles/
+│   │   └── index.css         # Tailwind + CSS global
+│   ├── App.tsx               # TanStack Query + Router setup
+│   └── main.tsx              # React entry point
 prisma/
-├── schema.prisma            # Schéma BDD (5 tables)
-├── seed.ts                  # Données initiales
-└── migrations/              # Historique migrations
+├── schema.prisma             # Schéma BDD (14 tables)
+├── seed.ts                   # Données initiales
+└── migrations/               # Historique migrations
 ```
 
 ## 2. Stack technique
@@ -59,7 +70,7 @@ prisma/
 - **TypeScript** → Typage strict
 - **TanStack Query** → State management serveur (cache, mutations)
 - **TanStack Router** → Navigation type-safe (file-based routing)
-- **Zustand** → State management client (actions en cours)
+- **Zustand** → State management client (actions, audio, fishing)
 - **Tailwind CSS** → Styling
 - **shadcn/ui** → Composants UI (Button, Card, Progress, Input)
 - **Lucide React** → Icônes
@@ -70,6 +81,7 @@ prisma/
 - **Prisma** → ORM pour SQLite
 - **SQLite** → Base de données locale
 - **IPC Bridge** → Communication main ↔ renderer
+- **Zod** → Validation des inputs
 
 ### Build/Dev
 - **Vite** → Bundler rapide
@@ -79,26 +91,19 @@ prisma/
 
 ## 3. Base de données (Prisma Schema)
 
+Le projet utilise **14 tables** organisées en 4 domaines :
+
+### Domaine Animaux (5 tables)
+
 ```prisma
-// prisma/schema.prisma
-
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 model AnimalType {
   id                 String   @id @default(uuid())
   name               String   @unique  // "cat", "dog", "alien"
   displayName        String   // "Chat", "Chien", "Alien"
-  hungerDecayRate    Float    @default(2.0)    // Cat: 2.5, Dog: 2.0, Alien: 1.5
-  happinessDecayRate Float    @default(1.5)    // Cat: 1.5, Dog: 2.0, Alien: 1.0
-  energyDecayRate    Float    @default(1.0)    // Cat: 0.8, Dog: 1.2, Alien: 1.5
-  healthDecayRate    Float    @default(3.0)    // Cat: 3.0, Dog: 3.0, Alien: 2.5
+  hungerDecayRate    Float    @default(2.0)
+  happinessDecayRate Float    @default(1.5)
+  energyDecayRate    Float    @default(1.0)
+  healthDecayRate    Float    @default(3.0)
   emoji              String   // 🐱 🐶 👽
   animals            Animal[]
 }
@@ -111,11 +116,11 @@ model Animal {
   happiness   Int        @default(100)
   health      Int        @default(100)
   energy      Int        @default(100)
-  age         Int        @default(0) // in hours
+  age         Int        @default(0)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @default(now())
   isAlive     Boolean    @default(true)
-  type        AnimalType @relation(fields: [typeId], references: [id])
+  type        AnimalType @relation
   actions     Action[]
 }
 
@@ -125,7 +130,7 @@ model Action {
   actionType      String   // "feed", "play", "heal", "sleep", "use_item"
   itemId          String?
   timestamp       DateTime @default(now())
-  // Stats tracking for history display
+  // Stats tracking
   hungerBefore    Int?
   happinessBefore Int?
   healthBefore    Int?
@@ -134,8 +139,9 @@ model Action {
   happinessAfter  Int?
   healthAfter     Int?
   energyAfter     Int?
-  animal          Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
-  item            Item?    @relation(fields: [itemId], references: [id])
+  coinsEarned     Int?
+  animal          Animal   @relation(onDelete: Cascade)
+  item            Item?    @relation
 }
 
 model Item {
@@ -147,6 +153,7 @@ model Item {
   healthBoost    Int         @default(0)
   energyBoost    Int         @default(0)
   energyCost     Int         @default(0)
+  price          Int         @default(10)
   emoji          String
   description    String
   actions        Action[]
@@ -157,7 +164,129 @@ model Inventory {
   id       String @id @default(uuid())
   itemId   String @unique
   quantity Int    @default(0)
-  item     Item   @relation(fields: [itemId], references: [id])
+  item     Item   @relation
+}
+```
+
+### Domaine Économie (3 tables)
+
+```prisma
+model Wallet {
+  id              String   @id @default(uuid())
+  coins           Int      @default(100)
+  lastPassiveGain DateTime @default(now())
+  createdAt       DateTime @default(now())
+}
+
+model MinigameScore {
+  id          String   @id @default(uuid())
+  gameType    String   // "clicker"
+  score       Int
+  coinsEarned Int
+  playedAt    DateTime @default(now())
+}
+
+model ClickerUpgrade {
+  id        String   @id @default(uuid())
+  type      String   @unique // "multiplier", "time_bonus", "auto_clicker"
+  level     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+### Domaine Pêche (6 tables)
+
+```prisma
+model FishSpecies {
+  id             String      @id @default(uuid())
+  name           String      @unique
+  displayName    String
+  emoji          String
+  rarity         String      // "common", "uncommon", "rare", "epic", "legendary"
+  baseValue      Int
+  difficulty     Int         // 1-10
+  minSize        Int
+  maxSize        Int
+  locations      String      // JSON array
+  baitPreference String      // JSON array
+  description    String
+  catches        FishCatch[]
+}
+
+model FishCatch {
+  id           String      @id @default(uuid())
+  speciesId    String
+  size         Int
+  coinsEarned  Int
+  isFirstCatch Boolean     @default(false)
+  caughtAt     DateTime    @default(now())
+  locationId   String
+  rodId        String
+  baitId       String?
+  species      FishSpecies @relation
+}
+
+model FishingRod {
+  id             String  @id @default(uuid())
+  name           String  @unique
+  displayName    String
+  tier           Int     // 1-5
+  price          Int
+  reelZoneBonus  Float   @default(0)
+  catchRateBonus Float   @default(0)
+  rarityBonus    Float   @default(0)
+  description    String
+  isOwned        Boolean @default(false)
+  isEquipped     Boolean @default(false)
+}
+
+model FishingBait {
+  id             String  @id @default(uuid())
+  name           String  @unique
+  displayName    String
+  emoji          String
+  price          Int
+  catchRateBonus Float   @default(0)
+  maxUses        Int     @default(1)
+  targetRarity   String?
+  targetSpecies  String?
+  description    String
+  quantity       Int     @default(0)
+}
+
+model FishingLocation {
+  id            String  @id @default(uuid())
+  name          String  @unique
+  displayName   String
+  emoji         String
+  unlockCost    Int
+  difficulty    Float   @default(1.0)
+  availableFish String  // JSON array
+  description   String
+  isUnlocked    Boolean @default(false)
+  unlockOrder   Int     @default(0)
+}
+
+model FishingUpgrade {
+  id        String   @id @default(uuid())
+  type      String   @unique // "luck", "reflexes", "value", "bait_efficiency"
+  level     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FishingProgress {
+  id              String   @id @default(uuid())
+  level           Int      @default(1)
+  experience      Int      @default(0)
+  totalFishCaught Int      @default(0)
+  largestFishId   String?
+  largestFishSize Int?
+  currentStreak   Int      @default(0)
+  bestStreak      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 ```
 
@@ -173,88 +302,163 @@ model Inventory {
                │
 ┌──────────────▼──────────────────────┐
 │     IPC Bridge (Electron Preload)   │
-│  window.api.animals.*                │
+│  window.api.* (animals, wallet,     │
+│  shop, fishing, minigame, etc.)     │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
 │   Main Process (Electron + Prisma)  │
-│  Services → Prisma → SQLite          │
+│  Controllers → Repositories → DB     │
 └─────────────────────────────────────┘
 ```
 
-### Flux typique d'une action
+### Pattern Repository
 
-**Exemple : Nourrir un animal**
+Le backend utilise un pattern Repository avec classes de base :
 
-1. **UI** : Utilisateur clique sur "Nourrir"
-2. **Hook** : `useFeedAnimal()` appelle `window.api.animals.feed(animalId)`
-3. **IPC** : Preload transmet au main process
-4. **Service** : `animalService.feed()` met à jour la BDD via Prisma
-5. **Response** : Animal mis à jour renvoyé au renderer
-6. **Cache** : TanStack Query invalide et refetch
-7. **UI** : Stats mises à jour + toast de succès
+```typescript
+// Base Repository (CRUD complet)
+class BaseRepository<T, CreateInput, UpdateInput> {
+  findMany(), findById(), create(), update(), delete()
+}
+
+// Read-Only Repository (entités statiques)
+class ReadOnlyRepository<T> {
+  findMany(), findById()
+}
+
+// Singleton Repository (une seule entrée)
+class SingletonRepository<T, UpdateInput> {
+  get(), update(), getOrCreate()
+}
+```
 
 ## 5. State Management
 
 ### Server State (TanStack Query)
-- Gestion du cache des animaux, items, inventory, history
-- Refetch automatique toutes les 10 secondes
-- Invalidation après mutations
-- staleTime: 5 minutes
+
+Gestion du cache pour toutes les données serveur :
 
 ```typescript
-// Hook custom
-const { data: animals } = useAnimals()
-const { animal, feedAnimal, playWithAnimal, healAnimal, sleepAnimal } = useAnimals()
+// Query keys principaux
+['animals']
+['animal-types']
+['shop-items']
+['wallet']
+['inventory']
+['history', animalId]
+['fishing', 'species']
+['fishing', 'rods']
+['fishing', 'baits']
+['fishing', 'locations']
+['fishing', 'upgrades']
+['fishing', 'progress']
+['clicker-upgrades']
 ```
 
 ### Client State (Zustand)
-- État des actions en cours (sleeping, playing, feeding, healing, using_item)
-- Progression des actions avec durée
-- Persistance entre changements d'onglets
 
+**3 stores Zustand :**
+
+1. **actions-store.ts** - État des actions en cours
 ```typescript
-// Store Zustand
 interface ActionsStore {
-  activeActions: Map<string, ActiveAction>  // animalId -> action en cours
-  startAction: (animalId: string, action: ActionType, duration: number) => void
-  completeAction: (animalId: string) => void
+  activeActions: Map<string, ActiveAction>
+  startAction: (animalId, type, duration) => void
+  completeAction: (animalId) => void
 }
 ```
 
-### Durées des actions
-- Feed: 5 secondes
-- Play: 20 secondes
-- Sleep: 30 secondes
-- Heal: 8 secondes
-- Use Item: 3 secondes
+2. **audio-store.ts** - Paramètres audio (persisté)
+```typescript
+interface AudioStore {
+  musicVolume: number
+  sfxVolume: number
+  isMusicMuted: boolean
+  isSfxMuted: boolean
+}
+```
 
-## 6. Système de tick temporel
+3. **fishing.store.ts** - État du jeu de pêche
+```typescript
+interface FishingStore {
+  gameState: 'idle' | 'casting' | 'waiting' | 'bite' | 'catching' | 'success' | 'failure'
+  selectedLocationId: string | null
+  selectedBaitId: string | null
+  tension: number
+  catchProgress: number
+  qteConfig: QTEConfig
+}
+```
+
+## 6. Communication IPC
+
+### API Surface (preload.ts)
+
+```typescript
+window.api = {
+  // Animaux
+  animalTypes: { getAll, getById },
+  animals: { getAll, getById, create, feed, play, heal, sleep, tick },
+  actions: { getByAnimalId },
+
+  // Items & Inventaire
+  items: { getAll, getById, getByType, useItem },
+  inventory: { getAll, getByType },
+  history: { getByAnimalId },
+
+  // Économie
+  wallet: { get, collectPassive, addCoins },
+  shop: { getItems, purchase },
+  minigame: { saveScore, getHighScores },
+  clickerUpgrades: { getAll, purchase, getGameStats },
+
+  // Pêche (~20 méthodes)
+  fishing: {
+    // Espèces
+    getAllSpecies, getSpeciesById,
+    // Catalogue
+    getCaughtFish, getCaughtSpeciesIds,
+    // Actions de jeu
+    selectRandomFish, catchFish, failCatch,
+    // Équipement
+    getRods, getEquippedRod, purchaseRod, equipRod,
+    getBaits, purchaseBait,
+    getLocations, unlockLocation,
+    // Progression
+    getUpgrades, purchaseUpgrade, getStats, getUpgradesWithDetails,
+    getProgress
+  },
+
+  // Events (Main → Renderer)
+  onAnimalsUpdated: (callback) => void,
+  onAnimalDied: (callback) => void,
+  onWalletUpdated: (callback) => void
+}
+```
+
+## 7. Système de tick temporel
 
 ### Tick dans le Main Process
 
-Le système de tick est géré côté **main process** (pas côté renderer) pour garantir la fiabilité.
-
 ```typescript
-// src/electron/main.ts
 const TICK_INTERVAL = 10000 // 10 secondes
 
 const runTick = async () => {
+  // 1. Dégradation des stats des animaux
   const animals = await getAllAnimals()
-  const aliveAnimals = animals.filter(a => a.isAlive)
-
-  for (const animal of aliveAnimals) {
+  for (const animal of animals.filter(a => a.isAlive)) {
     const result = await tickAnimal(animal.id)
-
-    if (result.justDied) {
-      sendDeathNotification(animal)
-      mainWindow?.webContents.send('animal:died', animal)
-    }
-
-    checkCriticalStats(result)  // Notifications si stats < 30%
+    if (result.justDied) sendDeathNotification(animal)
+    checkCriticalStats(result)
   }
 
-  mainWindow?.webContents.send('animals:updated')  // Trigger refetch UI
+  // 2. Collecte passive des coins
+  await collectPassiveCoins()
+
+  // 3. Notifier le renderer
+  mainWindow?.webContents.send('animals:updated')
+  mainWindow?.webContents.send('wallet:updated', wallet)
 }
 
 setInterval(runTick, TICK_INTERVAL)
@@ -262,347 +466,98 @@ setInterval(runTick, TICK_INTERVAL)
 
 ### Dégradation des stats
 
-```typescript
-// src/electron/database.ts
-export const tickAnimal = async (animalId: string) => {
-  const animal = await prisma.animal.findUnique({
-    where: { id: animalId },
-    include: { type: true }
-  })
+- **Hunger, Happiness, Energy** : Diminuent selon le type d'animal
+- **Health** : Diminue si une stat < 20, multiplié par le nombre de stats critiques
 
-  const now = new Date()
-  const hoursElapsed = (now.getTime() - animal.updatedAt.getTime()) / (1000 * 60 * 60)
+### Économie passive
 
-  // Dégradation selon le type d'animal
-  const newHunger = Math.max(0, animal.hunger - hoursElapsed * animal.type.hungerDecayRate)
-  const newHappiness = Math.max(0, animal.happiness - hoursElapsed * animal.type.happinessDecayRate)
-  const newEnergy = Math.max(0, animal.energy - hoursElapsed * animal.type.energyDecayRate)
+- **10 coins/heure** générés automatiquement
+- Collectés lors du tick ou manuellement
 
-  // Santé diminue si stats critiques (< 20), MULTIPLIÉE par le nombre de stats critiques
-  let criticalCount = 0
-  if (newHunger < 20) criticalCount++
-  if (newHappiness < 20) criticalCount++
-  if (newEnergy < 20) criticalCount++
+## 8. Système d'économie
 
-  const newHealth = criticalCount > 0
-    ? Math.max(0, animal.health - hoursElapsed * animal.type.healthDecayRate * criticalCount)
-    : animal.health
+### Sources de revenus
 
-  const isAlive = newHealth > 0
+| Source | Coins |
+|--------|-------|
+| Passif | 10/heure |
+| Feed | +2 |
+| Play | +5 |
+| Heal | +3 |
+| Sleep | +8 |
+| Use Item | +1 |
+| Clicker | Variable |
+| Fishing | Variable (basé sur rareté et taille) |
 
-  return {
-    animal: await prisma.animal.update({ ... }),
-    justDied: !isAlive && animal.isAlive,
-    criticalStats: { hunger: newHunger < 30, happiness: newHappiness < 30, ... }
-  }
-}
+### Coûts
+
+- Items de shop : 10-50 coins
+- Cannes à pêche : 0-500 coins
+- Appâts : 5-20 coins
+- Déblocage lieux : 100-1000 coins
+- Upgrades : Coût exponentiel (base × 1.4-1.7^level)
+
+## 9. Mini-jeu de pêche
+
+### États du jeu
+
+```
+idle → casting → waiting → bite → catching → success/failure → reward
 ```
 
-### Synchronisation temps offline
+### Mécanique QTE
 
-Au démarrage de l'app, `syncOfflineTime()` applique la dégradation accumulée :
+- **Tension** : 0-100, zone optimale 40-70
+- **Progress** : Remplir la barre pour capturer
+- Paramètres ajustables via `qteConfig`
 
-```typescript
-// src/electron/main.ts
-const syncOfflineTime = async () => {
-  const animals = await getAllAnimals()
-  const aliveAnimals = animals.filter(a => a.isAlive)
+### Système de rareté
 
-  for (const animal of aliveAnimals) {
-    const result = await tickAnimal(animal.id)
-    if (result.justDied) {
-      // Notification spéciale "mort pendant ton absence"
-      sendDeathNotification(animal, true)
-    }
-  }
-}
+| Rareté | Couleur | Multiplicateur valeur |
+|--------|---------|----------------------|
+| Common | Gris | ×1 |
+| Uncommon | Vert | ×2 |
+| Rare | Bleu | ×3 |
+| Epic | Violet | ×5 |
+| Legendary | Or | ×10 |
 
-app.whenReady().then(() => {
-  syncOfflineTime()
-  // ... création fenêtre
-})
+## 10. Routing
+
+```
+/                       → GameView principal
+/shop                   → Boutique d'items
+/animals/create         → Création d'animal
+/minigames              → Hub des mini-jeux
+/minigames/clicker      → Jeu clicker
+/minigames/fishing      → Jeu de pêche (tabs: game, equipment, upgrades, catalog)
 ```
 
-### Notifications Desktop
+## 11. Notifications Desktop
 
-```typescript
-// Cooldown de 1 heure par stat par animal
-const notificationCooldowns = new Map<string, number>()
-const COOLDOWN = 3600000  // 1 heure
+- **Mort** : Notification immédiate
+- **Stats critiques** (< 30%) : Avec cooldown 1h par stat par animal
+- **Mort offline** : Message spécifique au démarrage
 
-const checkCriticalStats = (result: TickResult) => {
-  const { animal, criticalStats } = result
-
-  for (const [stat, isCritical] of Object.entries(criticalStats)) {
-    if (isCritical) {
-      const key = `${animal.id}-${stat}`
-      const lastNotif = notificationCooldowns.get(key) || 0
-
-      if (Date.now() - lastNotif > COOLDOWN) {
-        new Notification({ title: `${animal.name} a besoin de toi !`, body: `...` }).show()
-        notificationCooldowns.set(key, Date.now())
-      }
-    }
-  }
-}
-```
-
-## 7. Communication IPC (Electron)
-
-### Preload (Context Bridge)
-
-```typescript
-// src/electron/preload.ts
-import { contextBridge, ipcRenderer } from 'electron'
-
-contextBridge.exposeInMainWorld('api', {
-  // Animal Types
-  animalTypes: {
-    getAll: () => ipcRenderer.invoke('animalTypes:getAll'),
-    getById: (id: string) => ipcRenderer.invoke('animalTypes:getById', id),
-  },
-
-  // Animals
-  animals: {
-    getAll: () => ipcRenderer.invoke('animals:getAll'),
-    getById: (id: string) => ipcRenderer.invoke('animals:getById', id),
-    create: (data: CreateAnimalDto) => ipcRenderer.invoke('animals:create', data),
-    feed: (id: string) => ipcRenderer.invoke('animals:feed', id),
-    play: (id: string) => ipcRenderer.invoke('animals:play', id),
-    heal: (id: string) => ipcRenderer.invoke('animals:heal', id),
-    sleep: (id: string) => ipcRenderer.invoke('animals:sleep', id),
-    tick: (id: string) => ipcRenderer.invoke('animals:tick', id),
-  },
-
-  // Actions
-  actions: {
-    getByAnimalId: (animalId: string) => ipcRenderer.invoke('actions:getByAnimalId', animalId),
-  },
-
-  // Items
-  items: {
-    getAll: () => ipcRenderer.invoke('items:getAll'),
-    getById: (id: string) => ipcRenderer.invoke('items:getById', id),
-    getByType: (type: string) => ipcRenderer.invoke('items:getByType', type),
-    useItem: (animalId: string, itemId: string) => ipcRenderer.invoke('items:useItem', animalId, itemId),
-  },
-
-  // Inventory
-  inventory: {
-    getAll: () => ipcRenderer.invoke('inventory:getAll'),
-    getByType: (type: string) => ipcRenderer.invoke('inventory:getByType', type),
-  },
-
-  // History
-  history: {
-    getByAnimalId: (animalId: string, limit?: number) =>
-      ipcRenderer.invoke('history:getByAnimalId', animalId, limit),
-  },
-
-  // Event listeners (Main → Renderer)
-  onAnimalsUpdated: (callback: () => void) => {
-    ipcRenderer.on('animals:updated', callback)
-    return () => ipcRenderer.removeListener('animals:updated', callback)
-  },
-  onAnimalDied: (callback: (animal: Animal) => void) => {
-    ipcRenderer.on('animal:died', (_, animal) => callback(animal))
-    return () => ipcRenderer.removeListener('animal:died', callback)
-  },
-})
-```
-
-### Main Process Handlers
-
-```typescript
-// src/electron/main.ts
-import { ipcMain } from 'electron'
-import * as db from './database'
-
-// AnimalTypes
-ipcMain.handle('animalTypes:getAll', () => db.getAllAnimalTypes())
-ipcMain.handle('animalTypes:getById', (_, id) => db.getAnimalTypeById(id))
-
-// Animals
-ipcMain.handle('animals:getAll', () => db.getAllAnimals())
-ipcMain.handle('animals:getById', (_, id) => db.getAnimalById(id))
-ipcMain.handle('animals:create', (_, data) => db.createAnimal(data))
-ipcMain.handle('animals:feed', (_, id) => db.feedAnimal(id))
-ipcMain.handle('animals:play', (_, id) => db.playWithAnimal(id))
-ipcMain.handle('animals:heal', (_, id) => db.healAnimal(id))
-ipcMain.handle('animals:sleep', (_, id) => db.sleepAnimal(id))
-ipcMain.handle('animals:tick', (_, id) => db.tickAnimal(id))
-
-// Actions
-ipcMain.handle('actions:getByAnimalId', (_, animalId) => db.getActionsByAnimalId(animalId))
-
-// Items
-ipcMain.handle('items:getAll', () => db.getAllItems())
-ipcMain.handle('items:getById', (_, id) => db.getItemById(id))
-ipcMain.handle('items:getByType', (_, type) => db.getItemsByType(type))
-ipcMain.handle('items:useItem', (_, animalId, itemId) => db.useItem(animalId, itemId))
-
-// Inventory
-ipcMain.handle('inventory:getAll', () => db.getInventory())
-ipcMain.handle('inventory:getByType', (_, type) => db.getInventoryByType(type))
-
-// History
-ipcMain.handle('history:getByAnimalId', (_, animalId, limit) => db.getActionHistory(animalId, limit))
-```
-
-## 8. Feature-based Architecture
-
-### Principe
-Chaque fonctionnalité vit dans son propre dossier :
-- **components/** : UI uniquement
-- **hooks/** : Logique métier + TanStack Query
-- **services/** : Wrappers IPC (`window.api.*`)
-- **stores/** : État local Zustand (si nécessaire)
-- **types/** : Types TypeScript custom
-- **schemas/** : Validation Zod (si nécessaire)
-
-### Exemple : Feature Animals
-
-```typescript
-// features/animals/services/animal-api.ts
-export const animalApi = {
-  getAllAnimals: () => window.api.animals.getAll(),
-  getAnimalById: (id: string) => window.api.animals.getById(id),
-  createAnimal: (data: CreateAnimalDto) => window.api.animals.create(data),
-  feedAnimal: (id: string) => window.api.animals.feed(id),
-  playWithAnimal: (id: string) => window.api.animals.play(id),
-  healAnimal: (id: string) => window.api.animals.heal(id),
-  sleepAnimal: (id: string) => window.api.animals.sleep(id),
-}
-
-// features/animals/hooks/use-animals.ts
-export const useAnimals = () => {
-  const queryClient = useQueryClient()
-
-  const { data: animals } = useQuery({
-    queryKey: ['animals'],
-    queryFn: animalApi.getAllAnimals,
-    refetchInterval: 10000,  // Sync avec le tick
-  })
-
-  // Écoute des événements IPC
-  useEffect(() => {
-    const unsubscribe = window.api.onAnimalsUpdated(() => {
-      queryClient.invalidateQueries({ queryKey: ['animals'] })
-    })
-    return unsubscribe
-  }, [])
-
-  return { animals }
-}
-
-// features/actions/stores/actions-store.ts
-import { create } from 'zustand'
-
-interface ActionsStore {
-  activeActions: Map<string, ActiveAction>
-  startAction: (animalId: string, type: ActionType, duration: number) => void
-  completeAction: (animalId: string) => void
-  getActiveAction: (animalId: string) => ActiveAction | undefined
-}
-
-export const useActionsStore = create<ActionsStore>((set, get) => ({
-  activeActions: new Map(),
-  startAction: (animalId, type, duration) => {
-    set(state => {
-      const newMap = new Map(state.activeActions)
-      newMap.set(animalId, { type, startTime: Date.now(), duration })
-      return { activeActions: newMap }
-    })
-  },
-  // ...
-}))
-```
-
-## 9. Notifications Desktop
-
-Les notifications sont gérées dans le main process avec un système de cooldown.
-
-```typescript
-// src/electron/main.ts
-import { Notification } from 'electron'
-
-// Notification de mort
-const sendDeathNotification = (animal: Animal, wasOffline = false) => {
-  new Notification({
-    title: `${animal.name} est mort...`,
-    body: wasOffline
-      ? `${animal.name} est décédé pendant ton absence 😢`
-      : `${animal.name} n'a pas survécu... 😢`
-  }).show()
-}
-
-// Notifications stats critiques (< 30%) avec cooldown 1h
-const notificationCooldowns = new Map<string, number>()
-const COOLDOWN = 3600000  // 1 heure
-
-const checkCriticalStats = (result: TickResult) => {
-  const { animal, criticalStats } = result
-
-  const messages = {
-    hunger: { title: `${animal.name} a faim !`, body: 'Il est temps de le nourrir 🍖' },
-    happiness: { title: `${animal.name} s'ennuie !`, body: 'Joue avec lui 🎮' },
-    energy: { title: `${animal.name} est fatigué !`, body: 'Laisse-le dormir 😴' },
-    health: { title: `${animal.name} est malade !`, body: 'Soigne-le vite 💊' },
-  }
-
-  for (const [stat, isCritical] of Object.entries(criticalStats)) {
-    if (isCritical && messages[stat]) {
-      const key = `${animal.id}-${stat}`
-      const lastNotif = notificationCooldowns.get(key) || 0
-
-      if (Date.now() - lastNotif > COOLDOWN) {
-        new Notification(messages[stat]).show()
-        notificationCooldowns.set(key, Date.now())
-      }
-    }
-  }
-}
-```
-
-## 10. Tests
-
-### Tests unitaires (Vitest)
-- Fonctions pures dans `lib/`
-- Utils de calcul de stats
-- Helpers
-
-### Tests composants (React Testing Library)
-- Rendu des composants
-- Interactions utilisateur
-- Intégration avec hooks
-
-### Tests d'intégration
-- Flux complets (créer animal → nourrir → vérifier stats)
-
-## 11. Principes clés
+## 12. Principes clés
 
 ### Separation of Concerns
 - **Components** : UI seulement
 - **Hooks** : Logique métier
 - **Services** : Communication IPC
-- **Lib** : Fonctions pures
+- **Controllers** : Business logic backend
+- **Repositories** : Accès données
 
 ### Type Safety
 - TypeScript strict
 - Types Prisma auto-générés
-- Validation Zod côté frontend
+- Validation Zod côté backend
 
 ### Performance
 - TanStack Query cache intelligent
-- Tick toutes les 10s (pas chaque seconde)
-- Calcul batch du temps écoulé offline
-
-### Developer Experience
-- Hot reload (Vite)
-- Fast tests (Vitest)
-- Type-safety complet
+- Tick toutes les 10s
+- Calcul batch du temps offline
 
 ---
 
-**Version** : 2.0
-**Date** : 25 novembre 2025
+**Version** : 3.0
+**Date** : 26 novembre 2025

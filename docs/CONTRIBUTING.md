@@ -4,28 +4,81 @@ Ce document décrit les conventions à respecter pour garantir un code maintenab
 
 ## Architecture feature-based
 
-Chaque fonctionnalité doit vivre dans un dossier `src/features/[feature-name]` :
+Chaque fonctionnalité vit dans son propre dossier :
+
+### Backend (`src/backend/features/`)
 
 ```
 features/
 ├── animals/
-│   ├── components/      # UI (stateless)
-│   ├── hooks/           # Logique métier + state
-│   ├── services/        # Appels IPC vers Electron
-│   └── types/           # Types TypeScript
+│   ├── controllers/      # Logique métier
+│   └── repositories/     # Accès données Prisma
+├── economy/
+│   ├── controllers/
+│   └── repositories/
+├── fishing/
+│   ├── controllers/
+│   └── repositories/
+├── inventory/
+│   ├── controllers/
+│   └── repositories/
+└── minigames/
+    ├── controllers/
+    └── repositories/
+```
+
+### Frontend (`src/frontend/features/`)
+
+```
+features/
+├── animals/
+│   ├── components/       # UI (stateless)
+│   ├── hooks/            # Logique métier + state
+│   ├── services/         # Appels IPC
+│   └── types/            # Types TypeScript
 ├── actions/
 │   ├── components/
 │   ├── hooks/
-│   ├── services/
+│   ├── stores/           # Zustand store
 │   └── types/
+├── audio/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/         # Audio manager
+│   └── stores/           # Audio store (persisté)
+├── economy/
+│   ├── components/
+│   ├── hooks/
+│   └── services/
+├── fishing/
+│   ├── components/
+│   │   ├── game-states/  # Composants par état de jeu
+│   │   └── equipment/    # Composants équipement
+│   ├── hooks/
+│   ├── services/
+│   ├── stores/           # Fishing store (QTE state)
+│   ├── constants/
+│   ├── utils/
+│   └── types/
+├── history/
+│   ├── components/
+│   ├── hooks/
+│   └── services/
+└── inventory/
+    ├── components/
+    ├── hooks/
+    └── services/
 ```
 
 ### Règles d'or
 
 - `components/` → UI uniquement, stateless
-- `hooks/` → Logique métier, side-effects, TanStack Query
+- `hooks/` → Logique métier, TanStack Query
 - `services/` → Wrapper IPC vers main process
-- `types/` → Types custom (Prisma types importés depuis `@prisma/client`)
+- `stores/` → État client Zustand
+- `types/` → Types custom
+- `controllers/` → Business logic backend
+- `repositories/` → Accès données
 
 ## Conventions de code
 
@@ -41,17 +94,17 @@ Chemins absolus avec alias : `@/features/...`, `@/shared/...`
 **Ordre des imports :**
 1. React et libraries externes
 2. TanStack packages
-3. Electron APIs (si applicable)
-4. Composants internes (`@/shared`, `@/features`)
+3. Composants internes (`@/shared`, `@/features`)
+4. Stores Zustand
 5. Types
 6. Styles
 
 ```typescript
-// Bon exemple
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Button } from '@/shared/components/ui/button'
+import { Button } from '@/shared/ui/button'
 import { useAnimals } from '@/features/animals/hooks/use-animals'
+import { useFishingStore } from '@/features/fishing/stores/fishing.store'
 import type { Animal } from '@prisma/client'
 ```
 
@@ -61,6 +114,7 @@ import type { Animal } from '@prisma/client'
 - **Composants** : `PascalCase`
 - **Hooks** : `useCamelCase`
 - **Services** : `camelCase`
+- **Stores** : `camelCase.store.ts`
 - **Types** : `PascalCase`
 - **Constantes** : `UPPER_SNAKE_CASE`
 
@@ -69,80 +123,98 @@ import type { Animal } from '@prisma/client'
 - Tailwind uniquement (pas de CSS inline sauf exceptions)
 - Classes ordonnées : layout → spacing → sizing → colors → typography
 
-## TanStack Router
+## Patterns spécifiques
 
-### File-based routing
+### Stores Zustand
 
-Les routes sont définies dans `src/routes/` :
-
+**Store simple (client-side only)** :
+```typescript
+// features/actions/stores/actions-store.ts
+export const useActionsStore = create<ActionsStore>((set) => ({
+  activeActions: new Map(),
+  startAction: (animalId, type, duration) => { ... },
+  completeAction: (animalId) => { ... },
+}))
 ```
-routes/
-├── __root.tsx           # Root layout
-├── index.tsx            # / (liste animaux)
-└── animals/
-    ├── $id.tsx          # /animals/:id (détail animal)
-    └── new.tsx          # /animals/new (créer animal)
+
+**Store persisté** :
+```typescript
+// features/audio/stores/audio-store.ts
+export const useAudioStore = create<AudioStore>()(
+  persist(
+    (set) => ({
+      musicVolume: 0.5,
+      sfxVolume: 0.5,
+      isMusicMuted: false,
+      isSfxMuted: false,
+      setMusicVolume: (volume) => set({ musicVolume: volume }),
+      // ...
+    }),
+    { name: 'audio-settings' }
+  )
+)
 ```
 
-### Conventions routes
+**Store avec state machine (fishing)** :
+```typescript
+// features/fishing/stores/fishing.store.ts
+export const useFishingStore = create<FishingStore>((set, get) => ({
+  gameState: 'idle',
+  tension: 50,
+  catchProgress: 0,
+  qteConfig: DEFAULT_QTE_CONFIG,
+
+  setGameState: (state) => set({ gameState: state }),
+  updateTension: (delta) => {
+    const newTension = Math.max(0, Math.min(100, get().tension + delta))
+    set({ tension: newTension })
+  },
+  // ...
+}))
+```
+
+### Pattern Repository (Backend)
 
 ```typescript
-// Route simple
-export const Route = createFileRoute('/animals/')({
-  component: AnimalsPage
-})
+// Base Repository
+class BaseRepository<T, CreateInput, UpdateInput> {
+  async findMany(): Promise<T[]>
+  async findById(id: string): Promise<T | null>
+  async create(data: CreateInput): Promise<T>
+  async update(id: string, data: UpdateInput): Promise<T>
+  async delete(id: string): Promise<T>
+}
 
-// Route avec loader (prefetch data)
-export const Route = createFileRoute('/animals/$id')({
-  component: AnimalDetailPage,
-  loader: async ({ params }) => {
-    return queryClient.ensureQueryData(animalOptions(params.id))
-  }
-})
+// Singleton Repository (Wallet, Progress)
+class SingletonRepository<T, UpdateInput> {
+  async get(): Promise<T>
+  async getOrCreate(): Promise<T>
+  async update(data: UpdateInput): Promise<T>
+}
 ```
 
-### Navigation type-safe
+### Audio Manager
 
 ```typescript
-import { useNavigate } from '@tanstack/react-router'
+// features/audio/services/audio-manager.ts
+class AudioManager {
+  private musicElement: HTMLAudioElement | null = null
 
-const navigate = useNavigate()
+  playMusic(track: string): void
+  stopMusic(): void
+  playSFX(sound: string): void
+  setMusicVolume(volume: number): void
+  setSFXVolume(volume: number): void
+}
 
-// Type-safe navigation
-navigate({
-  to: '/animals/$id',
-  params: { id: animalId }
-})
+export const audioManager = new AudioManager()
 ```
 
 ## TanStack Query
 
-### Utiliser des hooks custom
+### Hooks custom avec invalidation
 
 ```typescript
-// features/animals/hooks/use-get-animals.ts
-import { useQuery } from '@tanstack/react-query'
-import { getAnimals } from '../services/animal-service'
-
-export const useGetAnimals = () => {
-  return useQuery({
-    queryKey: ['animals'],
-    queryFn: getAnimals
-  })
-}
-
-// Dans le composant
-const { data: animals, isLoading } = useGetAnimals()
-```
-
-### Conventions
-
-- Toujours définir un `queryKey` explicite
-- Invalider le cache après mutations
-- Utiliser `useSuspenseQuery` pour les données critiques (optionnel)
-
-```typescript
-// Hook custom avec invalidation
 export const useFeedAnimal = () => {
   const queryClient = useQueryClient()
 
@@ -150,115 +222,80 @@ export const useFeedAnimal = () => {
     mutationFn: feedAnimal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals'] })
+      queryClient.invalidateQueries({ queryKey: ['wallet'] })
     }
   })
 }
 ```
 
-## Communication IPC (Electron)
+### Query keys
+
+```typescript
+// Conventions de query keys
+['animals']
+['animal-types']
+['wallet']
+['inventory']
+['shop-items']
+['history', animalId]
+['fishing', 'species']
+['fishing', 'rods']
+['fishing', 'baits']
+['fishing', 'locations']
+['fishing', 'upgrades']
+['fishing', 'progress']
+['clicker-upgrades']
+```
+
+## Communication IPC
 
 ### Services côté renderer
 
 ```typescript
-// features/animals/services/animal-service.ts
-export const getAnimals = async () => {
-  return window.api.animals.getAll()
-}
-
-export const feedAnimal = async (animalId: string) => {
-  return window.api.animals.feed(animalId)
+// features/fishing/services/fishing-api.ts
+export const fishingApi = {
+  getAllSpecies: () => window.api.fishing.getAllSpecies(),
+  catchFish: (speciesId, size, locationId, rodId, baitId) =>
+    window.api.fishing.catchFish(speciesId, size, locationId, rodId, baitId),
+  purchaseRod: (rodId) => window.api.fishing.purchaseRod(rodId),
+  // ...
 }
 ```
 
-### Preload types
+### Écoute d'événements IPC
 
 ```typescript
-// electron/preload.d.ts
-export interface IElectronAPI {
-  animals: {
-    getAll: () => Promise<Animal[]>
-    feed: (id: string) => Promise<Animal>
-    // ...
-  }
-}
-
-declare global {
-  interface Window {
-    api: IElectronAPI
-  }
-}
-```
-
-## Prisma
-
-### Migrations
-
-```bash
-# Créer une migration
-npm run prisma:migrate
-
-# Générer le client Prisma
-npm run prisma:generate
-
-# Ouvrir Prisma Studio
-npm run prisma:studio
-```
-
-### Services côté main
-
-```typescript
-// electron/database.ts
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
-
-export const getAllAnimals = async () => {
-  return prisma.animal.findMany({
-    include: { actions: true },
-    where: { vivant: true }
+useEffect(() => {
+  const unsubscribe = window.api.onWalletUpdated((wallet) => {
+    queryClient.setQueryData(['wallet'], wallet)
   })
-}
-
-export const feedAnimal = async (animalId: string) => {
-  // 1. Enregistrer l'action
-  await prisma.action.create({
-    data: {
-      animalId,
-      typeAction: 'nourrir'
-    }
-  })
-  
-  // 2. Mettre à jour les stats
-  return prisma.animal.update({
-    where: { id: animalId },
-    data: {
-      faim: { increment: 20 },
-      bonheur: { increment: 5 },
-      energie: { decrement: 5 },
-      derniereUpdate: new Date()
-    }
-  })
-}
+  return unsubscribe
+}, [])
 ```
 
 ## Validation (Zod)
 
-Pour les formulaires de création :
-
 ```typescript
+// Backend validation
 import { z } from 'zod'
 
 const createAnimalSchema = z.object({
-  nom: z.string().min(3, 'Minimum 3 caractères'),
-  type: z.enum(['chat', 'chien', 'alien'])
+  name: z.string().min(3).max(20),
+  typeId: z.string().uuid()
 })
 
-type CreateAnimalDto = z.infer<typeof createAnimalSchema>
+export const validate = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
+  const result = schema.safeParse(data)
+  if (!result.success) {
+    throw new ValidationError(result.error)
+  }
+  return result.data
+}
 ```
 
-## Tests (TDD obligatoire)
+## Tests
 
-### Stratégie
+### Stratégie TDD
 
 1. Écrire un test qui échoue (red)
 2. Implémenter le minimum pour passer (green)
@@ -266,84 +303,60 @@ type CreateAnimalDto = z.infer<typeof createAnimalSchema>
 
 ### Types de tests
 
-- **Unitaires** → `lib/`, utils, fonctions pures
-- **Intégration** → hooks, components
-- **E2E** → Playwright (optionnel, Phase 2)
+- **Unitaires** → Repositories, Controllers, utils
+- **Intégration** → Hooks, components
+- **E2E** → Playwright (optionnel)
 
-### Règles
+### Co-location
 
-- Tests co-localisés : `animal-card.tsx` → `animal-card.test.tsx`
-- Couverture minimale : **80%**
-- Mock des appels IPC avec Vitest
-
-```typescript
-// animal-card.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
-import { AnimalCard } from './animal-card'
-
-vi.mock('@/features/animals/hooks/use-feed-animal', () => ({
-  useFeedAnimal: () => ({
-    mutate: vi.fn()
-  })
-}))
-
-describe('AnimalCard', () => {
-  it('affiche le nom de l\'animal', () => {
-    const animal = { id: '1', nom: 'Mochi', type: 'chat', faim: 80 }
-    render(<AnimalCard animal={animal} />)
-    expect(screen.getByText('Mochi')).toBeInTheDocument()
-  })
-
-  it('appelle feedAnimal au clic sur Nourrir', () => {
-    const animal = { id: '1', nom: 'Mochi', type: 'chat', faim: 50 }
-    render(<AnimalCard animal={animal} />)
-    fireEvent.click(screen.getByText('Nourrir'))
-    // Assert mutation appelée
-  })
-})
 ```
+fishing/
+├── controllers/
+│   ├── fishing.controller.ts
+│   └── fishing.controller.test.ts
+├── repositories/
+│   ├── fish-species.repository.ts
+│   └── fish-species.repository.test.ts
+```
+
+### Couverture
+
+- Minimum : **80%**
+- Mock des appels IPC avec Vitest
 
 ## Git workflow
 
+Voir [GIT_FLOW.md](./GIT_FLOW.md) pour les détails complets.
+
 ### Branches
 
-- `main` → Production (stable)
+- `main` → Production
 - `develop` → Intégration
-- `feature/nom-feature` → Nouvelles fonctionnalités
-- `fix/nom-bug` → Correctifs
-
-### Commits (Conventional Commits)
-
-```
-feat: ajout composant AnimalCard avec stats
-fix: correction calcul dégradation santé
-test: ajout tests unitaires animal-service
-docs: mise à jour CONTRIBUTING.md
-refactor: optimisation hook useAnimalTick
-```
+- `feature/nom` → Nouvelles fonctionnalités
+- `fix/nom` → Correctifs
+- `refactor/nom` → Restructuration
 
 ### Commits atomiques OBLIGATOIRES
 
-Un commit = une seule logique. Séparer :
-
-1. Types et interfaces
-2. Services
-3. Hooks
-4. Composants UI
-5. Tests
-6. Documentation
+```bash
+1. feat: ajout types fishing
+2. feat: implémentation repositories fishing
+3. feat: ajout controller fishing
+4. feat: création hooks useFishing*
+5. feat: ajout composants UI fishing
+6. test: ajout tests fishing
+7. docs: mise à jour PROGRESS_TRACKER
+```
 
 ## Checklist avant PR
 
-- [ ] TypeScript sans `any`
-- [ ] Tests passent (>80% couverture)
-- [ ] Pas de warnings ESLint
+- [ ] TypeScript compile sans erreur (`npm run type-check`)
+- [ ] Tests passent (`npm test`)
+- [ ] Pas de warnings ESLint (`npm run lint`)
 - [ ] Code formaté (Prettier)
-- [ ] Types importés depuis `@prisma/client`
 - [ ] Queries via TanStack Query
 - [ ] IPC via services dans `features/*/services/`
-- [ ] Responsive (desktop 1280px minimum)
+- [ ] Stores Zustand pour état client complexe
 - [ ] `PROGRESS_TRACKER.md` mis à jour
 
 ## Scripts npm
@@ -351,72 +364,29 @@ Un commit = une seule logique. Séparer :
 ```bash
 # Développement
 npm run dev           # Lance Electron en dev mode
+npm run dev:vite      # Vite dev server seul
+npm run dev:electron  # Electron seul
 
 # Build
 npm run build         # Build production
-npm run package       # Package l'app (exe/dmg/deb)
+npm run package       # Package l'app
 
 # Base de données
-npm run prisma:migrate  # Créer migration
-npm run prisma:generate # Générer client
-npm run prisma:studio   # Ouvrir Prisma Studio
+npx prisma migrate dev    # Créer migration
+npx prisma generate       # Générer client
+npx prisma studio         # Ouvrir Prisma Studio
 
 # Tests
-npm run test          # Lancer tous les tests
+npm test              # Lancer tous les tests
 npm run test:watch    # Mode watch
 npm run test:coverage # Rapport de couverture
 
 # Qualité
 npm run lint          # ESLint
-npm run format        # Prettier
 npm run type-check    # TypeScript
 ```
 
-## Conventions UI
-
-### Sprites/Visuels
-
-Pour les sprites animaux, on utilise du **CSS pur** pour un design minimaliste et moderne :
-
-```typescript
-// features/animals/components/animal-sprite.tsx
-export const AnimalSprite = ({ type, mood }: AnimalSpriteProps) => {
-  const getMoodEmoji = () => {
-    if (mood === 'happy') return '😊'
-    if (mood === 'sad') return '😢'
-    if (mood === 'hungry') return '😫'
-    if (mood === 'sleeping') return '😴'
-    return '😐'
-  }
-
-  return (
-    <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-500">
-      <div className="absolute inset-0 flex items-center justify-center text-6xl">
-        {getMoodEmoji()}
-      </div>
-    </div>
-  )
-}
-```
-
-### Barres de stats
-
-Utiliser un composant Progress réutilisable avec code couleur :
-
-- Vert : > 60%
-- Orange : 30-60%
-- Rouge : < 30%
-
-## Performances
-
-- Tick toutes les **10 secondes** (pas chaque seconde)
-- Batch les calculs de dégradation offline
-- Utiliser `React.memo()` pour les composants lourds
-- Lazy load des routes avec TanStack Router
-
 ---
 
-Avec ces règles, le projet Tamagotchi restera maintenable, type-safe, et performant.
-
-**Version** : 1.0  
-**Date** : 24 novembre 2025
+**Version** : 2.0
+**Date** : 26 novembre 2025
