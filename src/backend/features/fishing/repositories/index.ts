@@ -1,0 +1,7 @@
+export * from './fish-species.repository'
+export * from './fish-catch.repository'
+export * from './fishing-rod.repository'
+export * from './fishing-bait.repository'
+export * from './fishing-location.repository'
+export * from './fishing-upgrade.repository'
+export * from './fishing-progress.repository'
