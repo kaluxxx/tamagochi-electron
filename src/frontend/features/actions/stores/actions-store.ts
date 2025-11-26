@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import type { ActiveActionType } from '../types'
+import { audioManager } from '@frontend/features/audio/services/audio-manager'
 
 const SLEEP_DURATION_MS = 30000 // 30 secondes
 const PLAY_DURATION_MS = 20000  // 20 secondes
@@ -73,6 +74,9 @@ export function useActionsStore(animalId: string) {
       globalThis.clearTimeout(existingTimeout)
     }
 
+    // Jouer le son en boucle
+    audioManager.playActionSfx('sleep', animalId)
+
     // Démarrer l'action
     startAction(animalId, {
       type: 'sleeping',
@@ -87,6 +91,7 @@ export function useActionsStore(animalId: string) {
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
         await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
+        audioManager.stopActionSfx(animalId)
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
@@ -102,6 +107,9 @@ export function useActionsStore(animalId: string) {
       globalThis.clearTimeout(existingTimeout)
     }
 
+    // Jouer le son en boucle
+    audioManager.playActionSfx('play', animalId)
+
     // Démarrer l'action
     startAction(animalId, {
       type: 'playing',
@@ -116,6 +124,7 @@ export function useActionsStore(animalId: string) {
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
         await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
+        audioManager.stopActionSfx(animalId)
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
@@ -131,6 +140,9 @@ export function useActionsStore(animalId: string) {
       globalThis.clearTimeout(existingTimeout)
     }
 
+    // Jouer le son en boucle
+    audioManager.playActionSfx('feed', animalId)
+
     // Démarrer l'action
     startAction(animalId, {
       type: 'feeding',
@@ -145,6 +157,7 @@ export function useActionsStore(animalId: string) {
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
         await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
+        audioManager.stopActionSfx(animalId)
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
@@ -160,6 +173,9 @@ export function useActionsStore(animalId: string) {
       globalThis.clearTimeout(existingTimeout)
     }
 
+    // Jouer le son en boucle
+    audioManager.playActionSfx('heal', animalId)
+
     // Démarrer l'action
     startAction(animalId, {
       type: 'healing',
@@ -174,6 +190,7 @@ export function useActionsStore(animalId: string) {
         await queryClient.invalidateQueries({ queryKey: ['animals'] })
         await queryClient.invalidateQueries({ queryKey: ['history', animalId] })
       } finally {
+        audioManager.stopActionSfx(animalId)
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
@@ -182,12 +199,21 @@ export function useActionsStore(animalId: string) {
     actionTimeouts.set(animalId, timeout)
   }, [animalId, queryClient, startAction, endAction])
 
-  const handleStartUseItem = useCallback((itemId: string, onComplete: () => void) => {
+  const handleStartUseItem = useCallback((itemId: string, itemType: string, onComplete: () => void) => {
     // Nettoyer le timer existant si présent
     const existingTimeout = actionTimeouts.get(animalId)
     if (existingTimeout) {
       globalThis.clearTimeout(existingTimeout)
     }
+
+    // Jouer le son en boucle selon le type d'item
+    const sfxMap: Record<string, 'feed' | 'play' | 'heal'> = {
+      food: 'feed',
+      toy: 'play',
+      medicine: 'heal',
+    }
+    const sfxType = sfxMap[itemType] ?? 'feed'
+    audioManager.playActionSfx(sfxType, animalId)
 
     // Démarrer l'action
     startAction(animalId, {
@@ -205,6 +231,7 @@ export function useActionsStore(animalId: string) {
         await queryClient.invalidateQueries({ queryKey: ['inventory'] })
         onComplete()
       } finally {
+        audioManager.stopActionSfx(animalId)
         endAction(animalId)
         actionTimeouts.delete(animalId)
       }
