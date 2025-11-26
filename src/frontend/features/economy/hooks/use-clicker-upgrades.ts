@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { economyApi } from '../services/economy-api'
+import { audioManager } from '@frontend/features/audio/services/audio-manager'
 import type { ClickerUpgrade, ClickerGameStats, ClickerUpgradeType } from '../types'
 
 // Configuration des upgrades (doit matcher database.ts)
@@ -59,6 +60,7 @@ export function useClickerUpgrades() {
   const purchaseMutation = useMutation({
     mutationFn: (type: ClickerUpgradeType) => economyApi.purchaseClickerUpgrade(type),
     onSuccess: () => {
+      audioManager.playSfx('upgrade_purchase')
       queryClient.invalidateQueries({ queryKey: ['clickerUpgrades'] })
       queryClient.invalidateQueries({ queryKey: ['clickerGameStats'] })
       queryClient.invalidateQueries({ queryKey: ['wallet'] })

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fishingApi } from '../services/fishing-api'
 import { useFishingStore } from '../stores/fishing.store'
+import { audioManager } from '@frontend/features/audio/services/audio-manager'
 import type { FishingUpgradeType } from '../types'
 
 // ============== SPECIES & CATALOG ==============
@@ -94,6 +95,7 @@ export function usePurchaseRod() {
   return useMutation({
     mutationFn: (rodId: string) => fishingApi.purchaseRod(rodId),
     onSuccess: () => {
+      audioManager.playSfx('purchase_success')
       queryClient.invalidateQueries({ queryKey: ['fishing', 'rods'] })
       queryClient.invalidateQueries({ queryKey: ['wallet'] })
     },
@@ -121,6 +123,7 @@ export function usePurchaseBait() {
     mutationFn: ({ baitId, quantity }: { baitId: string; quantity: number }) =>
       fishingApi.purchaseBait(baitId, quantity),
     onSuccess: () => {
+      audioManager.playSfx('purchase_success')
       queryClient.invalidateQueries({ queryKey: ['fishing', 'baits'] })
       queryClient.invalidateQueries({ queryKey: ['wallet'] })
     },
@@ -133,6 +136,7 @@ export function useUnlockLocation() {
   return useMutation({
     mutationFn: (locationId: string) => fishingApi.unlockLocation(locationId),
     onSuccess: () => {
+      audioManager.playSfx('purchase_success')
       queryClient.invalidateQueries({ queryKey: ['fishing', 'locations'] })
       queryClient.invalidateQueries({ queryKey: ['wallet'] })
     },
@@ -145,6 +149,7 @@ export function usePurchaseFishingUpgrade() {
   return useMutation({
     mutationFn: (type: FishingUpgradeType) => fishingApi.purchaseUpgrade(type),
     onSuccess: () => {
+      audioManager.playSfx('upgrade_purchase')
       queryClient.invalidateQueries({ queryKey: ['fishing', 'upgrades'] })
       queryClient.invalidateQueries({ queryKey: ['fishing', 'upgradesWithDetails'] })
       queryClient.invalidateQueries({ queryKey: ['fishing', 'stats'] })

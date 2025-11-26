@@ -9,7 +9,7 @@ interface InventoryPanelProps {
     animalEnergy: number
     isAlive: boolean
     isActionDisabled: boolean
-    onUseItem: (itemId: string, onComplete: () => void) => void
+    onUseItem: (itemId: string, itemType: string, onComplete: () => void) => void
     onItemUsed?: () => void
 }
 
@@ -22,7 +22,7 @@ export function InventoryPanel({animalEnergy, isAlive, isActionDisabled, onUseIt
     const handleUseItem = () => {
         if (!selectedItem || !isAlive || isActionDisabled) return
 
-        onUseItem(selectedItem.itemId, () => {
+        onUseItem(selectedItem.itemId, selectedItem.item.type, () => {
             setSelectedItem(null)
             onItemUsed?.()
         })
