@@ -7,7 +7,7 @@ import { useActions } from '@/features/actions/hooks/use-actions.ts'
 import { InventoryPanel } from '@/features/inventory/components/inventory-panel.tsx'
 import { HistoryPanel } from '@/features/history/components/history-panel.tsx'
 import { CollapsiblePanel } from '@/shared/components/ui/collapsible-panel.tsx'
-import type { Animal } from '@/shared/types/window'
+import type { Animal } from '@/features/animals/types'
 
 type LeftPanel = 'stats' | 'history' | null
 type RightPanel = 'actions' | 'inventory' | null
