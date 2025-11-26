@@ -1,4 +1,4 @@
-import type { Wallet, ShopItem, PurchaseResult, MinigameResult, MinigameScore, ClickerUpgrade, ClickerGameStats, PurchaseUpgradeResult, UpgradeType } from '../types'
+import type { Wallet, ShopItem, PurchaseResult, MinigameResult, MinigameScore, ClickerUpgrade, ClickerGameStats, PurchaseUpgradeResult, ClickerUpgradeType } from '../types'
 
 export const economyApi = {
   // Wallet operations
@@ -41,7 +41,7 @@ export const economyApi = {
     return window.api.clickerUpgrades.getAll()
   },
 
-  purchaseClickerUpgrade: async (type: UpgradeType): Promise<PurchaseUpgradeResult> => {
+  purchaseClickerUpgrade: async (type: ClickerUpgradeType): Promise<PurchaseUpgradeResult> => {
     return window.api.clickerUpgrades.purchase(type)
   },
 

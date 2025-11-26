@@ -1,5 +1,4 @@
-import type { Animal, AnimalType, CreateAnimalInput } from '../types'
-import type { TickResult, ActionResult } from '@/shared/types/window'
+import type { Animal, AnimalType, CreateAnimalInput, TickResult, ActionResult } from '../types'
 
 /**
  * Service API pour les opérations liées aux animaux

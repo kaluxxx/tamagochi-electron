@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { animalApi } from '../services/animal-api'
-import type { Animal } from '@/shared/types/window'
+import type { Animal } from '../types'
 
 /**
  * Hook pour écouter les événements de mise à jour des animaux depuis le main process
