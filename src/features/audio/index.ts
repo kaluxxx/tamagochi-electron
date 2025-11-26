@@ -22,7 +22,6 @@ export type {
 export {
   MUSIC_TRACKS,
   SOUND_EFFECTS,
-  CROSSFADE_DURATION,
   DEFAULT_AUDIO_SETTINGS,
   getTrackForRoute,
 } from './constants/tracks'

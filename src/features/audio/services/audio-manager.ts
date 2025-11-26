@@ -3,15 +3,16 @@ import type { AudioSettings, SfxType } from '../types'
 import {
   MUSIC_TRACKS,
   SOUND_EFFECTS,
-  CROSSFADE_DURATION,
   getTrackForRoute,
 } from '@/features/audio'
+
+// Transition rapide (200ms)
+const FADE_DURATION = 200
 
 class AudioManager {
   private musicTracks: Map<string, Howl> = new Map()
   private sfxSounds: Map<SfxType, Howl> = new Map()
   private currentTrackId: string | null = null
-  private currentTrackHowlId: number | null = null
   private isInitialized = false
   private settings: AudioSettings = {
     musicVolume: 0.5,
@@ -23,14 +24,13 @@ class AudioManager {
   initialize(): void {
     if (this.isInitialized) return
 
-    // Preload all music tracks
+    // Preload all music tracks (sans html5 pour meilleur support autoplay)
     MUSIC_TRACKS.forEach((track) => {
       const howl = new Howl({
         src: [track.src],
         loop: track.loop,
-        volume: 0,
+        volume: track.baseVolume * this.settings.musicVolume,
         preload: true,
-        html5: true, // Better for long audio files
         onloaderror: (_id, error) => {
           console.warn(`Failed to load music track ${track.id}:`, error)
         },
@@ -66,11 +66,11 @@ class AudioManager {
     if (this.currentTrackId) {
       const howl = this.musicTracks.get(this.currentTrackId)
       const track = MUSIC_TRACKS.find((t) => t.id === this.currentTrackId)
-      if (howl && track && this.currentTrackHowlId !== null) {
+      if (howl && track) {
         const targetVolume = settings.isMusicMuted
           ? 0
           : track.baseVolume * settings.musicVolume
-        howl.volume(targetVolume, this.currentTrackHowlId)
+        howl.volume(targetVolume)
       }
     }
   }
@@ -86,10 +86,10 @@ class AudioManager {
     // Don't restart if already playing the same track
     if (this.currentTrackId === track.id) return
 
-    this.crossfadeTo(track.id)
+    this.switchTrack(track.id)
   }
 
-  private crossfadeTo(targetTrackId: string): void {
+  private switchTrack(targetTrackId: string): void {
     const targetHowl = this.musicTracks.get(targetTrackId)
     const targetTrack = MUSIC_TRACKS.find((t) => t.id === targetTrackId)
     if (!targetHowl || !targetTrack) return
@@ -98,48 +98,35 @@ class AudioManager {
       ? 0
       : targetTrack.baseVolume * this.settings.musicVolume
 
-    // Fade out current track if playing
-    if (this.currentTrackId && this.currentTrackHowlId !== null) {
+    // Stop current track with quick fade
+    if (this.currentTrackId) {
       const currentHowl = this.musicTracks.get(this.currentTrackId)
-      if (currentHowl) {
-        const currentHowlId = this.currentTrackHowlId
-        currentHowl.fade(
-          currentHowl.volume(currentHowlId) as number,
-          0,
-          CROSSFADE_DURATION
-        )
-        // Stop after fade completes
+      if (currentHowl && currentHowl.playing()) {
+        currentHowl.fade(currentHowl.volume() as number, 0, FADE_DURATION)
         globalThis.setTimeout(() => {
-          currentHowl.stop(currentHowlId)
-        }, CROSSFADE_DURATION)
+          currentHowl.stop()
+        }, FADE_DURATION)
       }
     }
 
-    // Start new track with fade in
-    const newHowlId = targetHowl.play()
-    targetHowl.volume(0, newHowlId)
-    targetHowl.fade(0, targetVolume, CROSSFADE_DURATION, newHowlId)
+    // Start new track with quick fade in
+    targetHowl.volume(0)
+    targetHowl.play()
+    targetHowl.fade(0, targetVolume, FADE_DURATION)
 
     this.currentTrackId = targetTrackId
-    this.currentTrackHowlId = newHowlId
   }
 
   stopMusic(): void {
-    if (this.currentTrackId && this.currentTrackHowlId !== null) {
+    if (this.currentTrackId) {
       const howl = this.musicTracks.get(this.currentTrackId)
       if (howl) {
-        howl.fade(
-          howl.volume(this.currentTrackHowlId) as number,
-          0,
-          CROSSFADE_DURATION / 2
-        )
-        const howlId = this.currentTrackHowlId
+        howl.fade(howl.volume() as number, 0, FADE_DURATION)
         globalThis.setTimeout(() => {
-          howl.stop(howlId)
-        }, CROSSFADE_DURATION / 2)
+          howl.stop()
+        }, FADE_DURATION)
       }
       this.currentTrackId = null
-      this.currentTrackHowlId = null
     }
   }
 
@@ -167,7 +154,6 @@ class AudioManager {
     this.musicTracks.clear()
     this.sfxSounds.clear()
     this.currentTrackId = null
-    this.currentTrackHowlId = null
     this.isInitialized = false
   }
 
