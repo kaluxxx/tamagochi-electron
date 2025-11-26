@@ -2,48 +2,13 @@ import { Card, CardContent } from '@frontend/shared/ui/card'
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
 import { getAnimalSprite, getStatSprite } from '@frontend/shared/utils/sprite-loader'
 import { cn } from '@frontend/shared/lib/utils'
+import { StatItem } from './stat-item'
+import { formatAge, getMoodFromStats, getTypeColor } from '../utils/animal-helpers'
 import type { Animal } from '../types'
 
 interface AnimalCardProps {
   animal: Animal
   onClick?: () => void
-}
-
-/**
- * Calcule l'âge formaté d'un animal en heures ou jours
- */
-function formatAge(ageInHours: number): string {
-  if (ageInHours < 24) {
-    return `${Math.floor(ageInHours)}h`
-  }
-  const days = Math.floor(ageInHours / 24)
-  return `${days}j`
-}
-
-/**
- * Détermine le mood du sprite en fonction des stats
- */
-function getMoodFromStats(animal: Animal): 'happy' | 'neutral' | 'sad' | 'hungry' | 'sleeping' | 'dead' {
-  if (!animal.isAlive) return 'dead'
-
-  if (animal.energy < 30) return 'sleeping'
-  if (animal.hunger < 30) return 'hungry'
-  if (animal.happiness < 30) return 'sad'
-  if (animal.happiness > 60 && animal.hunger > 60) return 'happy'
-
-  return 'neutral'
-}
-
-/**
- * Retourne la couleur de la bordure selon le type d'animal
- */
-function getTypeColor(typeName: string): string {
-  const colors: Record<string, string> = {
-    cat: 'border-[#FF8C42]',
-    dog: 'border-[#D4A574]',
-    alien: 'border-[#7DCEA0]',
-  }
-  return colors[typeName] || 'border-border'
 }
 
 /**
@@ -127,39 +92,5 @@ export function AnimalCard({ animal, onClick }: AnimalCardProps) {
         )}
       </CardContent>
     </Card>
-  )
-}
-
-/**
- * Item de stat avec sprite et barre de progression
- */
-interface StatItemProps {
-  icon: string
-  value: number
-  color: string
-}
-
-function StatItem({ icon, value, color }: StatItemProps) {
-  return (
-    <div className="flex items-center gap-2">
-      <SpriteImage
-        src={icon}
-        alt="stat"
-        size="sm"
-        pixelated
-        className="w-6 h-6 flex-shrink-0"
-      />
-      <div className="flex-1 space-y-1">
-        <div className="h-3 bg-gray-200 rounded-full overflow-hidden border-2 border-gray-300">
-          <div
-            className={cn('h-full transition-all duration-500', color)}
-            style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
-          />
-        </div>
-        <span className="text-[10px] font-bold text-text-secondary">
-          {Math.floor(value)}/100
-        </span>
-      </div>
-    </div>
   )
 }
