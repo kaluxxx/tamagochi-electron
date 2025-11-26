@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay, useWallet, useShop } from '@/features/economy'
 import type { ShopItem } from '@/features/economy'
-import { useSoundEffects } from '@/features/audio'
+import { useSoundEffects, AudioControls } from '@/features/audio'
 
 export const Route = createFileRoute('/shop')({
   component: ShopPage,
@@ -71,7 +71,10 @@ function ShopPage() {
           RETOUR
         </button>
         <h1 className="font-pixel text-xl text-black">BOUTIQUE</h1>
-        <CoinDisplay size="md" />
+        <div className="flex items-center gap-2">
+          <CoinDisplay size="md" />
+          <AudioControls compact size="md" />
+        </div>
       </div>
 
       {/* Purchase message */}

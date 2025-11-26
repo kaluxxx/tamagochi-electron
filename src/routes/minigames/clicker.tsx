@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay, useWallet, useClickerUpgrades, CLICKER_UPGRADE_CONFIG, economyApi } from '@/features/economy'
 import type { ClickerUpgradeType } from '@/features/economy'
 import { SpriteImage } from '@/shared/components/ui/sprite-image'
-import { useSoundEffects } from '@/features/audio'
+import { useSoundEffects, AudioControls } from '@/features/audio'
 import { cn } from '@/shared/lib/utils'
 
 export const Route = createFileRoute('/minigames/clicker')({
@@ -189,7 +189,10 @@ function ClickerGame() {
         <h1 className="font-pixel text-xl text-white drop-shadow-[2px_2px_0_#000]">
           CLICKER FRENZY
         </h1>
-        <CoinDisplay size="md" />
+        <div className="flex items-center gap-2">
+          <CoinDisplay size="md" />
+          <AudioControls compact size="md" />
+        </div>
       </div>
 
       {/* Main Content */}

@@ -4,6 +4,7 @@ import { useAnimals } from '@/features/animals/hooks/use-animals'
 import { AnimalTabs } from '@/features/animals/components/animal-tabs'
 import { GameView } from '@/shared/components/layout/game-view.tsx'
 import { CoinDisplay } from '@/features/economy'
+import { AudioControls } from '@/features/audio'
 
 export const Route = createFileRoute('/')({
   component: IndexComponent,
@@ -73,7 +74,7 @@ function IndexComponent() {
           onSelectAnimal={setSelectedAnimalId}
         />
 
-        {/* Navigation économie + solde */}
+        {/* Navigation économie + solde + audio */}
         <div className="flex items-center gap-2 mb-1">
           <button
             onClick={() => navigate({ to: '/shop' })}
@@ -88,6 +89,7 @@ function IndexComponent() {
             JEUX
           </button>
           <CoinDisplay size="sm" />
+          <AudioControls compact size="sm" />
         </div>
       </div>
 
