@@ -5,18 +5,31 @@ import renderer from 'vite-plugin-electron-renderer'
 import {tanstackRouter} from '@tanstack/router-plugin/vite'
 import path from 'path'
 
+const sharedAliases = {
+    '@': path.resolve(__dirname, './src'),
+    '@backend': path.resolve(__dirname, './src/backend'),
+    '@frontend': path.resolve(__dirname, './src/frontend'),
+    '@shared': path.resolve(__dirname, './src/shared')
+}
+
 export default defineConfig({
     plugins: [
-        tanstackRouter(),
+        tanstackRouter({
+            routesDirectory: 'src/frontend/routes',
+            generatedRouteTree: 'src/frontend/routeTree.gen.ts',
+        }),
         react(),
         electron([
             {
-                entry: 'src/electron/main.ts',
+                entry: 'src/backend/main.ts',
                 vite: {
+                    resolve: {
+                        alias: sharedAliases
+                    },
                     build: {
                         outDir: 'dist-electron',
                         lib: {
-                            entry: 'src/electron/main.ts',
+                            entry: 'src/backend/main.ts',
                             formats: ['cjs'],
                             fileName: () => 'main.js'
                         },
@@ -27,15 +40,18 @@ export default defineConfig({
                 }
             },
             {
-                entry: 'src/electron/preload.ts',
+                entry: 'src/backend/preload.ts',
                 onstart(options) {
                     options.reload()
                 },
                 vite: {
+                    resolve: {
+                        alias: sharedAliases
+                    },
                     build: {
                         outDir: 'dist-electron',
                         lib: {
-                            entry: 'src/electron/preload.ts',
+                            entry: 'src/backend/preload.ts',
                             formats: ['cjs'],
                             fileName: () => 'preload.js'
                         },
@@ -49,9 +65,7 @@ export default defineConfig({
         renderer()
     ],
     resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src')
-        }
+        alias: sharedAliases
     },
     server: {
         port: 5173
