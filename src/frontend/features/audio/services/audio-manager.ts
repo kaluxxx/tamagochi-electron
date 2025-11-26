@@ -12,6 +12,7 @@ const FADE_DURATION = 200
 class AudioManager {
   private musicTracks: Map<string, Howl> = new Map()
   private sfxSounds: Map<SfxType, Howl> = new Map()
+  private activeActionSounds: Map<string, { howl: Howl; soundId: number }> = new Map()
   private currentTrackId: string | null = null
   private isInitialized = false
   private pendingRoute: string | null = null
@@ -162,6 +163,36 @@ class AudioManager {
     if (sound) {
       sound.volume(this.settings.sfxVolume)
       sound.play()
+    }
+  }
+
+  // Joue un son en boucle pour une action (identifié par actionKey, ex: animalId)
+  playActionSfx(type: SfxType, actionKey: string): void {
+    if (!this.isInitialized) {
+      this.initialize()
+    }
+
+    // Arrêter le son précédent si existant
+    this.stopActionSfx(actionKey)
+
+    if (this.settings.isSfxMuted) return
+
+    const sound = this.sfxSounds.get(type)
+    if (sound) {
+      sound.loop(true)
+      sound.volume(this.settings.sfxVolume)
+      const soundId = sound.play()
+      this.activeActionSounds.set(actionKey, { howl: sound, soundId })
+    }
+  }
+
+  // Arrête le son d'une action en cours
+  stopActionSfx(actionKey: string): void {
+    const activeSound = this.activeActionSounds.get(actionKey)
+    if (activeSound) {
+      activeSound.howl.stop(activeSound.soundId)
+      activeSound.howl.loop(false)
+      this.activeActionSounds.delete(actionKey)
     }
   }
 
