@@ -1,5 +1,5 @@
 import type { Animal, AnimalType } from '@prisma/client'
-import { BaseRepository } from '../../../core/base.repository'
+import { BaseRepository } from '@backend/core'
 
 export type AnimalWithType = Animal & { type: AnimalType }
 

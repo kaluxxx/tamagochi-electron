@@ -1,5 +1,5 @@
 import { animalRepository, type AnimalWithType, type AnimalCreateInput } from '../repositories'
-import { NotFoundError, AnimalDeadError } from '../../../core/errors'
+import { NotFoundError, AnimalDeadError } from '@backend/core'
 
 export interface TickResult {
   animal: AnimalWithType
@@ -34,10 +34,6 @@ export class AnimalController {
       throw new NotFoundError('Animal', id)
     }
     return animal
-  }
-
-  async getAliveAnimals(): Promise<AnimalWithType[]> {
-    return animalRepository.findAlive()
   }
 
   async createAnimal(data: AnimalCreateInput): Promise<AnimalWithType> {
