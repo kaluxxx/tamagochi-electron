@@ -23,7 +23,7 @@ interface UseActionsReturn {
   useItemProgress: number
   activeAction: ActiveAction
   handleAction: (action: ActionType) => void
-  handleUseItem: (itemId: string, onComplete: () => void) => void
+  handleUseItem: (itemId: string, itemType: string, onComplete: () => void) => void
   isActionDisabled: boolean
   canPlay: boolean
   canSleep: boolean
@@ -97,9 +97,9 @@ export function useActions({ animalId, isAlive, energy }: UseActionsProps): UseA
     return null
   }, [isFeeding, isHealing, isSleeping, isPlaying])
 
-  const handleUseItem = useCallback((itemId: string, onComplete: () => void) => {
+  const handleUseItem = useCallback((itemId: string, itemType: string, onComplete: () => void) => {
     if (!isAlive || hasActiveAction) return
-    handleStartUseItem(itemId, onComplete)
+    handleStartUseItem(itemId, itemType, onComplete)
   }, [isAlive, hasActiveAction, handleStartUseItem])
 
   const activeAction: ActiveAction = activeActionType

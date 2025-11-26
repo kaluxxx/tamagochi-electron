@@ -127,7 +127,7 @@ export function GameView({ animal }: AnimalGameViewProps) {
             animalEnergy={animal.energy}
             isAlive={animal.isAlive}
             isActionDisabled={isActionDisabled}
-            onUseItem={handleUseItem}
+            onUseItem={(itemId, itemType, onComplete) => handleUseItem(itemId, itemType, onComplete)}
             onItemUsed={handleItemUsed}
           />
         </CollapsiblePanel>
