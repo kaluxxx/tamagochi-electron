@@ -4,17 +4,17 @@
   "directories": {
     "output": "release"
   },
-  "nodeModuleCollector": "native",
   "files": [
     "dist/**/*",
     "dist-electron/**/*",
-    "prisma/**/*"
+    "prisma/schema.prisma",
+    "prisma/migrations/**/*"
   ],
   "asarUnpack": [
     "node_modules/.prisma/**/*"
   ],
   "win": {
-    "target": ["nsis", "portable"],
+    "target": ["portable"],
     "icon": "build/icon.ico"
   }
 }
