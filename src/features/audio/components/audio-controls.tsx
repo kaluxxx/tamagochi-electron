@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Volume2, VolumeX } from 'lucide-react'
 import { useAudio } from '@/features/audio'
 import { AudioPanelContent } from './audio-panel-content'
@@ -6,14 +6,33 @@ import { cn } from '@/shared/lib/utils'
 
 interface AudioControlsProps {
   compact?: boolean
+  size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
-export function AudioControls({ compact = false, className }: AudioControlsProps) {
+export function AudioControls({ compact = false, size = 'md', className }: AudioControlsProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { isMusicMuted, isSfxMuted, toggleMusicMute, toggleSfxMute, playSfx } = useAudio()
+  const panelRef = useRef<HTMLDivElement>(null)
 
   const isMuted = isMusicMuted && isSfxMuted
+
+  // Close panel when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: globalThis.MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as globalThis.Node)) {
+        setIsExpanded(false)
+      }
+    }
+
+    if (isExpanded) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isExpanded])
 
   const handleToggleAll = () => {
     if (isMuted) {
@@ -26,29 +45,42 @@ export function AudioControls({ compact = false, className }: AudioControlsProps
     playSfx('click')
   }
 
+  const sizeClasses = {
+    sm: 'px-2 py-1',
+    md: 'px-3 py-1.5',
+    lg: 'px-4 py-2',
+  }
+
+  const iconSize = {
+    sm: 14,
+    md: 16,
+    lg: 20,
+  }
+
   if (compact) {
     return (
-      <div className={cn('relative', className)}>
+      <div className={cn('relative', className)} ref={panelRef}>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
-            'p-2 border-4 border-white rounded-button shadow-lg transition-all duration-200',
-            'hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0',
+            'inline-flex items-center justify-center gap-1 rounded-lg border-2 border-black font-bold transition-all',
+            'hover:brightness-95 active:translate-y-0.5',
+            sizeClasses[size],
             isMuted
-              ? 'bg-gradient-to-br from-gray-400 to-gray-500'
-              : 'bg-gradient-to-br from-primary-pink to-pink-600'
+              ? 'bg-gray-200 text-gray-500'
+              : 'bg-purple-200 text-purple-700'
           )}
           title={isMuted ? 'Son désactivé' : 'Son activé'}
         >
           {isMuted ? (
-            <VolumeX size={20} className="text-white" />
+            <VolumeX size={iconSize[size]} />
           ) : (
-            <Volume2 size={20} className="text-white" />
+            <Volume2 size={iconSize[size]} />
           )}
         </button>
 
         {isExpanded && (
-          <div className="absolute top-full right-0 mt-2 w-56 bg-bg-light border-4 border-white rounded-card shadow-xl p-4 space-y-4 z-50">
+          <div className="absolute top-full right-0 mt-2 w-56 bg-[#FFF4E6] border-4 border-black rounded-lg shadow-xl p-4 space-y-4 z-50">
             <AudioPanelContent isMuted={isMuted} onToggleAll={handleToggleAll} playSfx={playSfx} />
           </div>
         )}
@@ -57,7 +89,7 @@ export function AudioControls({ compact = false, className }: AudioControlsProps
   }
 
   return (
-    <div className={cn('bg-bg-light border-4 border-white rounded-card p-4 shadow-lg space-y-4', className)}>
+    <div className={cn('bg-[#FFF4E6] border-4 border-black rounded-lg p-4 shadow-lg space-y-4', className)}>
       <AudioPanelContent isMuted={isMuted} onToggleAll={handleToggleAll} playSfx={playSfx} />
     </div>
   )

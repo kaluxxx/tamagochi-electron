@@ -53,7 +53,7 @@ export const SOUND_EFFECTS: SoundEffect[] = [
   { id: 'upgrade_purchase', src: '/audio/sfx/upgrade-purchase.mp3' },
 ]
 
-export const CROSSFADE_DURATION = 1000 // milliseconds
+export const CROSSFADE_DURATION = 500 // milliseconds
 
 export const DEFAULT_AUDIO_SETTINGS: AudioSettings = {
   musicVolume: 0.5,
