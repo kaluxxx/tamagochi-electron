@@ -1,9 +1,10 @@
+import { PrismaClient } from '@prisma/client'
 import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import Module from 'module'
 
-let prisma: any
+let prisma: PrismaClient
 
 function getDbPath(): string {
   if (app.isPackaged) {
@@ -21,12 +22,21 @@ function setupPrismaForPackagedApp() {
     const prismaClientPath = path.join(process.resourcesPath, 'prisma-client')
 
     // Ajouter le chemin aux chemins de recherche de modules
-    const originalResolveFilename = (Module as any)._resolveFilename
-    ;(Module as any)._resolveFilename = function (
+    type ResolveFilename = (
       request: string,
-      parent: any,
+      parent: Module | null,
       isMain: boolean,
-      options: any
+      options?: Record<string, unknown>
+    ) => string
+
+    const originalResolveFilename = (Module as unknown as { _resolveFilename: ResolveFilename })
+      ._resolveFilename
+
+    ;(Module as unknown as { _resolveFilename: ResolveFilename })._resolveFilename = function (
+      request: string,
+      parent: Module | null,
+      isMain: boolean,
+      options?: Record<string, unknown>
     ) {
       // Rediriger les imports Prisma vers extraResources
       if (request === '@prisma/client' || request.startsWith('@prisma/client/')) {
@@ -53,9 +63,6 @@ function setupPrismaForPackagedApp() {
 export function getPrismaClient() {
   if (!prisma) {
     setupPrismaForPackagedApp()
-
-    // Import dynamique après configuration des chemins
-    const { PrismaClient } = require('@prisma/client')
     prisma = new PrismaClient({
       log: ['error', 'warn']
     })
