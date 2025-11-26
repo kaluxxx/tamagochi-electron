@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay, useWallet, useShop } from '@/features/economy'
 import type { ShopItem } from '@/features/economy'
+import { useSoundEffects, AudioControls } from '@/features/audio'
 
 export const Route = createFileRoute('/shop')({
   component: ShopPage,
@@ -26,6 +27,7 @@ function ShopPage() {
   const navigate = useNavigate()
   const { coins } = useWallet()
   const { items, purchase, isPurchasing, isLoading } = useShop()
+  const { playSfx } = useSoundEffects()
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory>('all')
   const [purchaseMessage, setPurchaseMessage] = useState<{ text: string; success: boolean } | null>(null)
 
@@ -35,6 +37,7 @@ function ShopPage() {
 
   const handlePurchase = async (item: ShopItem) => {
     if (coins < item.price) {
+      playSfx('purchase_fail')
       setPurchaseMessage({ text: 'Pas assez de pièces !', success: false })
       window.setTimeout(() => setPurchaseMessage(null), 2000)
       return
@@ -44,10 +47,12 @@ function ShopPage() {
       { itemId: item.id, quantity: 1 },
       {
         onSuccess: () => {
+          playSfx('purchase_success')
           setPurchaseMessage({ text: `${item.name} acheté !`, success: true })
           window.setTimeout(() => setPurchaseMessage(null), 2000)
         },
         onError: () => {
+          playSfx('purchase_fail')
           setPurchaseMessage({ text: 'Erreur lors de l\'achat', success: false })
           window.setTimeout(() => setPurchaseMessage(null), 2000)
         },
@@ -66,7 +71,10 @@ function ShopPage() {
           RETOUR
         </button>
         <h1 className="font-pixel text-xl text-black">BOUTIQUE</h1>
-        <CoinDisplay size="md" />
+        <div className="flex items-center gap-2">
+          <CoinDisplay size="md" />
+          <AudioControls compact size="md" />
+        </div>
       </div>
 
       {/* Purchase message */}

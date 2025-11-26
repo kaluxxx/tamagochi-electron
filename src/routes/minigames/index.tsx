@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay } from '@/features/economy'
+import { AudioControls } from '@/features/audio'
 
 export const Route = createFileRoute('/minigames/')({
   component: MinigamesPage,
@@ -19,7 +20,10 @@ function MinigamesPage() {
           RETOUR
         </button>
         <h1 className="font-pixel text-xl text-black">MINI-JEUX</h1>
-        <CoinDisplay size="md" />
+        <div className="flex items-center gap-2">
+          <CoinDisplay size="md" />
+          <AudioControls compact size="md" />
+        </div>
       </div>
 
       {/* Liste des jeux */}
@@ -37,6 +41,21 @@ function MinigamesPage() {
             </p>
             <p className="font-pixel text-[8px] text-green-700 mt-2">
               Gain max: 30 pièces
+            </p>
+          </button>
+
+          {/* Fishing Game */}
+          <button
+            onClick={() => navigate({ to: '/minigames/fishing' })}
+            className="p-4 bg-[#5DADE2] border-4 border-black hover:bg-[#48A6D6] active:translate-y-1 transition-all"
+          >
+            <div className="text-4xl mb-2">&#x1F3A3;</div>
+            <h2 className="font-pixel text-sm text-black mb-1">PECHE</h2>
+            <p className="font-pixel text-[8px] text-gray-700">
+              Attrape des poissons rares !
+            </p>
+            <p className="font-pixel text-[8px] text-green-700 mt-2">
+              20 especes a collecter
             </p>
           </button>
         </div>
