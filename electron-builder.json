@@ -7,20 +7,11 @@
   "files": [
     "dist/**/*",
     "dist-electron/**/*",
-    "prisma/**/*",
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/client/**/*"
+    "prisma/**/*"
   ],
-  "extraResources": [
-    {
-      "from": "prisma",
-      "to": "prisma",
-      "filter": ["schema.prisma", "migrations/**/*"]
-    }
-  ],
-  "asar": true,
   "asarUnpack": [
-    "node_modules/.prisma/**/*"
+    "node_modules/.prisma/**/*",
+    "node_modules/@prisma/engines/**/*"
   ],
   "win": {
     "target": ["nsis", "portable"],
