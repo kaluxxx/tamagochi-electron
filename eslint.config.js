@@ -27,6 +27,8 @@ export default [
         React: 'readonly',
         setInterval: 'readonly',
         clearInterval: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
       },
     },
     plugins: {
