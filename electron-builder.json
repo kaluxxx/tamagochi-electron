@@ -8,13 +8,17 @@
     "dist/**/*",
     "dist-electron/**/*",
     "prisma/schema.prisma",
-    "prisma/migrations/**/*",
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/client/**/*"
+    "prisma/migrations/**/*"
   ],
-  "asarUnpack": [
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/client/**/*"
+  "extraResources": [
+    {
+      "from": "node_modules/.prisma",
+      "to": "prisma-client/.prisma"
+    },
+    {
+      "from": "node_modules/@prisma/client",
+      "to": "prisma-client/@prisma/client"
+    }
   ],
   "win": {
     "target": ["portable"],
