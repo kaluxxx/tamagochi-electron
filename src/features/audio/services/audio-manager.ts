@@ -15,8 +15,6 @@ class AudioManager {
   private currentTrackId: string | null = null
   private isInitialized = false
   private pendingRoute: string | null = null
-  private loadedTracks = 0
-  private totalTracks = 0
   private settings: AudioSettings = {
     musicVolume: 0.5,
     sfxVolume: 0.7,
@@ -27,9 +25,6 @@ class AudioManager {
   initialize(): void {
     if (this.isInitialized) return
 
-    this.totalTracks = MUSIC_TRACKS.length
-    this.loadedTracks = 0
-
     // Preload all music tracks (sans html5 pour meilleur support autoplay)
     MUSIC_TRACKS.forEach((track) => {
       const howl = new Howl({
@@ -38,7 +33,6 @@ class AudioManager {
         volume: track.baseVolume * this.settings.musicVolume,
         preload: true,
         onload: () => {
-          this.loadedTracks++
           // Start pending music once the correct track is loaded
           if (this.pendingRoute) {
             const pendingTrack = getTrackForRoute(this.pendingRoute)
@@ -50,7 +44,6 @@ class AudioManager {
         },
         onloaderror: (_id, error) => {
           console.warn(`Failed to load music track ${track.id}:`, error)
-          this.loadedTracks++
         },
       })
       this.musicTracks.set(track.id, howl)
