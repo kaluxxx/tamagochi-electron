@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+import 'dotenv/config'
 import { app, BrowserWindow, Notification } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -192,10 +192,10 @@ async function createWindow() {
 
   // Load app
   if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
-    mainWindow.loadURL('http://localhost:5173')
+    await mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    await mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
   // Sync offline time (apply degradation for time passed)
@@ -223,6 +223,6 @@ app.on('activate', () => {
   if (mainWindow) {
     mainWindow.show()
   } else if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    void createWindow()
   }
 })
