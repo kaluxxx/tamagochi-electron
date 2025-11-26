@@ -4,14 +4,14 @@
   "directories": {
     "output": "release"
   },
+  "nodeModuleCollector": "native",
   "files": [
     "dist/**/*",
     "dist-electron/**/*",
     "prisma/**/*"
   ],
   "asarUnpack": [
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/engines/**/*"
+    "node_modules/.prisma/**/*"
   ],
   "win": {
     "target": ["nsis", "portable"],
