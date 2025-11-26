@@ -197,6 +197,7 @@ async function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      autoplayPolicy: 'no-user-gesture-required',
     },
   })
 
@@ -347,6 +348,106 @@ ipcMain.handle('clickerUpgrades:purchase', async (_, type: string) => {
 
 ipcMain.handle('clickerUpgrades:getGameStats', async () => {
   return animalService.getClickerGameStats()
+})
+
+// ============== IPC Handlers - Fishing ==============
+
+// Fish Species
+ipcMain.handle('fishing:getAllSpecies', async () => {
+  return animalService.getAllFishSpecies()
+})
+
+ipcMain.handle('fishing:getSpeciesById', async (_, id: string) => {
+  return animalService.getFishSpeciesById(id)
+})
+
+// Catalog
+ipcMain.handle('fishing:getCaughtFish', async () => {
+  return animalService.getCaughtFish()
+})
+
+ipcMain.handle('fishing:getCaughtSpeciesIds', async () => {
+  return animalService.getCaughtSpeciesIds()
+})
+
+// Game Actions
+ipcMain.handle('fishing:selectRandomFish', async (_, locationId: string, baitId?: string) => {
+  return animalService.selectRandomFish(locationId, baitId)
+})
+
+ipcMain.handle('fishing:catchFish', async (_, speciesId: string, size: number, locationId: string, rodId: string, baitId?: string) => {
+  const result = await animalService.catchFish(speciesId, size, locationId, rodId, baitId)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+ipcMain.handle('fishing:failCatch', async () => {
+  return animalService.failCatch()
+})
+
+// Rods
+ipcMain.handle('fishing:getRods', async () => {
+  return animalService.getFishingRods()
+})
+
+ipcMain.handle('fishing:getEquippedRod', async () => {
+  return animalService.getEquippedRod()
+})
+
+ipcMain.handle('fishing:purchaseRod', async (_, rodId: string) => {
+  const result = await animalService.purchaseRod(rodId)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+ipcMain.handle('fishing:equipRod', async (_, rodId: string) => {
+  return animalService.equipRod(rodId)
+})
+
+// Baits
+ipcMain.handle('fishing:getBaits', async () => {
+  return animalService.getFishingBaits()
+})
+
+ipcMain.handle('fishing:purchaseBait', async (_, baitId: string, quantity: number) => {
+  const result = await animalService.purchaseBait(baitId, quantity)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+// Locations
+ipcMain.handle('fishing:getLocations', async () => {
+  return animalService.getFishingLocations()
+})
+
+ipcMain.handle('fishing:unlockLocation', async (_, locationId: string) => {
+  const result = await animalService.unlockLocation(locationId)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+// Upgrades
+ipcMain.handle('fishing:getUpgrades', async () => {
+  return animalService.getFishingUpgrades()
+})
+
+ipcMain.handle('fishing:purchaseUpgrade', async (_, type: string) => {
+  const result = await animalService.purchaseFishingUpgrade(type as animalService.FishingUpgradeType)
+  notifyRenderer('wallet:updated', result.wallet)
+  return result
+})
+
+ipcMain.handle('fishing:getStats', async () => {
+  return animalService.getFishingStats()
+})
+
+ipcMain.handle('fishing:getUpgradesWithDetails', async () => {
+  return animalService.getFishingUpgradesWithDetails()
+})
+
+// Progress
+ipcMain.handle('fishing:getProgress', async () => {
+  return animalService.getFishingProgress()
 })
 
 app.whenReady().then(createWindow)
