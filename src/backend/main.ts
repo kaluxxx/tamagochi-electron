@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { app, BrowserWindow, Notification } from 'electron'
+import { app, BrowserWindow, Notification, Tray, Menu, nativeImage } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -17,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 let mainWindow: BrowserWindow | null = null
+let tray: Tray | null = null
 let tickInterval: ReturnType<typeof setInterval> | null = null
 let isQuitting = false
 
@@ -154,6 +155,37 @@ function registerAllHandlers() {
   console.log('All IPC handlers registered')
 }
 
+// ============== TRAY ==============
+
+function createTray() {
+  // Chemin vers l'icône (dev: public/, prod: dist/)
+  const iconPath = app.isPackaged
+    ? path.join(__dirname, '../dist/icons/games.png')
+    : path.join(process.cwd(), 'public/icons/games.png')
+
+  const icon = nativeImage.createFromPath(iconPath)
+  tray = new Tray(icon.resize({ width: 16, height: 16 }))
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Ouvrir Tamagotchi',
+      click: () => mainWindow?.show()
+    },
+    { type: 'separator' },
+    {
+      label: 'Quitter',
+      click: () => {
+        isQuitting = true
+        app.quit()
+      }
+    }
+  ])
+
+  tray.setToolTip('Tamagotchi')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', () => mainWindow?.show())
+}
+
 // ============== WINDOW CREATION ==============
 
 async function createWindow() {
@@ -205,7 +237,10 @@ async function createWindow() {
   startTickSystem()
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createTray()
+  void createWindow()
+})
 
 app.on('window-all-closed', () => {
   // Ne pas quitter l'app quand la fenêtre est fermée
