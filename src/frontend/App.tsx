@@ -1,9 +1,12 @@
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { RouterProvider, createRouter, createHashHistory } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { routeTree } from './routeTree.gen'
 
+// Use hash history for Electron file:// protocol compatibility
+const hashHistory = createHashHistory()
+
 // Create a new router instance
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree, history: hashHistory })
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
