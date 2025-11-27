@@ -1,5 +1,5 @@
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
-import { getStatSprite } from '@frontend/shared/utils/sprite-loader'
+import { getStatSprite, getUISprite } from '@frontend/shared/utils/sprite-loader'
 import { cn } from '@frontend/shared/lib/utils'
 import type { Animal } from '../types'
 
@@ -65,7 +65,7 @@ export function StatsPanel({ animal, isSleeping, isPlaying }: StatsPanelProps) {
           </span>
           {!animal.isAlive && (
             <SpriteImage
-              src="/sprites/ui/dead-badge.svg"
+              src={getUISprite('dead-badge')}
               alt="Décédé"
               className="w-4 h-4"
               pixelated

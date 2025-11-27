@@ -17,7 +17,7 @@ export type ActionType = 'feed' | 'play' | 'heal' | 'sleep'
  * @returns Path to the sprite image
  */
 export const getAnimalSprite = (animalType: string, mood: MoodType): string => {
-  return `/sprites/animals/${animalType}/${mood}.svg`
+  return `./sprites/animals/${animalType}/${mood}.svg`
 }
 
 /**
@@ -27,7 +27,7 @@ export const getAnimalSprite = (animalType: string, mood: MoodType): string => {
  * @returns Path to the sprite image
  */
 export const getItemSprite = (itemType: ItemType, itemName: string): string => {
-  return `/sprites/items/${itemType}/${itemName}.svg`
+  return `./sprites/items/${itemType}/${itemName}.svg`
 }
 
 /**
@@ -36,7 +36,7 @@ export const getItemSprite = (itemType: ItemType, itemName: string): string => {
  * @returns Path to the sprite image
  */
 export const getActionSprite = (actionType: ActionType): string => {
-  return `/sprites/actions/${actionType}.svg`
+  return `./sprites/actions/${actionType}.svg`
 }
 
 /**
@@ -45,7 +45,7 @@ export const getActionSprite = (actionType: ActionType): string => {
  * @returns Path to the sprite image
  */
 export const getStatSprite = (statType: StatType): string => {
-  return `/sprites/stats/${statType}.svg`
+  return `./sprites/stats/${statType}.svg`
 }
 
 /**
@@ -54,7 +54,16 @@ export const getStatSprite = (statType: StatType): string => {
  * @returns Path to the sprite image
  */
 export const getUISprite = (uiElement: string): string => {
-  return `/sprites/ui/${uiElement}.svg`
+  return `./sprites/ui/${uiElement}.svg`
+}
+
+/**
+ * Get the sprite path for upgrade icons
+ * @param upgradeName - The upgrade name (coin, multiplier, time, auto, etc.)
+ * @returns Path to the sprite image
+ */
+export const getUpgradeSprite = (upgradeName: string): string => {
+  return `./sprites/upgrades/${upgradeName}.svg`
 }
 
 /**

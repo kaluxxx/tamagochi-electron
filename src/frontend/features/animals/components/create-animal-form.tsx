@@ -4,7 +4,7 @@ import { useAnimalTypes } from '../hooks/use-animal-types'
 import { useCreateAnimal } from '../hooks/use-create-animal'
 import { createAnimalSchema } from '../schemas/create-animal.schema'
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
-import { getAnimalSprite } from '@frontend/shared/utils/sprite-loader'
+import { getAnimalSprite, getUISprite } from '@frontend/shared/utils/sprite-loader'
 import { cn } from '@frontend/shared/lib/utils'
 import type { AnimalType } from '../types'
 
@@ -43,7 +43,7 @@ export function CreateAnimalForm() {
       {/* Background incubateur */}
       <div
         className="fixed inset-0 bg-cover bg-center pixel-scene"
-        style={{ backgroundImage: "url('/sprites/ui/incubator.jpg')" }}
+        style={{ backgroundImage: `url('${getUISprite('incubator').replace('.svg', '.jpg')}')` }}
       />
 
       {/* Contenu centré */}

@@ -1,6 +1,7 @@
 import {Link} from '@tanstack/react-router'
 import {Button} from '@frontend/shared/ui/button'
 import {SpriteImage} from '@frontend/shared/ui/sprite-image'
+import {getUISprite} from '@frontend/shared/utils/sprite-loader'
 import {AnimalCard} from './animal-card'
 import type {Animal} from '../types'
 
@@ -38,7 +39,7 @@ export function AnimalList({animals, isLoading}: AnimalListProps) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[600px] space-y-8 py-12">
                 <SpriteImage
-                    src="/sprites/ui/empty-state.svg"
+                    src={getUISprite('empty-state')}
                     alt="Empty State"
                     pixelated
                     className="w-64 h-64"

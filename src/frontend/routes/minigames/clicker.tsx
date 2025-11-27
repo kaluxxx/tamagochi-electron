@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CoinDisplay, useWallet, useClickerUpgrades, CLICKER_UPGRADE_CONFIG, economyApi } from '@frontend/features/economy'
 import type { ClickerUpgradeType } from '@frontend/features/economy'
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
+import { getUpgradeSprite } from '@frontend/shared/utils/sprite-loader'
 import { useSoundEffects, AudioControls } from '@frontend/features/audio'
 import { cn } from '@frontend/shared/lib/utils'
 
@@ -202,7 +203,7 @@ function ClickerGame() {
           {gameState === 'idle' && (
             <div className="text-center">
               <SpriteImage
-                src="/sprites/upgrades/coin.svg"
+                src={getUpgradeSprite('coin')}
                 alt="Coin"
                 size="xl"
                 pixelated
@@ -257,7 +258,7 @@ function ClickerGame() {
               {/* Potential coins */}
               <div className="mb-6 flex items-center justify-center gap-2">
                 <SpriteImage
-                  src="/sprites/upgrades/coin.svg"
+                  src={getUpgradeSprite('coin')}
                   alt="Coin"
                   size="sm"
                   pixelated
@@ -310,7 +311,7 @@ function ClickerGame() {
             <div className="text-center">
               <div className="text-6xl mb-4">
                 <SpriteImage
-                  src="/sprites/upgrades/coin.svg"
+                  src={getUpgradeSprite('coin')}
                   alt="Coin"
                   size="xl"
                   pixelated
@@ -327,7 +328,7 @@ function ClickerGame() {
                 </p>
                 <div className="flex items-center justify-center gap-2">
                   <SpriteImage
-                    src="/sprites/upgrades/coin.svg"
+                    src={getUpgradeSprite('coin')}
                     alt="Coin"
                     size="sm"
                     pixelated
@@ -410,7 +411,7 @@ function ClickerGame() {
                         </span>
                         <div className="flex items-center gap-1">
                           <SpriteImage
-                            src="/sprites/upgrades/coin.svg"
+                            src={getUpgradeSprite('coin')}
                             alt="Coin"
                             size="xs"
                             pixelated
