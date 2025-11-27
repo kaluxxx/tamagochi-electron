@@ -189,18 +189,6 @@ function createTray() {
 // ============== WINDOW CREATION ==============
 
 async function createWindow() {
-  // Initialize database connection
-  try {
-    await initializeDatabase()
-  } catch (error) {
-    console.error('Failed to initialize database:', error)
-    app.quit()
-    return
-  }
-
-  // Register all IPC handlers
-  registerAllHandlers()
-
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
@@ -222,22 +210,63 @@ async function createWindow() {
     }
   })
 
-  // Load app
+  // Notify renderer when window is hidden/shown (for audio control)
+  mainWindow.on('hide', () => {
+    mainWindow?.webContents.send('window:visibility', false)
+  })
+
+  mainWindow.on('show', () => {
+    mainWindow?.webContents.send('window:visibility', true)
+  })
+
+  // Load app immediately (shows loading screen)
   if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
     await mainWindow.loadURL('http://localhost:5173')
-    mainWindow.webContents.openDevTools()
   } else {
     await mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
+
+  // Track start time for minimum loading duration
+  const loadingStartTime = Date.now()
+  const MIN_LOADING_DURATION = 5000 // 5 seconds minimum
+
+  // Initialize database in background while loading screen is shown
+  try {
+    await initializeDatabase()
+  } catch (error) {
+    console.error('Failed to initialize database:', error)
+    app.quit()
+    return
+  }
+
+  // Register all IPC handlers after DB is ready
+  registerAllHandlers()
 
   // Sync offline time (apply degradation for time passed)
   await syncOfflineTime()
 
   // Start the tick system
   startTickSystem()
+
+  // Wait for minimum loading duration before showing app
+  const elapsedTime = Date.now() - loadingStartTime
+  const remainingTime = MIN_LOADING_DURATION - elapsedTime
+  if (remainingTime > 0) {
+    await new Promise(resolve => setTimeout(resolve, remainingTime))
+  }
+
+  // Notify renderer that app is ready
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('app:ready')
+  }
 }
 
 app.whenReady().then(() => {
+  // Masquer la barre de menu en production
+  if (app.isPackaged) {
+    Menu.setApplicationMenu(null)
+  }
+
   createTray()
   void createWindow()
 })

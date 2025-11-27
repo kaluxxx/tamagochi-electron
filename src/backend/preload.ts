@@ -101,5 +101,15 @@ contextBridge.exposeInMainWorld('api', {
     const handler = (_event: Electron.IpcRendererEvent, wallet: unknown) => callback(wallet)
     ipcRenderer.on('wallet:updated', handler)
     return () => ipcRenderer.removeListener('wallet:updated', handler)
+  },
+  onAppReady: (callback: () => void) => {
+    const handler = () => callback()
+    ipcRenderer.on('app:ready', handler)
+    return () => ipcRenderer.removeListener('app:ready', handler)
+  },
+  onWindowVisibility: (callback: (isVisible: boolean) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, isVisible: boolean) => callback(isVisible)
+    ipcRenderer.on('window:visibility', handler)
+    return () => ipcRenderer.removeListener('window:visibility', handler)
   }
 })

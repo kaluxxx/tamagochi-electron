@@ -146,6 +146,8 @@ declare global {
       onAnimalsUpdated: (callback: () => void) => () => void
       onAnimalDied: (callback: (animal: Animal) => void) => () => void
       onWalletUpdated: (callback: (wallet: Wallet) => void) => () => void
+      onAppReady: (callback: () => void) => () => void
+      onWindowVisibility: (callback: (isVisible: boolean) => void) => () => void
     }
   }
 }
