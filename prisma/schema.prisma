@@ -7,40 +7,41 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 model AnimalType {
   id                 String   @id @default(uuid())
-  name               String   @unique  // "cat", "dog", "alien"
-  displayName        String   // "Chat", "Chien", "Alien"
+  name               String   @unique // "cat", "dog", "alien"
+  displayName        String // "Chat", "Chien", "Alien"
   hungerDecayRate    Float    @default(2.0)
   happinessDecayRate Float    @default(1.5)
   energyDecayRate    Float    @default(1.0)
   healthDecayRate    Float    @default(3.0)
-  emoji              String   // 🐱 🐶 👽
+  emoji              String // 🐱 🐶 👽
   animals            Animal[]
 }
 
 model Animal {
-  id          String     @id @default(uuid())
-  name        String
-  typeId      String
-  hunger      Int        @default(100)
-  happiness   Int        @default(100)
-  health      Int        @default(100)
-  energy      Int        @default(100)
-  age         Int        @default(0) // in hours
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
-  isAlive     Boolean    @default(true)
-  type        AnimalType @relation(fields: [typeId], references: [id])
-  actions     Action[]
+  id        String     @id @default(uuid())
+  name      String
+  typeId    String
+  hunger    Int        @default(100)
+  happiness Int        @default(100)
+  health    Int        @default(100)
+  energy    Int        @default(100)
+  age       Int        @default(0) // in hours
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  isAlive   Boolean    @default(true)
+  type      AnimalType @relation(fields: [typeId], references: [id])
+  actions   Action[]
 }
 
 model Action {
   id              String   @id @default(uuid())
   animalId        String
-  actionType      String   // "feed", "play", "heal", "sleep", "use_item"
+  actionType      String // "feed", "play", "heal", "sleep", "use_item"
   itemId          String?
   timestamp       DateTime @default(now())
   // Stats before action
@@ -54,21 +55,21 @@ model Action {
   healthAfter     Int?
   energyAfter     Int?
   // Economy
-  coinsEarned     Int?     // Coins earned from this action
+  coinsEarned     Int? // Coins earned from this action
   animal          Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
   item            Item?    @relation(fields: [itemId], references: [id])
 }
 
 model Item {
-  id             String      @id @default(uuid())
+  id             String     @id @default(uuid())
   name           String
-  type           String      // "food", "toy", "medicine"
-  hungerBoost    Int         @default(0)
-  happinessBoost Int         @default(0)
-  healthBoost    Int         @default(0)
-  energyBoost    Int         @default(0)
-  energyCost     Int         @default(0)
-  price          Int         @default(10) // Price in coins
+  type           String // "food", "toy", "medicine"
+  hungerBoost    Int        @default(0)
+  happinessBoost Int        @default(0)
+  healthBoost    Int        @default(0)
+  energyBoost    Int        @default(0)
+  energyCost     Int        @default(0)
+  price          Int        @default(10) // Price in coins
   emoji          String
   description    String
   actions        Action[]
@@ -92,7 +93,7 @@ model Wallet {
 
 model MinigameScore {
   id          String   @id @default(uuid())
-  gameType    String   // "clicker", etc.
+  gameType    String // "clicker", etc.
   score       Int
   coinsEarned Int
   playedAt    DateTime @default(now())
@@ -112,23 +113,23 @@ model ClickerUpgrade {
 model FishSpecies {
   id             String      @id @default(uuid())
   name           String      @unique // "sardine", "trout", etc.
-  displayName    String      // "Sardine", "Truite"
-  emoji          String      // 🐟 🐠 🦈
-  rarity         String      // "common", "uncommon", "rare", "epic", "legendary"
-  baseValue      Int         // Base coin reward
-  difficulty     Int         // 1-10 scale for QTE difficulty
-  minSize        Int         // Minimum size in cm
-  maxSize        Int         // Maximum size in cm
-  locations      String      // JSON array of location IDs where found
-  baitPreference String      // JSON array of preferred bait IDs
-  description    String      // Flavor text for catalog
+  displayName    String // "Sardine", "Truite"
+  emoji          String // 🐟 🐠 🦈
+  rarity         String // "common", "uncommon", "rare", "epic", "legendary"
+  baseValue      Int // Base coin reward
+  difficulty     Int // 1-10 scale for QTE difficulty
+  minSize        Int // Minimum size in cm
+  maxSize        Int // Maximum size in cm
+  locations      String // JSON array of location IDs where found
+  baitPreference String // JSON array of preferred bait IDs
+  description    String // Flavor text for catalog
   catches        FishCatch[]
 }
 
 model FishCatch {
   id           String      @id @default(uuid())
   speciesId    String
-  size         Int         // Actual size caught (cm)
+  size         Int // Actual size caught (cm)
   coinsEarned  Int
   isFirstCatch Boolean     @default(false)
   caughtAt     DateTime    @default(now())
@@ -141,9 +142,9 @@ model FishCatch {
 model FishingRod {
   id             String  @id @default(uuid())
   name           String  @unique // "bamboo", "wooden", etc.
-  displayName    String  // "Canne Bambou"
-  tier           Int     // 1-5
-  price          Int     // Purchase cost (0 for starter)
+  displayName    String // "Canne Bambou"
+  tier           Int // 1-5
+  price          Int // Purchase cost (0 for starter)
   reelZoneBonus  Float   @default(0) // % increase to reel zone size
   catchRateBonus Float   @default(0) // % bonus to catch rate
   rarityBonus    Float   @default(0) // % bonus to rare fish appearance
@@ -155,9 +156,9 @@ model FishingRod {
 model FishingBait {
   id             String  @id @default(uuid())
   name           String  @unique // "worm", "bread", etc.
-  displayName    String  // "Ver", "Pain"
-  emoji          String  // 🪱 🍞
-  price          Int     // Price per unit
+  displayName    String // "Ver", "Pain"
+  emoji          String // 🪱 🍞
+  price          Int // Price per unit
   catchRateBonus Float   @default(0) // General catch rate bonus
   maxUses        Int     @default(1) // How many times can be used (1 = single use)
   targetRarity   String? // JSON array of rarities it attracts (null = all)
@@ -169,11 +170,11 @@ model FishingBait {
 model FishingLocation {
   id            String  @id @default(uuid())
   name          String  @unique // "pond", "river", etc.
-  displayName   String  // "Étang", "Rivière"
-  emoji         String  // 🏞️ 🌊
-  unlockCost    Int     // Coins to unlock (0 for starter)
+  displayName   String // "Étang", "Rivière"
+  emoji         String // 🏞️ 🌊
+  unlockCost    Int // Coins to unlock (0 for starter)
   difficulty    Float   @default(1.0) // Base difficulty multiplier
-  availableFish String  // JSON array of species IDs available here
+  availableFish String // JSON array of species IDs available here
   description   String
   isUnlocked    Boolean @default(false)
   unlockOrder   Int     @default(0) // Order in which locations unlock
@@ -192,8 +193,8 @@ model FishingProgress {
   level           Int      @default(1)
   experience      Int      @default(0)
   totalFishCaught Int      @default(0)
-  largestFishId   String?  // Species ID of largest fish
-  largestFishSize Int?     // Size of largest fish caught
+  largestFishId   String? // Species ID of largest fish
+  largestFishSize Int? // Size of largest fish caught
   currentStreak   Int      @default(0)
   bestStreak      Int      @default(0)
   createdAt       DateTime @default(now())

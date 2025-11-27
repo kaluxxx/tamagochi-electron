@@ -1,4 +1,4 @@
-import type { Action, Item } from '@prisma/client'
+import type { Action, Item } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export type ActionWithItem = Action & { item: Item | null }

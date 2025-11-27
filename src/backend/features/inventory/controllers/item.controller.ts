@@ -1,4 +1,4 @@
-import type { Item } from '@prisma/client'
+import type { Item } from '@/generated/prisma'
 import { itemRepository } from '../repositories'
 import { NotFoundError } from '../../../core/errors'
 

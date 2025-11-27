@@ -1,4 +1,4 @@
-import type { Wallet } from '@prisma/client'
+import type { Wallet } from '@/generated/prisma'
 import { SingletonRepository } from '../../../core/base.repository'
 
 export interface WalletUpdateInput {

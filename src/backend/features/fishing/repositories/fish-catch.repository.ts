@@ -1,4 +1,4 @@
-import type { FishCatch, FishSpecies } from '@prisma/client'
+import type { FishCatch, FishSpecies } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export type FishCatchWithSpecies = FishCatch & { species: FishSpecies }

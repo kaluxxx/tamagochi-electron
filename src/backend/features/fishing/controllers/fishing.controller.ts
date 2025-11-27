@@ -1,4 +1,4 @@
-import type { FishSpecies, FishingRod, FishingBait, FishingLocation, FishingUpgrade, FishingProgress } from '@prisma/client'
+import type { FishSpecies, FishingRod, FishingBait, FishingLocation, FishingUpgrade, FishingProgress } from '@/generated/prisma'
 import {
   fishSpeciesRepository,
   fishCatchRepository,

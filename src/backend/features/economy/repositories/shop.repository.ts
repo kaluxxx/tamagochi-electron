@@ -1,4 +1,4 @@
-import type { Item, Inventory } from '@prisma/client'
+import type { Item, Inventory } from '@/generated/prisma'
 import { ReadOnlyRepository } from '../../../core/base.repository'
 
 export type InventoryWithItem = Inventory & { item: Item }

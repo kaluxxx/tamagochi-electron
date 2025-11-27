@@ -1,4 +1,4 @@
-import type { AnimalType } from '@prisma/client'
+import type { AnimalType } from '@/generated/prisma'
 import { animalTypeRepository } from '../repositories'
 import { NotFoundError } from '../../../core/errors'
 

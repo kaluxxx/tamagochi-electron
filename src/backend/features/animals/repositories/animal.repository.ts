@@ -1,4 +1,4 @@
-import type { Animal, AnimalType } from '@prisma/client'
+import type { Animal, AnimalType } from '@/generated/prisma'
 import { BaseRepository } from '@backend/core'
 
 export type AnimalWithType = Animal & { type: AnimalType }

@@ -1,4 +1,4 @@
-import type { MinigameScore } from '@prisma/client'
+import type { MinigameScore } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export interface MinigameScoreCreateInput {

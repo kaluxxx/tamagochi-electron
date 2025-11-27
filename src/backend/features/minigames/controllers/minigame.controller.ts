@@ -1,4 +1,4 @@
-import type { MinigameScore, ClickerUpgrade } from '@prisma/client'
+import type { MinigameScore, ClickerUpgrade } from '@/generated/prisma'
 import { minigameScoreRepository, clickerUpgradeRepository } from '../repositories'
 import {
   CLICKER_UPGRADE_CONFIG,

@@ -1,4 +1,4 @@
-import type { AnimalType } from '@prisma/client'
+import type { AnimalType } from '@/generated/prisma'
 import { ReadOnlyRepository } from '../../../core/base.repository'
 
 export class AnimalTypeRepository extends ReadOnlyRepository<AnimalType> {

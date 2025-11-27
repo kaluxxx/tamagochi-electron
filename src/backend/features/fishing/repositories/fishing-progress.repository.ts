@@ -1,4 +1,4 @@
-import type { FishingProgress } from '@prisma/client'
+import type { FishingProgress } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export const FISHING_XP_CONFIG = {

@@ -13,6 +13,7 @@ const sharedAliases = {
 }
 
 export default defineConfig({
+    base: './',
     plugins: [
         tanstackRouter({
             routesDirectory: 'src/frontend/routes',
@@ -34,7 +35,19 @@ export default defineConfig({
                             fileName: () => 'main.js'
                         },
                         rollupOptions: {
-                            external: ['electron', '@prisma/client', '.prisma/client']
+                            external: (id) => {
+                                if (id === 'electron') return true
+                                if (id.includes('generated/prisma')) return true
+                                return false
+                            },
+                            output: {
+                                paths: (id) => {
+                                    if (id.includes('generated/prisma')) {
+                                        return '../src/generated/prisma'
+                                    }
+                                    return id
+                                }
+                            }
                         }
                     }
                 }
@@ -71,6 +84,6 @@ export default defineConfig({
         port: 5173
     },
     optimizeDeps: {
-        exclude: ['@prisma/client', '.prisma/client']
+        exclude: []
     }
 })

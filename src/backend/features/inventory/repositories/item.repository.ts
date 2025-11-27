@@ -1,4 +1,4 @@
-import type { Item } from '@prisma/client'
+import type { Item } from '@/generated/prisma'
 import { ReadOnlyRepository } from '../../../core/base.repository'
 
 export class ItemRepository extends ReadOnlyRepository<Item> {
