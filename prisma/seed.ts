@@ -1,21 +1,21 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 
-const prisma = new PrismaClient()
-
-async function main() {
+/**
+ * Seed la base de données avec les données initiales
+ * Peut être appelé via `npx prisma db seed` ou importé directement
+ */
+export async function seedDatabase(prismaClient: PrismaClient): Promise<void> {
   console.log('🌱 Seeding database...')
 
-  // Clear existing data
-  await prisma.minigameScore.deleteMany()
-  await prisma.wallet.deleteMany()
-  await prisma.inventory.deleteMany()
-  await prisma.action.deleteMany()
-  await prisma.animal.deleteMany()
-  await prisma.item.deleteMany()
-  await prisma.animalType.deleteMany()
+  // Vérifier si déjà seedé
+  const existingTypes = await prismaClient.animalType.count()
+  if (existingTypes > 0) {
+    console.log('Database already seeded, skipping...')
+    return
+  }
 
   // Create AnimalTypes
-  const cat = await prisma.animalType.create({
+  const cat = await prismaClient.animalType.create({
     data: {
       name: 'cat',
       displayName: 'Chat',
@@ -27,7 +27,7 @@ async function main() {
     },
   })
 
-  const dog = await prisma.animalType.create({
+  const dog = await prismaClient.animalType.create({
     data: {
       name: 'dog',
       displayName: 'Chien',
@@ -39,7 +39,7 @@ async function main() {
     },
   })
 
-  const alien = await prisma.animalType.create({
+  const alien = await prismaClient.animalType.create({
     data: {
       name: 'alien',
       displayName: 'Alien',
@@ -54,7 +54,7 @@ async function main() {
   console.log('✅ Animal types created:', { cat, dog, alien })
 
   // Create Food Items (with prices)
-  const steak = await prisma.item.create({
+  const steak = await prismaClient.item.create({
     data: {
       name: 'Steak',
       type: 'food',
@@ -69,7 +69,7 @@ async function main() {
     },
   })
 
-  const milk = await prisma.item.create({
+  const milk = await prismaClient.item.create({
     data: {
       name: 'Lait',
       type: 'food',
@@ -84,7 +84,7 @@ async function main() {
     },
   })
 
-  const apple = await prisma.item.create({
+  const apple = await prismaClient.item.create({
     data: {
       name: 'Pomme',
       type: 'food',
@@ -100,7 +100,7 @@ async function main() {
   })
 
   // Create Toy Items (with prices)
-  const ball = await prisma.item.create({
+  const ball = await prismaClient.item.create({
     data: {
       name: 'Balle',
       type: 'toy',
@@ -115,7 +115,7 @@ async function main() {
     },
   })
 
-  const plush = await prisma.item.create({
+  const plush = await prismaClient.item.create({
     data: {
       name: 'Peluche',
       type: 'toy',
@@ -130,7 +130,7 @@ async function main() {
     },
   })
 
-  const gameConsole = await prisma.item.create({
+  const gameConsole = await prismaClient.item.create({
     data: {
       name: 'Console',
       type: 'toy',
@@ -146,7 +146,7 @@ async function main() {
   })
 
   // Create Medicine Items (with prices)
-  const vitamin = await prisma.item.create({
+  const vitamin = await prismaClient.item.create({
     data: {
       name: 'Vitamine',
       type: 'medicine',
@@ -161,7 +161,7 @@ async function main() {
     },
   })
 
-  const vaccine = await prisma.item.create({
+  const vaccine = await prismaClient.item.create({
     data: {
       name: 'Vaccin',
       type: 'medicine',
@@ -176,7 +176,7 @@ async function main() {
     },
   })
 
-  const bandage = await prisma.item.create({
+  const bandage = await prismaClient.item.create({
     data: {
       name: 'Bandage',
       type: 'medicine',
@@ -201,7 +201,7 @@ async function main() {
   const allItems = [steak, milk, apple, ball, plush, gameConsole, vitamin, vaccine, bandage]
 
   for (const item of allItems) {
-    await prisma.inventory.create({
+    await prismaClient.inventory.create({
       data: {
         itemId: item.id,
         quantity: 10 // 10 of each item to start
@@ -212,7 +212,7 @@ async function main() {
   console.log('✅ Inventory created with 10 of each item')
 
   // Create initial Wallet
-  await prisma.wallet.create({
+  await prismaClient.wallet.create({
     data: {
       coins: 100,
       lastPassiveGain: new Date(),
@@ -225,17 +225,17 @@ async function main() {
   console.log('🎣 Seeding fishing data...')
 
   // Clear existing fishing data
-  await prisma.fishCatch.deleteMany()
-  await prisma.fishSpecies.deleteMany()
-  await prisma.fishingRod.deleteMany()
-  await prisma.fishingBait.deleteMany()
-  await prisma.fishingLocation.deleteMany()
-  await prisma.fishingUpgrade.deleteMany()
-  await prisma.fishingProgress.deleteMany()
+  await prismaClient.fishCatch.deleteMany()
+  await prismaClient.fishSpecies.deleteMany()
+  await prismaClient.fishingRod.deleteMany()
+  await prismaClient.fishingBait.deleteMany()
+  await prismaClient.fishingLocation.deleteMany()
+  await prismaClient.fishingUpgrade.deleteMany()
+  await prismaClient.fishingProgress.deleteMany()
 
   // Create Fishing Locations (needed first for fish location references)
   const locations = await Promise.all([
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'pond',
         displayName: 'Étang',
@@ -248,7 +248,7 @@ async function main() {
         unlockOrder: 0,
       },
     }),
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'river',
         displayName: 'Rivière',
@@ -261,7 +261,7 @@ async function main() {
         unlockOrder: 1,
       },
     }),
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'lake',
         displayName: 'Lac',
@@ -274,7 +274,7 @@ async function main() {
         unlockOrder: 2,
       },
     }),
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'coast',
         displayName: 'Côte',
@@ -287,7 +287,7 @@ async function main() {
         unlockOrder: 3,
       },
     }),
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'deep_sea',
         displayName: 'Haute Mer',
@@ -300,7 +300,7 @@ async function main() {
         unlockOrder: 4,
       },
     }),
-    prisma.fishingLocation.create({
+    prismaClient.fishingLocation.create({
       data: {
         name: 'grotto',
         displayName: 'Grotte Mystique',
@@ -320,7 +320,7 @@ async function main() {
 
   // Create Fishing Baits
   await Promise.all([
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'worm',
         displayName: 'Ver',
@@ -334,7 +334,7 @@ async function main() {
         quantity: 10,
       },
     }),
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'bread',
         displayName: 'Pain',
@@ -348,7 +348,7 @@ async function main() {
         quantity: 10,
       },
     }),
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'shrimp',
         displayName: 'Crevette',
@@ -362,7 +362,7 @@ async function main() {
         quantity: 5,
       },
     }),
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'silver_lure',
         displayName: 'Leurre Argent',
@@ -376,7 +376,7 @@ async function main() {
         quantity: 2,
       },
     }),
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'gold_lure',
         displayName: 'Leurre Or',
@@ -390,7 +390,7 @@ async function main() {
         quantity: 1,
       },
     }),
-    prisma.fishingBait.create({
+    prismaClient.fishingBait.create({
       data: {
         name: 'legendary_bait',
         displayName: 'Appât Légendaire',
@@ -410,7 +410,7 @@ async function main() {
 
   // Create Fishing Rods
   await Promise.all([
-    prisma.fishingRod.create({
+    prismaClient.fishingRod.create({
       data: {
         name: 'bamboo',
         displayName: 'Canne Bambou',
@@ -424,7 +424,7 @@ async function main() {
         isEquipped: true,
       },
     }),
-    prisma.fishingRod.create({
+    prismaClient.fishingRod.create({
       data: {
         name: 'wooden',
         displayName: 'Canne Bois',
@@ -438,7 +438,7 @@ async function main() {
         isEquipped: false,
       },
     }),
-    prisma.fishingRod.create({
+    prismaClient.fishingRod.create({
       data: {
         name: 'fiberglass',
         displayName: 'Canne Fibre',
@@ -452,7 +452,7 @@ async function main() {
         isEquipped: false,
       },
     }),
-    prisma.fishingRod.create({
+    prismaClient.fishingRod.create({
       data: {
         name: 'carbon',
         displayName: 'Canne Carbone',
@@ -466,7 +466,7 @@ async function main() {
         isEquipped: false,
       },
     }),
-    prisma.fishingRod.create({
+    prismaClient.fishingRod.create({
       data: {
         name: 'master',
         displayName: 'Canne Master',
@@ -487,7 +487,7 @@ async function main() {
   // Create Fish Species (20 total)
   // Common (6)
   const commonFish = await Promise.all([
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'sardine',
         displayName: 'Sardine',
@@ -502,7 +502,7 @@ async function main() {
         description: 'Un petit poisson argenté, très commun.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'trout',
         displayName: 'Truite',
@@ -517,7 +517,7 @@ async function main() {
         description: 'Un poisson d\'eau douce très apprécié.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'carp',
         displayName: 'Carpe',
@@ -532,7 +532,7 @@ async function main() {
         description: 'Un gros poisson paisible qui aime le pain.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'anchovy',
         displayName: 'Anchois',
@@ -547,7 +547,7 @@ async function main() {
         description: 'Un tout petit poisson de mer très abondant.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'mackerel',
         displayName: 'Maquereau',
@@ -562,7 +562,7 @@ async function main() {
         description: 'Un poisson rapide aux reflets bleutés.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'perch',
         displayName: 'Perche',
@@ -581,7 +581,7 @@ async function main() {
 
   // Uncommon (6)
   const uncommonFish = await Promise.all([
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'bass',
         displayName: 'Bar',
@@ -596,7 +596,7 @@ async function main() {
         description: 'Un poisson combatif très recherché.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'salmon',
         displayName: 'Saumon',
@@ -611,7 +611,7 @@ async function main() {
         description: 'Le roi des rivières, délicieux et vaillant.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'cod',
         displayName: 'Morue',
@@ -626,7 +626,7 @@ async function main() {
         description: 'Un poisson des eaux froides très nutritif.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'pike',
         displayName: 'Brochet',
@@ -641,7 +641,7 @@ async function main() {
         description: 'Un prédateur féroce d\'eau douce.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'catfish',
         displayName: 'Silure',
@@ -656,7 +656,7 @@ async function main() {
         description: 'Un géant moustache des profondeurs.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'flounder',
         displayName: 'Sole',
@@ -675,7 +675,7 @@ async function main() {
 
   // Rare (4)
   const rareFish = await Promise.all([
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'tuna',
         displayName: 'Thon',
@@ -690,7 +690,7 @@ async function main() {
         description: 'Un torpille des mers, rapide et puissant.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'swordfish',
         displayName: 'Espadon',
@@ -705,7 +705,7 @@ async function main() {
         description: 'Un guerrier des océans au nez tranchant.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'eel',
         displayName: 'Anguille',
@@ -720,7 +720,7 @@ async function main() {
         description: 'Un serpent des eaux, glissant et mystérieux.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'anglerfish',
         displayName: 'Baudroie',
@@ -739,7 +739,7 @@ async function main() {
 
   // Epic (3)
   const epicFish = await Promise.all([
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'giant_squid',
         displayName: 'Calmar Géant',
@@ -754,7 +754,7 @@ async function main() {
         description: 'Une terreur tentaculaire des profondeurs.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'shark',
         displayName: 'Requin',
@@ -769,7 +769,7 @@ async function main() {
         description: 'L\'apex prédateur des océans.',
       },
     }),
-    prisma.fishSpecies.create({
+    prismaClient.fishSpecies.create({
       data: {
         name: 'manta_ray',
         displayName: 'Raie Manta',
@@ -787,7 +787,7 @@ async function main() {
   ])
 
   // Legendary (1)
-  const legendaryFish = await prisma.fishSpecies.create({
+  const legendaryFish = await prismaClient.fishSpecies.create({
     data: {
       name: 'golden_koi',
       displayName: 'Koï Doré',
@@ -814,7 +814,7 @@ async function main() {
       return fishLocations.includes(location.id)
     })
 
-    await prisma.fishingLocation.update({
+    await prismaClient.fishingLocation.update({
       where: { id: location.id },
       data: {
         availableFish: JSON.stringify(fishInLocation.map(f => f.id)),
@@ -826,16 +826,16 @@ async function main() {
 
   // Create Fishing Upgrades (all at level 0)
   await Promise.all([
-    prisma.fishingUpgrade.create({
+    prismaClient.fishingUpgrade.create({
       data: { type: 'luck', level: 0 },
     }),
-    prisma.fishingUpgrade.create({
+    prismaClient.fishingUpgrade.create({
       data: { type: 'reflexes', level: 0 },
     }),
-    prisma.fishingUpgrade.create({
+    prismaClient.fishingUpgrade.create({
       data: { type: 'value', level: 0 },
     }),
-    prisma.fishingUpgrade.create({
+    prismaClient.fishingUpgrade.create({
       data: { type: 'bait_efficiency', level: 0 },
     }),
   ])
@@ -843,7 +843,7 @@ async function main() {
   console.log('✅ Fishing upgrades initialized')
 
   // Create Fishing Progress
-  await prisma.fishingProgress.create({
+  await prismaClient.fishingProgress.create({
     data: {
       level: 1,
       experience: 0,
@@ -858,11 +858,16 @@ async function main() {
   console.log('🎉 Seeding completed!')
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Seeding failed:', e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+// Mode standalone pour `npx prisma db seed`
+/* eslint-disable no-undef */
+if (require.main === module) {
+  const prisma = new PrismaClient()
+  seedDatabase(prisma)
+    .catch((e) => {
+      console.error('❌ Seeding failed:', e)
+      process.exit(1)
+    })
+    .finally(async () => {
+      await prisma.$disconnect()
+    })
+}

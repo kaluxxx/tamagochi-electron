@@ -11,8 +11,8 @@
   ],
   "extraResources": [
     {
-      "from": "prisma/prisma/tamagotchi.db",
-      "to": "db/tamagotchi.db"
+      "from": "prisma/migrations",
+      "to": "prisma/migrations"
     }
   ],
   "win": {
