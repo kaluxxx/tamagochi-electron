@@ -1,4 +1,4 @@
-import type { Item } from '@prisma/client'
+import type { Item } from '@/generated/prisma'
 import { shopRepository, type InventoryWithItem } from '../repositories'
 import { walletRepository } from '../repositories'
 import { NotFoundError, InsufficientFundsError } from '../../../core/errors'

@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
-import Module from 'module'
 
 let prisma: PrismaClient
 
@@ -16,53 +15,43 @@ function getDbPath(): string {
   return path.join(process.cwd(), 'prisma', 'prisma', 'tamagotchi.db')
 }
 
-function setupPrismaForPackagedApp() {
-  if (app.isPackaged) {
-    // Chemin vers les modules Prisma dans extraResources
-    const prismaClientPath = path.join(process.resourcesPath, 'prisma-client')
+function ensureDatabase(): void {
+  if (!app.isPackaged) return
 
-    // Ajouter le chemin aux chemins de recherche de modules
-    type ResolveFilename = (
-      request: string,
-      parent: Module | null,
-      isMain: boolean,
-      options?: Record<string, unknown>
-    ) => string
+  const userDbPath = getDbPath()
 
-    const originalResolveFilename = (Module as unknown as { _resolveFilename: ResolveFilename })
-      ._resolveFilename
-
-    ;(Module as unknown as { _resolveFilename: ResolveFilename })._resolveFilename = function (
-      request: string,
-      parent: Module | null,
-      isMain: boolean,
-      options?: Record<string, unknown>
-    ) {
-      // Rediriger les imports Prisma vers extraResources
-      if (request === '@prisma/client' || request.startsWith('@prisma/client/')) {
-        const newPath = path.join(prismaClientPath, request)
-        if (fs.existsSync(newPath) || fs.existsSync(newPath + '.js')) {
-          return originalResolveFilename.call(this, newPath, parent, isMain, options)
-        }
-      }
-      if (request === '.prisma/client' || request.startsWith('.prisma/client/')) {
-        const newPath = path.join(prismaClientPath, request)
-        if (fs.existsSync(newPath) || fs.existsSync(newPath + '.js')) {
-          return originalResolveFilename.call(this, newPath, parent, isMain, options)
-        }
-      }
-      return originalResolveFilename.call(this, request, parent, isMain, options)
-    }
+  // Si la DB existe déjà dans userData, ne rien faire
+  if (fs.existsSync(userDbPath)) {
+    console.log('Database already exists in userData')
+    return
   }
 
-  // Configurer DATABASE_URL
-  const dbPath = getDbPath()
-  process.env.DATABASE_URL = `file:${dbPath}`
+  // Copier la DB pré-seedée depuis les ressources
+  const sourceDbPath = path.join(process.resourcesPath, 'db', 'tamagotchi.db')
+
+  if (fs.existsSync(sourceDbPath)) {
+    // Créer le dossier parent si nécessaire
+    const userDataPath = path.dirname(userDbPath)
+    if (!fs.existsSync(userDataPath)) {
+      fs.mkdirSync(userDataPath, { recursive: true })
+    }
+
+    fs.copyFileSync(sourceDbPath, userDbPath)
+    console.log('Database copied from resources to userData')
+  } else {
+    console.error('Source database not found in resources:', sourceDbPath)
+  }
 }
 
-export function getPrismaClient() {
+export function getPrismaClient(): PrismaClient {
   if (!prisma) {
-    setupPrismaForPackagedApp()
+    // S'assurer que la DB existe (copie si nécessaire)
+    ensureDatabase()
+
+    // Configurer DATABASE_URL avant de créer le client
+    const dbPath = getDbPath()
+    process.env.DATABASE_URL = `file:${dbPath}`
+
     prisma = new PrismaClient({
       log: ['error', 'warn']
     })

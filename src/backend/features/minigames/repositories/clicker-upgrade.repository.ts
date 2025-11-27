@@ -1,4 +1,4 @@
-import type { ClickerUpgrade } from '@prisma/client'
+import type { ClickerUpgrade } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export const CLICKER_UPGRADE_CONFIG = {
@@ -6,28 +6,19 @@ export const CLICKER_UPGRADE_CONFIG = {
     baseCost: 50,
     costMultiplier: 1.5,
     baseEffect: 1,
-    effectPerLevel: 0.5,
-    displayName: 'Multiplicateur',
-    description: 'Multiplie les pieces gagnees',
-    icon: '/sprites/upgrades/multiplier.svg'
+    effectPerLevel: 0.5
   },
   time_bonus: {
     baseCost: 30,
     costMultiplier: 1.4,
     baseEffect: 10,
-    effectPerLevel: 5,
-    displayName: 'Temps Bonus',
-    description: '+5 secondes par niveau',
-    icon: '/sprites/upgrades/time.svg'
+    effectPerLevel: 5
   },
   auto_clicker: {
     baseCost: 100,
     costMultiplier: 1.8,
     baseEffect: 0,
-    effectPerLevel: 1,
-    displayName: 'Auto-Clicker',
-    description: '+1 clic auto par seconde',
-    icon: '/sprites/upgrades/auto.svg'
+    effectPerLevel: 1
   }
 } as const
 

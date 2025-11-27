@@ -3,7 +3,7 @@
  * All repositories should extend this class
  */
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import { getPrismaClient } from '../database/prisma'
 
 export abstract class BaseRepository<T, CreateInput, UpdateInput> {

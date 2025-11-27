@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@frontend/shared/ui/card'
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
-import { getAnimalSprite, getStatSprite } from '@frontend/shared/utils/sprite-loader'
+import { getAnimalSprite, getStatSprite, getUISprite } from '@frontend/shared/utils/sprite-loader'
 import { cn } from '@frontend/shared/lib/utils'
 import { StatItem } from './stat-item'
 import { formatAge, getMoodFromStats, getTypeColor } from '../utils/animal-helpers'
@@ -55,7 +55,7 @@ export function AnimalCard({ animal, onClick }: AnimalCardProps) {
               </span>
               {!animal.isAlive && (
                 <SpriteImage
-                  src="/sprites/ui/dead-badge.svg"
+                  src={getUISprite('dead-badge')}
                   alt="Décédé"
                   pixelated
                   className="w-6 h-6"

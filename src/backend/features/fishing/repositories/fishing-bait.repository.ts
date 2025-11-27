@@ -1,4 +1,4 @@
-import type { FishingBait } from '@prisma/client'
+import type { FishingBait } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export class FishingBaitRepository {

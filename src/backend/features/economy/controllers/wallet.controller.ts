@@ -1,4 +1,4 @@
-import type { Wallet } from '@prisma/client'
+import type { Wallet } from '@/generated/prisma'
 import { walletRepository } from '../repositories'
 import { InsufficientFundsError } from '../../../core/errors'
 

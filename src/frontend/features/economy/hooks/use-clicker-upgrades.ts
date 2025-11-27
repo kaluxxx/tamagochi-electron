@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { economyApi } from '../services/economy-api'
 import { audioManager } from '@frontend/features/audio/services/audio-manager'
+import { getUpgradeSprite } from '@frontend/shared/utils/sprite-loader'
 import type { ClickerUpgrade, ClickerGameStats, ClickerUpgradeType } from '../types'
 
 // Configuration des upgrades (doit matcher database.ts)
@@ -12,7 +13,7 @@ export const CLICKER_UPGRADE_CONFIG = {
     effectPerLevel: 0.5,
     displayName: 'Multiplicateur',
     description: 'Multiplie les pieces gagnees',
-    icon: '/sprites/upgrades/multiplier.svg'
+    icon: getUpgradeSprite('multiplier')
   },
   time_bonus: {
     baseCost: 30,
@@ -21,7 +22,7 @@ export const CLICKER_UPGRADE_CONFIG = {
     effectPerLevel: 5,
     displayName: 'Temps Bonus',
     description: '+5 secondes par niveau',
-    icon: '/sprites/upgrades/time.svg'
+    icon: getUpgradeSprite('time')
   },
   auto_clicker: {
     baseCost: 100,
@@ -30,7 +31,7 @@ export const CLICKER_UPGRADE_CONFIG = {
     effectPerLevel: 1,
     displayName: 'Auto-Clicker',
     description: '+1 clic auto par seconde',
-    icon: '/sprites/upgrades/auto.svg'
+    icon: getUpgradeSprite('auto')
   }
 } as const
 

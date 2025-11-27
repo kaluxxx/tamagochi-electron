@@ -1,5 +1,5 @@
 import { SpriteImage } from '@frontend/shared/ui/sprite-image'
-import { getAnimalSprite, calculateMood } from '@frontend/shared/utils/sprite-loader'
+import { getAnimalSprite, calculateMood, getUISprite } from '@frontend/shared/utils/sprite-loader'
 import { cn } from '@frontend/shared/lib/utils'
 import { getAnimationClass } from '../utils/animation-helpers'
 import { ActionIndicator } from './action-indicator'
@@ -58,7 +58,7 @@ export function AnimalView({
     <div className="flex-1 flex flex-col">
       <div
         className="flex-1 border-4 border-black pixel-panel relative overflow-hidden flex items-center justify-center"
-        style={{ backgroundImage: "url('/sprites/ui/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+        style={{ backgroundImage: `url('${getUISprite('background').replace('.svg', '.png')}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         {/* Animal Sprite - animation selon l'état */}
         <div className="relative">

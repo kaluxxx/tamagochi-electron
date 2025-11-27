@@ -1,4 +1,4 @@
-import type { FishingUpgrade } from '@prisma/client'
+import type { FishingUpgrade } from '@/generated/prisma'
 import { getPrismaClient } from '../../../database/prisma'
 
 export const FISHING_UPGRADE_CONFIG = {
@@ -8,8 +8,7 @@ export const FISHING_UPGRADE_CONFIG = {
     baseEffect: 0,
     effectPerLevel: 5,
     displayName: 'Chanceux',
-    description: '+5% chance poissons rares par niveau',
-    icon: '/sprites/fishing/upgrades/luck.svg'
+    description: '+5% chance poissons rares par niveau'
   },
   reflexes: {
     baseCost: 75,
@@ -17,8 +16,7 @@ export const FISHING_UPGRADE_CONFIG = {
     baseEffect: 0,
     effectPerLevel: 0.1,
     displayName: 'Réflexes',
-    description: '+0.1s temps de réaction par niveau',
-    icon: '/sprites/fishing/upgrades/reflexes.svg'
+    description: '+0.1s temps de réaction par niveau'
   },
   value: {
     baseCost: 80,
@@ -26,8 +24,7 @@ export const FISHING_UPGRADE_CONFIG = {
     baseEffect: 0,
     effectPerLevel: 10,
     displayName: 'Marchand',
-    description: '+10% valeur des poissons par niveau',
-    icon: '/sprites/fishing/upgrades/value.svg'
+    description: '+10% valeur des poissons par niveau'
   },
   bait_efficiency: {
     baseCost: 150,
@@ -35,8 +32,7 @@ export const FISHING_UPGRADE_CONFIG = {
     baseEffect: 0,
     effectPerLevel: 1,
     displayName: 'Maître Appât',
-    description: '+1 utilisation par appât par niveau',
-    icon: '/sprites/fishing/upgrades/bait.svg'
+    description: '+1 utilisation par appât par niveau'
   }
 } as const
 

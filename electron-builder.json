@@ -7,17 +7,12 @@
   "files": [
     "dist/**/*",
     "dist-electron/**/*",
-    "prisma/schema.prisma",
-    "prisma/migrations/**/*"
+    "src/generated/prisma/**/*"
   ],
   "extraResources": [
     {
-      "from": "node_modules/.prisma",
-      "to": "prisma-client/.prisma"
-    },
-    {
-      "from": "node_modules/@prisma/client",
-      "to": "prisma-client/@prisma/client"
+      "from": "prisma/prisma/tamagotchi.db",
+      "to": "db/tamagotchi.db"
     }
   ],
   "win": {
