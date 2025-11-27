@@ -859,8 +859,12 @@ export async function seedDatabase(prismaClient: PrismaClient): Promise<void> {
 }
 
 // Mode standalone pour `npx prisma db seed`
+// Ne s'exécute QUE si lancé directement via tsx/node, PAS dans Electron
 /* eslint-disable no-undef */
-if (require.main === module) {
+const isRunningInElectron = !!(process.versions && process.versions.electron)
+const isMainModule = require.main === module
+
+if (isMainModule && !isRunningInElectron) {
   const prisma = new PrismaClient()
   seedDatabase(prisma)
     .catch((e) => {

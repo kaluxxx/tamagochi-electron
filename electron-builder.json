@@ -11,8 +11,8 @@
   ],
   "extraResources": [
     {
-      "from": "prisma/migrations",
-      "to": "prisma/migrations"
+      "from": "prisma/template.db",
+      "to": "prisma/template.db"
     }
   ],
   "win": {

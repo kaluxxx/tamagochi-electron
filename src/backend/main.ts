@@ -3,6 +3,14 @@ import { app, BrowserWindow, Notification, Tray, Menu, nativeImage } from 'elect
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+// Set DATABASE_URL early, before Prisma module loads
+// This is needed because Prisma reads env vars at module load time
+const userDataPath = app.getPath('userData')
+const dbPath = app.isPackaged
+  ? path.join(userDataPath, 'tamagotchi.db')
+  : path.join(process.cwd(), 'prisma', 'prisma', 'tamagotchi.db')
+process.env.DATABASE_URL = `file:${dbPath}`
+
 // Database
 import { initializeDatabase, closeDatabase } from './database/prisma'
 

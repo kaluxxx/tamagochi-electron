@@ -2,7 +2,6 @@ import { PrismaClient } from '@/generated/prisma'
 import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
-import { seedDatabase } from '../../../prisma/seed'
 
 let prisma: PrismaClient
 
@@ -13,19 +12,15 @@ function getDbPath(): string {
     return path.join(userDataPath, 'tamagotchi.db')
   }
   // En dev, utiliser le chemin du projet
-  return path.join(process.cwd(), 'prisma', 'prisma', 'tamagotchi.db')
+  return path.join(process.cwd(), 'prisma', 'tamagotchi.db')
 }
 
-function getMigrationsPath(): string {
+function getTemplateDbPath(): string {
   if (app.isPackaged) {
-    return path.join(process.resourcesPath, 'prisma', 'migrations')
+    return path.join(process.resourcesPath, 'prisma', 'template.db')
   }
-  return path.join(process.cwd(), 'prisma', 'migrations')
-}
-
-function isNewDatabase(): boolean {
-  const dbPath = getDbPath()
-  return !fs.existsSync(dbPath)
+  // En dev, la template est au même endroit que la DB
+  return path.join(process.cwd(), 'prisma', 'template.db')
 }
 
 function ensureDbDirectory(): void {
@@ -37,56 +32,34 @@ function ensureDbDirectory(): void {
 }
 
 /**
- * Lit et exécute les fichiers SQL des migrations dans l'ordre
+ * Copie la DB template vers userData si elle n'existe pas
  */
-async function runMigrations(client: PrismaClient): Promise<void> {
-  const migrationsPath = getMigrationsPath()
+function copyTemplateDbIfNeeded(): void {
+  const dbPath = getDbPath()
+  const templatePath = getTemplateDbPath()
 
-  if (!fs.existsSync(migrationsPath)) {
-    console.error('Migrations folder not found:', migrationsPath)
-    throw new Error('Migrations folder not found')
+  // Si la DB existe déjà et n'est pas vide, ne rien faire
+  if (fs.existsSync(dbPath)) {
+    const stats = fs.statSync(dbPath)
+    if (stats.size > 0) {
+      console.log('Database already exists, skipping template copy')
+      return
+    }
+    // Supprimer le fichier vide/corrompu
+    fs.unlinkSync(dbPath)
   }
 
-  // Lire les dossiers de migration dans l'ordre chronologique
-  const migrationDirs = fs.readdirSync(migrationsPath)
-    .filter(dir => fs.statSync(path.join(migrationsPath, dir)).isDirectory())
-    .sort() // Les noms commencent par timestamp, donc le tri fonctionne
-
-  console.log(`Found ${migrationDirs.length} migrations to apply`)
-
-  for (const migrationDir of migrationDirs) {
-    const sqlPath = path.join(migrationsPath, migrationDir, 'migration.sql')
-
-    if (!fs.existsSync(sqlPath)) {
-      console.warn(`No migration.sql in ${migrationDir}, skipping`)
-      continue
-    }
-
-    console.log(`Applying migration: ${migrationDir}`)
-    const sql = fs.readFileSync(sqlPath, 'utf-8')
-
-    // Splitter le SQL par statements (séparés par ;)
-    // Filtrer les lignes vides et commentaires
-    const statements = sql
-      .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'))
-
-    for (const statement of statements) {
-      try {
-        await client.$executeRawUnsafe(statement)
-      } catch (error) {
-        // Ignorer les erreurs "table already exists" pour les migrations
-        const errorMessage = String(error)
-        if (!errorMessage.includes('already exists')) {
-          console.error(`Error executing SQL: ${statement.substring(0, 100)}...`)
-          throw error
-        }
-      }
-    }
+  // Vérifier que la template existe
+  if (!fs.existsSync(templatePath)) {
+    throw new Error(`Template database not found at: ${templatePath}`)
   }
 
-  console.log('All migrations applied successfully')
+  // Copier la template
+  console.log('Copying template database...')
+  console.log('  From:', templatePath)
+  console.log('  To:', dbPath)
+  fs.copyFileSync(templatePath, dbPath)
+  console.log('Template database copied successfully')
 }
 
 export function getPrismaClient(): PrismaClient {
@@ -106,19 +79,26 @@ export function getPrismaClient(): PrismaClient {
 }
 
 export async function initializeDatabase() {
-  const needsMigrations = isNewDatabase()
+  const dbPath = getDbPath()
+  const templatePath = getTemplateDbPath()
+
+  console.log('=== Database Initialization ===')
+  console.log('DB Path:', dbPath)
+  console.log('Template Path:', templatePath)
+  console.log('DB exists:', fs.existsSync(dbPath))
+  console.log('Template exists:', fs.existsSync(templatePath))
 
   try {
+    // S'assurer que le dossier existe
+    ensureDbDirectory()
+
+    // Copier la template si nécessaire (premier lancement)
+    copyTemplateDbIfNeeded()
+
+    // Connecter le client
     const client = getPrismaClient()
     await client.$connect()
     console.log('Database connected successfully')
-
-    // Premier lancement : appliquer les migrations et seed
-    if (needsMigrations) {
-      console.log('First launch detected - running migrations and seed...')
-      await runMigrations(client)
-      await seedDatabase(client)
-    }
   } catch (error) {
     console.error('Failed to initialize database:', error)
     throw error
