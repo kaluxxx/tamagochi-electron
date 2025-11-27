@@ -27,6 +27,8 @@ export default [
         React: 'readonly',
         setInterval: 'readonly',
         clearInterval: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
       },
     },
     plugins: {
@@ -54,6 +56,7 @@ export default [
       'dist/',
       'dist-electron/',
       'release/',
+      'src/generated/',
       '*.config.js',
       '*.config.ts',
     ],

@@ -1,67 +1,62 @@
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
-  <!-- Chat Dead - Décédé en gris avec yeux X -->
+  <!-- Chat Dead - Style fantôme avec auréole -->
 
-  <!-- Oreilles tombantes -->
-  <rect x="7" y="9" width="4" height="5" fill="#7F8C8D"/>
-  <rect x="8" y="10" width="2" height="3" fill="#95A5A6"/>
-  <rect x="21" y="9" width="4" height="5" fill="#7F8C8D"/>
-  <rect x="22" y="10" width="2" height="3" fill="#95A5A6"/>
+  <!-- Auréole dorée -->
+  <rect x="13" y="4" width="6" height="1" fill="#FFD700"/>
+  <rect x="12" y="5" width="1" height="1" fill="#FFD700"/>
+  <rect x="19" y="5" width="1" height="1" fill="#FFD700"/>
+  <rect x="12" y="6" width="1" height="1" fill="#FFA500"/>
+  <rect x="19" y="6" width="1" height="1" fill="#FFA500"/>
+  <rect x="13" y="7" width="6" height="1" fill="#FFD700"/>
 
-  <!-- Ombres oreilles -->
-  <rect x="7" y="13" width="3" height="1" fill="#6C7A89"/>
-  <rect x="22" y="13" width="3" height="1" fill="#6C7A89"/>
+  <!-- Oreilles fantôme (tombantes, transparentes) -->
+  <rect x="7" y="9" width="4" height="4" fill="#BDC3C7" opacity="0.9"/>
+  <rect x="8" y="10" width="2" height="2" fill="#ECF0F1" opacity="0.8"/>
+  <rect x="21" y="9" width="4" height="4" fill="#BDC3C7" opacity="0.9"/>
+  <rect x="22" y="10" width="2" height="2" fill="#ECF0F1" opacity="0.8"/>
 
-  <!-- Contour tête -->
-  <rect x="9" y="11" width="14" height="2" fill="#6C7A89"/>
-  <rect x="8" y="13" width="16" height="10" fill="#6C7A89"/>
+  <!-- Contour tête fantôme -->
+  <rect x="9" y="11" width="14" height="2" fill="#95A5A6"/>
+  <rect x="8" y="13" width="16" height="9" fill="#95A5A6"/>
 
-  <!-- Tête principale -->
-  <rect x="10" y="12" width="12" height="11" fill="#7F8C8D"/>
+  <!-- Tête principale (fantôme) -->
+  <rect x="10" y="12" width="12" height="10" fill="#BDC3C7"/>
+  <rect x="11" y="13" width="10" height="8" fill="#ECF0F1"/>
 
-  <!-- Face intérieure -->
-  <rect x="11" y="14" width="10" height="7" fill="#95A5A6"/>
-  <rect x="12" y="15" width="8" height="5" fill="#B4BCC2"/>
-
-  <!-- Yeux en X (mort) -->
-  <!-- Oeil gauche X -->
-  <rect x="12" y="16" width="1" height="1" fill="#2C3E50"/>
-  <rect x="13" y="17" width="1" height="1" fill="#2C3E50"/>
-  <rect x="14" y="16" width="1" height="1" fill="#2C3E50"/>
+  <!-- Yeux X morts -->
+  <rect x="12" y="15" width="1" height="1" fill="#2C3E50"/>
+  <rect x="14" y="15" width="1" height="1" fill="#2C3E50"/>
   <rect x="13" y="16" width="1" height="1" fill="#2C3E50"/>
-  <rect x="12" y="18" width="1" height="1" fill="#2C3E50"/>
-  <rect x="14" y="18" width="1" height="1" fill="#2C3E50"/>
+  <rect x="12" y="17" width="1" height="1" fill="#2C3E50"/>
+  <rect x="14" y="17" width="1" height="1" fill="#2C3E50"/>
 
-  <!-- Oeil droit X -->
-  <rect x="17" y="16" width="1" height="1" fill="#2C3E50"/>
-  <rect x="18" y="17" width="1" height="1" fill="#2C3E50"/>
-  <rect x="19" y="16" width="1" height="1" fill="#2C3E50"/>
+  <rect x="17" y="15" width="1" height="1" fill="#2C3E50"/>
+  <rect x="19" y="15" width="1" height="1" fill="#2C3E50"/>
   <rect x="18" y="16" width="1" height="1" fill="#2C3E50"/>
-  <rect x="17" y="18" width="1" height="1" fill="#2C3E50"/>
-  <rect x="19" y="18" width="1" height="1" fill="#2C3E50"/>
+  <rect x="17" y="17" width="1" height="1" fill="#2C3E50"/>
+  <rect x="19" y="17" width="1" height="1" fill="#2C3E50"/>
 
-  <!-- Nez -->
-  <rect x="15" y="18" width="2" height="2" fill="#AAB7C0"/>
-  <rect x="15" y="19" width="1" height="1" fill="#B4BCC2"/>
+  <!-- Nez gris -->
+  <rect x="15" y="18" width="2" height="1" fill="#7F8C8D"/>
 
-  <!-- Bouche neutre/triste -->
-  <rect x="14" y="21" width="4" height="1" fill="#2C3E50"/>
+  <!-- Bouche triste -->
+  <rect x="14" y="20" width="1" height="1" fill="#2C3E50"/>
+  <rect x="15" y="19" width="2" height="1" fill="#2C3E50"/>
+  <rect x="17" y="20" width="1" height="1" fill="#2C3E50"/>
 
-  <!-- Moustaches tombantes -->
-  <rect x="7" y="17" width="3" height="1" fill="#5C6A74"/>
-  <rect x="7" y="19" width="2" height="1" fill="#5C6A74"/>
-  <rect x="22" y="17" width="3" height="1" fill="#5C6A74"/>
-  <rect x="23" y="19" width="2" height="1" fill="#5C6A74"/>
+  <!-- Corps fantôme (fondu vers le bas) -->
+  <rect x="11" y="22" width="10" height="3" fill="#BDC3C7" opacity="0.8"/>
+  <rect x="12" y="25" width="8" height="2" fill="#95A5A6" opacity="0.6"/>
+  <rect x="13" y="27" width="6" height="2" fill="#7F8C8D" opacity="0.4"/>
+  <rect x="14" y="29" width="4" height="2" fill="#6C7A89" opacity="0.2"/>
 
-  <!-- Corps couché -->
-  <rect x="12" y="23" width="8" height="3" fill="#7F8C8D"/>
-  <rect x="13" y="24" width="6" height="1" fill="#95A5A6"/>
+  <!-- Moustaches fantôme -->
+  <rect x="7" y="17" width="3" height="1" fill="#7F8C8D" opacity="0.6"/>
+  <rect x="22" y="17" width="3" height="1" fill="#7F8C8D" opacity="0.6"/>
 
-  <!-- Queue tombante -->
-  <rect x="11" y="24" width="2" height="1" fill="#7F8C8D"/>
-  <rect x="10" y="25" width="2" height="1" fill="#6C7A89"/>
-
-  <!-- Symbole âme (optionnel - petit halo) -->
-  <rect x="15" y="8" width="2" height="1" fill="#FFFFFF" opacity="0.6"/>
-  <rect x="14" y="9" width="1" height="1" fill="#FFFFFF" opacity="0.6"/>
-  <rect x="17" y="9" width="1" height="1" fill="#FFFFFF" opacity="0.6"/>
+  <!-- Petites étoiles/particules d'âme -->
+  <rect x="6" y="12" width="1" height="1" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="25" y="14" width="1" height="1" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="8" y="20" width="1" height="1" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="24" y="18" width="1" height="1" fill="#FFFFFF" opacity="0.6"/>
 </svg>

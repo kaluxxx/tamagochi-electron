@@ -1,0 +1,77 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="shape-rendering: crispEdges;">
+  <!-- Alien Sick - Malade avec teint jaunâtre/pâle -->
+
+  <!-- Antennes tombantes (affaiblies) -->
+  <rect x="12" y="6" width="1" height="3" fill="#B8A860"/>
+  <rect x="11" y="7" width="1" height="2" fill="#A09050"/>
+  <rect x="11" y="5" width="2" height="1" fill="#B8A860"/>
+  <!-- Boule antenne gauche (terne) -->
+  <rect x="11" y="3" width="2" height="2" fill="#7B5090"/>
+  <rect x="11" y="3" width="1" height="1" fill="#9070A0"/>
+
+  <rect x="19" y="6" width="1" height="3" fill="#B8A860"/>
+  <rect x="20" y="7" width="1" height="2" fill="#A09050"/>
+  <rect x="19" y="5" width="2" height="1" fill="#B8A860"/>
+  <!-- Boule antenne droite (terne) -->
+  <rect x="19" y="3" width="2" height="2" fill="#7B5090"/>
+  <rect x="20" y="3" width="1" height="1" fill="#9070A0"/>
+
+  <!-- Contour tête -->
+  <rect x="10" y="9" width="12" height="2" fill="#A09050"/>
+  <rect x="9" y="11" width="14" height="12" fill="#A09050"/>
+
+  <!-- Tête principale (teint jaunâtre/malade) -->
+  <rect x="11" y="10" width="10" height="13" fill="#B8A860"/>
+  <rect x="12" y="11" width="8" height="11" fill="#C8B870"/>
+
+  <!-- Grand front alien (pâle) -->
+  <rect x="13" y="12" width="6" height="4" fill="#D8C890"/>
+  <rect x="14" y="13" width="4" height="2" fill="#E0D8A8"/>
+
+  <!-- Yeux fatigués/mi-clos -->
+  <rect x="12" y="16" width="3" height="3" fill="#1C1C1C"/>
+  <rect x="13" y="17" width="1" height="1" fill="#4A7090"/>
+  <rect x="14" y="17" width="1" height="1" fill="#7F8C8D"/>
+
+  <rect x="17" y="16" width="3" height="3" fill="#1C1C1C"/>
+  <rect x="18" y="17" width="1" height="1" fill="#4A7090"/>
+  <rect x="19" y="17" width="1" height="1" fill="#7F8C8D"/>
+
+  <!-- Cernes sous les yeux -->
+  <rect x="12" y="19" width="3" height="1" fill="#8A7A50"/>
+  <rect x="17" y="19" width="3" height="1" fill="#8A7A50"/>
+
+  <!-- Petit nez alien -->
+  <rect x="16" y="20" width="1" height="1" fill="#A09050"/>
+
+  <!-- Bouche nauséeuse -->
+  <rect x="14" y="21" width="1" height="1" fill="#1C1C1C"/>
+  <rect x="15" y="22" width="2" height="1" fill="#1C1C1C"/>
+  <rect x="17" y="21" width="1" height="1" fill="#1C1C1C"/>
+
+  <!-- Gouttes de sueur -->
+  <rect x="10" y="13" width="1" height="2" fill="#87CEEB"/>
+  <rect x="10" y="15" width="1" height="1" fill="#5DADE2"/>
+  <rect x="21" y="14" width="1" height="2" fill="#87CEEB"/>
+  <rect x="21" y="16" width="1" height="1" fill="#5DADE2"/>
+
+  <!-- Marques aliens sur le front (ternes) -->
+  <rect x="15" y="13" width="2" height="1" fill="#A09050"/>
+  <rect x="14" y="14" width="4" height="1" fill="#B8A860"/>
+
+  <!-- Corps affaissé -->
+  <rect x="11" y="23" width="10" height="6" fill="#B8A860"/>
+  <rect x="12" y="24" width="8" height="4" fill="#C8B870"/>
+  <rect x="13" y="25" width="6" height="2" fill="#D8C890"/>
+
+  <!-- Petits bras/appendices (tombants) -->
+  <rect x="10" y="26" width="2" height="2" fill="#B8A860"/>
+  <rect x="20" y="26" width="2" height="2" fill="#B8A860"/>
+
+  <!-- Pieds -->
+  <rect x="13" y="28" width="2" height="1" fill="#A09050"/>
+  <rect x="17" y="28" width="2" height="1" fill="#A09050"/>
+
+  <!-- Détail ventre -->
+  <rect x="14" y="26" width="4" height="1" fill="#E0D8A8"/>
+</svg>

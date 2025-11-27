@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Créer une application desktop (Electron) de gestion d'animaux virtuels type Tamagotchi, où l'utilisateur doit prendre soin de créatures qui évoluent et se dégradent avec le temps.
+Créer une application desktop (Electron) de gestion d'animaux virtuels type Tamagotchi, où l'utilisateur doit prendre soin de créatures qui évoluent et se dégradent avec le temps. L'application inclut également des mini-jeux (clicker, pêche) et un système d'économie pour acheter des items et équipements.
 
 ## Public cible
 
@@ -12,13 +12,13 @@ Créer une application desktop (Electron) de gestion d'animaux virtuels type Tam
 
 ## Contrainte projet
 
-**Durée** : 3.5 jours
+**Durée initiale** : 3.5 jours
 **Contrainte académique** : Au moins 2 entités en base de données
-**Réalisé** : 4 entités (`AnimalType`, `Animal`, `Action`, `Item`)
+**Réalisé** : 14 entités, 4 features majeures (Animaux, Économie, Pêche, Audio)
 
 ---
 
-## User stories - MVP
+## User Stories
 
 ### Gestion des types d'animaux
 
@@ -70,7 +70,7 @@ En tant qu'utilisateur, je veux voir dans l'historique des actions quels items o
 ### Système de temps
 
 **US14 : Dégradation passive des stats**
-En tant qu'utilisateur, je veux que les stats de mon animal se dégradent automatiquement avec le temps selon les taux de son type (chat: faim -2.5/h, chien: bonheur -2/h, alien: moins de dégradation)
+En tant qu'utilisateur, je veux que les stats de mon animal se dégradent automatiquement avec le temps selon les taux de son type
 
 **US15 : Calcul du temps écoulé offline**
 En tant qu'utilisateur, je veux que les stats de mon animal se dégradent même quand l'app est fermée, en fonction du temps réellement écoulé
@@ -83,10 +83,113 @@ En tant qu'utilisateur, je veux recevoir des notifications quand les stats de mo
 ### Statistiques
 
 **US17 : Historique des actions**
-En tant qu'utilisateur, je veux voir l'historique des 20 dernières actions effectuées sur mon animal (type d'action, item utilisé si applicable, timestamp)
+En tant qu'utilisateur, je veux voir l'historique des 20 dernières actions effectuées sur mon animal (type d'action, item utilisé si applicable, timestamp, deltas de stats)
 
 **US18 : Statistiques globales** (optionnel)
 En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (total créés par type, vivants/morts, actions effectuées, items les plus utilisés)
+
+---
+
+## Système d'économie
+
+### Wallet
+
+**US-ECO-1 : Portefeuille de coins**
+En tant qu'utilisateur, je veux avoir un portefeuille de coins visible dans l'interface pour suivre ma monnaie virtuelle
+
+**US-ECO-2 : Génération passive de coins**
+En tant qu'utilisateur, je veux gagner 10 coins par heure automatiquement, même quand l'app est fermée
+
+**US-ECO-3 : Récompenses d'actions**
+En tant qu'utilisateur, je veux gagner des coins en effectuant des actions sur mes animaux :
+- Feed: +2 coins
+- Play: +5 coins
+- Heal: +3 coins
+- Sleep: +8 coins
+- Use Item: +1 coin
+
+### Shop
+
+**US-ECO-4 : Boutique d'items**
+En tant qu'utilisateur, je veux accéder à une boutique pour acheter des items avec mes coins
+
+**US-ECO-5 : Achat d'items**
+En tant qu'utilisateur, je veux acheter des items qui s'ajoutent automatiquement à mon inventaire
+
+---
+
+## Mini-jeu Clicker
+
+**US-CLICK-1 : Gameplay clicker**
+En tant qu'utilisateur, je veux jouer à un mini-jeu de clicker pour gagner des coins en cliquant rapidement
+
+**US-CLICK-2 : Système d'upgrades clicker**
+En tant qu'utilisateur, je veux acheter des améliorations pour mon clicker :
+- Multiplier : ×1.5 par niveau
+- Time Bonus : +5 secondes par niveau
+- Auto Clicker : +0.2 clicks/seconde par niveau
+
+**US-CLICK-3 : High scores et rewards**
+En tant qu'utilisateur, je veux voir mes meilleurs scores et gagner des coins proportionnels à mon score
+
+---
+
+## Mini-jeu de Pêche
+
+### Gameplay de base
+
+**US-FISH-1 : Mécanique de pêche**
+En tant qu'utilisateur, je veux lancer ma ligne et attendre qu'un poisson morde pour essayer de l'attraper
+
+**US-FISH-2 : Système QTE (Quick Time Event)**
+En tant qu'utilisateur, je veux jouer à un mini-jeu de capture où je dois maintenir la tension dans une zone optimale (40-70) pour remplir une barre de progression et capturer le poisson
+
+### Équipement
+
+**US-FISH-3 : Cannes à pêche**
+En tant qu'utilisateur, je veux acheter et équiper différentes cannes à pêche avec des bonus :
+- Reel Zone Bonus : Zone optimale plus large
+- Catch Rate Bonus : Meilleur taux de capture
+- Rarity Bonus : Plus de chances de poissons rares
+
+**US-FISH-4 : Appâts**
+En tant qu'utilisateur, je veux acheter et utiliser des appâts pour améliorer mes chances :
+- Appâts généraux : Bonus de capture
+- Appâts spécialisés : Ciblent certaines raretés ou espèces
+
+**US-FISH-5 : Lieux de pêche**
+En tant qu'utilisateur, je veux débloquer différents lieux de pêche (étang, rivière, lac, océan, etc.) avec des poissons différents et des niveaux de difficulté variés
+
+### Catalogue et progression
+
+**US-FISH-6 : Catalogue de poissons**
+En tant qu'utilisateur, je veux voir un catalogue de tous les poissons avec :
+- Espèces découvertes vs non découvertes
+- Rareté (common, uncommon, rare, epic, legendary)
+- Statistiques personnelles (nombre attrapé, plus gros)
+
+**US-FISH-7 : Système d'upgrades pêche**
+En tant qu'utilisateur, je veux acheter des améliorations permanentes :
+- Luck : +5% chances de poissons rares par niveau
+- Reflexes : Zone optimale +2 par niveau
+- Value : +10% valeur des poissons par niveau
+- Bait Efficiency : -5% consommation d'appât par niveau
+
+**US-FISH-8 : Progression et niveaux**
+En tant qu'utilisateur, je veux gagner de l'expérience en pêchant et monter de niveau pour débloquer des récompenses
+
+---
+
+## Système Audio
+
+**US-AUDIO-1 : Musique de fond**
+En tant qu'utilisateur, je veux avoir de la musique de fond qui change selon la page où je suis (jeu principal, mini-jeux, boutique)
+
+**US-AUDIO-2 : Effets sonores**
+En tant qu'utilisateur, je veux entendre des effets sonores pour les actions importantes (achat, capture de poisson, actions sur animal)
+
+**US-AUDIO-3 : Contrôles audio**
+En tant qu'utilisateur, je veux pouvoir ajuster le volume de la musique et des effets séparément, et les couper individuellement
 
 ---
 
@@ -97,65 +200,34 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 1. L'utilisateur lance l'application
 2. Voit un écran vide avec message "Créer ton premier animal"
 3. Clique sur "Créer un animal"
-4. Remplit le formulaire :
-    - Nom (3-20 caractères)
-    - Type (chat/chien/alien)
-5. Valide → l'animal est créé avec stats par défaut (100/100/100/100)
+4. Remplit le formulaire (nom, type)
+5. Valide → animal créé avec stats par défaut (100/100/100/100)
 6. Redirection vers la liste des animaux
-7. L'animal apparaît dans la liste avec un sprite/emoji
 
 ### 2. Prendre soin d'un animal
 
-1. L'utilisateur clique sur un animal dans la liste
-2. Accède au détail avec :
-    - Sprite animé selon humeur
-    - 4 barres de stats (Faim/Bonheur/Santé/Énergie)
-    - Âge de l'animal
-    - Statut vivant/mort
-3. Voit 4 boutons d'actions :
-    - **Nourrir** : +20 faim, +5 bonheur, -5 énergie
-    - **Jouer** : +15 bonheur, -10 énergie, -5 faim
-    - **Soigner** : +20 santé
-    - **Dormir** : +30 énergie, +5 bonheur
-4. Clique sur "Nourrir"
-5. Les barres se mettent à jour instantanément
-6. Toast de succès "Animal nourri !"
-7. L'action est enregistrée dans l'historique
+1. L'utilisateur sélectionne un animal dans les onglets
+2. Accède au détail avec sprite, stats, actions
+3. Effectue une action (nourrir, jouer, soigner, dormir)
+4. Les stats se mettent à jour + coins gagnés
+5. L'action est enregistrée dans l'historique
 
-### 3. Dégradation automatique
+### 3. Acheter et utiliser un item
 
-1. L'utilisateur laisse l'app ouverte
-2. Toutes les 10 secondes, un "tick" se déclenche
-3. Les stats diminuent progressivement :
-    - Faim : -2 par heure
-    - Bonheur : -1.5 par heure
-    - Énergie : -1 par heure
-    - Santé : -3 par heure si faim < 20 ou bonheur < 20
-4. Si une stat < 30%, notification desktop
-5. Si santé = 0 → l'animal meurt
-6. Toast "Ton animal est mort 😢"
-7. L'animal passe dans la section "Cimetière"
+1. L'utilisateur accède à la boutique (/shop)
+2. Sélectionne un item et l'achète avec ses coins
+3. L'item est ajouté à l'inventaire
+4. Retour sur la page principale
+5. Utilise l'item sur un animal depuis l'inventaire
 
-### 4. Fermeture/Réouverture de l'app
+### 4. Session de pêche
 
-1. L'utilisateur ferme l'application à 14h00
-2. Réouvre l'app à 18h00 (4h plus tard)
-3. Au démarrage, calcul du temps écoulé depuis `derniereUpdate`
-4. Application de la dégradation en batch (4h × taux de dégradation)
-5. Si l'animal est mort pendant l'absence :
-    - Toast "Ton animal est mort pendant ton absence 😢"
-    - Animal déplacé au cimetière
-6. Si l'animal est vivant mais stats critiques :
-    - Notification "Ton animal a besoin de toi !"
-
-### 5. Consultation de l'historique
-
-1. L'utilisateur accède au détail d'un animal
-2. Scroll vers le bas pour voir l'historique
-3. Liste des 20 dernières actions avec :
-    - Icône (🍖 Nourrir, 🎮 Jouer, 💊 Soigner, 😴 Dormir)
-    - Timestamp relatif ("Il y a 2h")
-4. Regroupement par jour (optionnel)
+1. L'utilisateur accède aux mini-jeux (/minigames)
+2. Sélectionne le jeu de pêche
+3. Choisit un lieu et un appât (optionnel)
+4. Lance la ligne et attend une touche
+5. Mini-jeu QTE pour capturer le poisson
+6. Récompense en coins et XP si succès
 
 ---
 
@@ -165,162 +237,83 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 - Toutes les stats sont bornées entre **0 et 100**
 - Un animal **meurt** si `sante = 0`
-- La **santé** diminue uniquement si `faim < 20` ou `bonheur < 20`
+- La **santé** diminue uniquement si une stat < 20
 
 ### Actions
 
-- **Nourrir** : `faim +20`, `bonheur +5`, `energie -5`
-- **Jouer** : `bonheur +15`, `energie -10`, `faim -5`
-    - Bouton désactivé si `energie < 10`
-- **Soigner** : `sante +20`
-- **Dormir** : `energie +30`, `bonheur +5`
+| Action | Faim | Bonheur | Énergie | Santé | Durée | Coins |
+|--------|------|---------|---------|-------|-------|-------|
+| Nourrir | +20 | +5 | -5 | - | 5s | +2 |
+| Jouer | -5 | +15 | -10 | - | 20s | +5 |
+| Soigner | - | - | - | +20 | 8s | +3 |
+| Dormir | - | +5 | +30 | - | 30s | +8 |
+| Utiliser Item | Variable | Variable | Variable | Variable | 3s | +1 |
 
-### Dégradation (par heure)
+### Dégradation (par heure) - Taux par type d'animal
 
-- `faim`: -2
-- `bonheur`: -1.5
-- `energie`: -1
-- `sante`: -3 (uniquement si `faim < 20` ou `bonheur < 20`)
+| Type | Faim | Bonheur | Énergie | Santé |
+|------|------|---------|---------|-------|
+| **Chat** 🐱 | -2.5 | -1.5 | -0.8 | -3.0 |
+| **Chien** 🐶 | -2.0 | -2.0 | -1.2 | -3.0 |
+| **Alien** 👽 | -1.5 | -1.0 | -1.5 | -2.5 |
 
-### Âge
+**Règle santé** : La santé diminue uniquement si une stat est critique (< 20).
+Le taux de dégradation est **multiplié par le nombre de stats critiques**.
 
-- Incrémenté automatiquement avec le temps écoulé
-- Affiché en heures ou jours selon la durée
+### Économie
 
-### Types d'animaux
+| Source | Montant |
+|--------|---------|
+| Passif | 10 coins/heure |
+| Actions | 1-8 coins selon action |
+| Clicker | Variable (score-based) |
+| Pêche | Variable (rareté + taille) |
 
-- **Chat** : emoji 🐱 ou sprite minimaliste
-- **Chien** : emoji 🐶 ou sprite minimaliste
-- **Alien** : emoji 👽 ou sprite minimaliste
+### Raretés de poissons
 
-### Humeurs (affichage sprite)
+| Rareté | Couleur | Multiplicateur valeur | Probabilité base |
+|--------|---------|----------------------|------------------|
+| Common | Gris | ×1 | 50% |
+| Uncommon | Vert | ×2 | 30% |
+| Rare | Bleu | ×3 | 15% |
+| Epic | Violet | ×5 | 4% |
+| Legendary | Or | ×10 | 1% |
 
-- **Content** : si `bonheur > 60` et `faim > 60` → 😊
-- **Triste** : si `bonheur < 30` → 😢
-- **Affamé** : si `faim < 30` → 😫
-- **Endormi** : si `energie < 30` → 😴
-- **Neutre** : sinon → 😐
+### Coûts exponentiels (upgrades)
 
----
+```
+coût_niveau_n = coût_base × multiplicateur^niveau
 
-## Cas limites
-
-### Aucun animal créé
-
-- Affichage d'un écran vide avec message d'incitation
-- Bouton "Créer ton premier animal"
-
-### Animal mort
-
-- Badge "💀 Mort"
-- Stats figées
-- Boutons d'actions désactivés
-- Déplacé dans la section "Cimetière"
-
-### Stats à 100
-
-- Les actions n'augmentent pas au-delà de 100
-- Message "Stat déjà au maximum"
-
-### Stats à 0
-
-- Si `sante = 0` → mort instantané
-- Si `faim = 0` → `sante` diminue rapidement
-- Si `energie = 0` → bouton "Jouer" désactivé
-
-### Notifications
-
-- Maximum 1 notification par stat par heure (pas de spam)
-- Notifications groupées si plusieurs stats critiques
-
-### Temps écoulé > 24h
-
-- Si animal mort depuis >24h, message spécifique
-- Si animal vivant après >24h sans actions, stats critiques garanties
+Clicker: multiplicateur = 1.6
+Fishing: multiplicateur = 1.4 à 1.7 selon l'upgrade
+```
 
 ---
 
 ## Modèle de données
 
-### Table `AnimalType`
+### Tables principales (14 tables)
 
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Identifiant unique |
-| `name` | String | Nom technique unique (cat/dog/alien) |
-| `displayName` | String | Nom d'affichage (Chat/Chien/Alien) |
-| `hungerDecayRate` | Float | Taux de dégradation de la faim par heure (défaut: 2.0) |
-| `happinessDecayRate` | Float | Taux de dégradation du bonheur par heure (défaut: 1.5) |
-| `energyDecayRate` | Float | Taux de dégradation de l'énergie par heure (défaut: 1.0) |
-| `healthDecayRate` | Float | Taux de dégradation de la santé par heure (défaut: 3.0) |
-| `emoji` | String | Emoji représentant le type (🐱/🐶/👽) |
+#### Domaine Animaux
+- **AnimalType** : Types d'animaux avec taux de dégradation
+- **Animal** : Instances d'animaux avec stats
+- **Action** : Historique des actions avec stats before/after
+- **Item** : Items disponibles dans le jeu
+- **Inventory** : Quantités d'items possédés
 
-### Table `Animal`
+#### Domaine Économie
+- **Wallet** : Portefeuille unique (singleton)
+- **MinigameScore** : Scores des mini-jeux
+- **ClickerUpgrade** : Niveaux des upgrades clicker
 
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Identifiant unique |
-| `name` | String | Nom de l'animal (3-20 caractères) |
-| `typeId` | UUID | Référence vers AnimalType |
-| `hunger` | Integer | Niveau de faim (0-100) |
-| `happiness` | Integer | Niveau de bonheur (0-100) |
-| `health` | Integer | Niveau de santé (0-100) |
-| `energy` | Integer | Niveau d'énergie (0-100) |
-| `age` | Integer | Âge en heures |
-| `createdAt` | DateTime | Date de création |
-| `updatedAt` | DateTime | Dernière mise à jour des stats |
-| `isAlive` | Boolean | Statut vivant/mort |
-
-### Table `Action`
-
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Identifiant unique |
-| `animalId` | UUID | Référence vers Animal |
-| `actionType` | String | Type (feed/play/heal/sleep) |
-| `itemId` | UUID (nullable) | Référence vers Item utilisé (optionnel) |
-| `timestamp` | DateTime | Horodatage de l'action |
-
-### Table `Item`
-
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Identifiant unique |
-| `name` | String | Nom de l'objet |
-| `type` | String | Type (food/toy/medicine) |
-| `hungerBoost` | Integer | Bonus de faim (0-100) |
-| `happinessBoost` | Integer | Bonus de bonheur (0-100) |
-| `healthBoost` | Integer | Bonus de santé (0-100) |
-| `energyBoost` | Integer | Bonus d'énergie (0-100) |
-| `energyCost` | Integer | Coût en énergie pour utiliser l'objet |
-| `emoji` | String | Emoji représentant l'objet |
-| `description` | String | Description de l'objet |
-
-### Relations
-
-- Un `AnimalType` a plusieurs `Animal` (One-to-Many)
-- Un `Animal` a plusieurs `Action` (One-to-Many)
-- Un `Animal` appartient à un `AnimalType` (Many-to-One)
-- Un `Item` peut être utilisé dans plusieurs `Action` (One-to-Many)
-- Une `Action` peut utiliser un `Item` (Many-to-One, optionnel)
-- Suppression en cascade : si animal supprimé → actions supprimées
-
-### Exemples d'items
-
-**Nourriture (food):**
-- 🍖 Steak : +30 hunger, -5 energy
-- 🥛 Lait : +15 hunger, +10 happiness
-- 🍎 Pomme : +10 hunger, +5 health
-
-**Jouets (toy):**
-- 🎾 Balle : +20 happiness, -15 energy
-- 🧸 Peluche : +15 happiness, -5 energy
-- 🎮 Console : +25 happiness, -20 energy
-
-**Médicaments (medicine):**
-- 💊 Vitamine : +20 health, +10 energy
-- 💉 Vaccin : +30 health
-- 🩹 Bandage : +15 health
+#### Domaine Pêche
+- **FishSpecies** : Espèces de poissons
+- **FishCatch** : Historique des captures
+- **FishingRod** : Cannes à pêche
+- **FishingBait** : Appâts
+- **FishingLocation** : Lieux de pêche
+- **FishingUpgrade** : Upgrades permanents
+- **FishingProgress** : Progression du joueur
 
 ---
 
@@ -329,14 +322,14 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 ### Performance
 
 - Temps de chargement page < 1 seconde
-- Tick toutes les **10 secondes** (pas chaque seconde pour économiser la batterie)
-- Calcul batch du temps écoulé offline (pas de boucle)
+- Tick toutes les **10 secondes** (pas chaque seconde)
+- Calcul batch du temps écoulé offline
 
 ### Sécurité
 
 - Base de données locale (SQLite) dans dossier utilisateur
+- Validation Zod côté backend
 - Pas de données sensibles stockées
-- Validation côté client ET serveur (Electron main process)
 
 ### Compatibilité
 
@@ -350,27 +343,6 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 - Navigation au clavier possible
 - Labels ARIA pour screen readers
 - Contraste suffisant (WCAG 2.1 AA)
-- Tailles de police lisibles
-
----
-
-## Extensions possibles (hors MVP)
-
-### Phase 2
-
-- **Mini-jeu** : Cliquer sur des objets qui tombent pour gagner du bonheur
-- **Évolution** : Bébé → Adulte → Vieux selon l'âge
-- **Objets** : Système d'inventaire avec nourriture, jouets, médicaments
-- **Multiples types** : Débloquer de nouveaux types d'animaux
-- **Achievements** : "Première semaine", "100 actions", "Animal centenaire"
-
-### Phase 3
-
-- **Export/Import** : Sauvegarder et partager ses animaux
-- **Thèmes** : Mode sombre/clair
-- **Graphiques** : Courbes d'évolution des stats dans le temps
-- **Sons** : Bruitages pour chaque action
-- **Animations** : Transitions CSS pour les sprites
 
 ---
 
@@ -378,20 +350,24 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 
 ### Fonctionnels
 
-- ✅ Au moins 2 entités en BDD (`Animal` + `Action`)
+- ✅ 14 entités en BDD (objectif: 2)
 - ✅ CRUD complet sur les animaux
 - ✅ Système de dégradation automatique
 - ✅ Persistance entre sessions
 - ✅ Notifications desktop natives
+- ✅ Système d'économie complet
+- ✅ Mini-jeu clicker avec upgrades
+- ✅ Mini-jeu de pêche complet
+- ✅ Système audio
 
 ### Techniques
 
 - ✅ Architecture feature-based
-- ✅ Tests unitaires >80% couverture
 - ✅ TypeScript strict sans `any`
 - ✅ TanStack Query pour le state serveur
 - ✅ TanStack Router pour la navigation
 - ✅ Prisma pour l'ORM
+- ✅ Pattern Repository/Controller
 
 ### UX
 
@@ -399,10 +375,10 @@ En tant qu'utilisateur, je veux voir des statistiques sur tous mes animaux (tota
 - ✅ Feedback immédiat (toasts)
 - ✅ Barres de stats visuelles
 - ✅ Animations fluides
-- ✅ Responsive (desktop uniquement)
+- ✅ Musique et effets sonores
 
 ---
 
-**Version** : 1.0  
-**Date** : 24 novembre 2025  
-**Statut** : Spécifications validées pour développement MVP
+**Version** : 3.0
+**Date** : 26 novembre 2025
+**Statut** : Spécifications mises à jour avec toutes les features implémentées

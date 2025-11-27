@@ -1,50 +1,183 @@
 erDiagram
-    AnimalType ||--o{ Animal : "has"
-    Animal ||--o{ Action : "performs"
-    Item ||--o{ Action : "used in"
+    AnimalType ||--o{ Animal : has
+    Animal ||--o{ Action : performs
+    Item ||--o{ Action : uses
+    Item ||--|| Inventory : stored_in
+    FishSpecies ||--o{ FishCatch : caught_as
+    FishingLocation ||--o{ FishCatch : location
+    FishingRod ||--o{ FishCatch : rod
+    FishingBait ||--o{ FishCatch : bait
 
     AnimalType {
-        uuid id PK
-        string name UK "cat, dog, alien"
-        string displayName "Chat, Chien, Alien"
-        float hungerDecayRate "default: 2.0"
-        float happinessDecayRate "default: 1.5"
-        float energyDecayRate "default: 1.0"
-        float healthDecayRate "default: 3.0"
-        string emoji "🐱 🐶 👽"
+        string id PK
+        string name UK
+        string displayName
+        float hungerDecayRate
+        float happinessDecayRate
+        float energyDecayRate
+        float healthDecayRate
+        string emoji
     }
 
     Animal {
-        uuid id PK
+        string id PK
         string name
-        uuid typeId FK
-        int hunger "default: 100"
-        int happiness "default: 100"
-        int health "default: 100"
-        int energy "default: 100"
-        int age "in hours, default: 0"
-        datetime createdAt "default: now()"
-        datetime updatedAt "default: now()"
-        boolean isAlive "default: true"
+        string typeId FK
+        int hunger
+        int happiness
+        int health
+        int energy
+        int age
+        datetime createdAt
+        datetime updatedAt
+        boolean isAlive
     }
 
     Action {
-        uuid id PK
-        uuid animalId FK "CASCADE on delete"
-        string actionType "feed, play, heal, sleep"
-        uuid itemId FK "nullable"
-        datetime timestamp "default: now()"
+        string id PK
+        string animalId FK
+        string actionType
+        string itemId FK
+        datetime timestamp
+        int hungerBefore
+        int happinessBefore
+        int healthBefore
+        int energyBefore
+        int hungerAfter
+        int happinessAfter
+        int healthAfter
+        int energyAfter
+        int coinsEarned
     }
 
     Item {
-        uuid id PK
+        string id PK
         string name
-        string type "food, toy, medicine"
-        int hungerBoost "default: 0"
-        int happinessBoost "default: 0"
-        int healthBoost "default: 0"
-        int energyBoost "default: 0"
-        int energyCost "default: 0"
+        string type
+        int hungerBoost
+        int happinessBoost
+        int healthBoost
+        int energyBoost
+        int energyCost
+        int price
         string emoji
         string description
+    }
+
+    Inventory {
+        string id PK
+        string itemId FK
+        int quantity
+    }
+
+    Wallet {
+        string id PK
+        int coins
+        datetime lastPassiveGain
+        datetime createdAt
+    }
+
+    MinigameScore {
+        string id PK
+        string gameType
+        int score
+        int coinsEarned
+        datetime playedAt
+    }
+
+    ClickerUpgrade {
+        string id PK
+        string type UK
+        int level
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    FishSpecies {
+        string id PK
+        string name UK
+        string displayName
+        string emoji
+        string rarity
+        int baseValue
+        int difficulty
+        int minSize
+        int maxSize
+        string locations
+        string baitPreference
+        string description
+    }
+
+    FishCatch {
+        string id PK
+        string speciesId FK
+        int size
+        int coinsEarned
+        boolean isFirstCatch
+        datetime caughtAt
+        string locationId FK
+        string rodId FK
+        string baitId FK
+    }
+
+    FishingRod {
+        string id PK
+        string name UK
+        string displayName
+        int tier
+        int price
+        float reelZoneBonus
+        float catchRateBonus
+        float rarityBonus
+        string description
+        boolean isOwned
+        boolean isEquipped
+    }
+
+    FishingBait {
+        string id PK
+        string name UK
+        string displayName
+        string emoji
+        int price
+        float catchRateBonus
+        int maxUses
+        string targetRarity
+        string targetSpecies
+        string description
+        int quantity
+    }
+
+    FishingLocation {
+        string id PK
+        string name UK
+        string displayName
+        string emoji
+        int unlockCost
+        float difficulty
+        string availableFish
+        string description
+        boolean isUnlocked
+        int unlockOrder
+    }
+
+    FishingUpgrade {
+        string id PK
+        string type UK
+        int level
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    FishingProgress {
+        string id PK
+        int level
+        int experience
+        int totalFishCaught
+        string largestFishId
+        int largestFishSize
+        int currentStreak
+        int bestStreak
+        datetime createdAt
+        datetime updatedAt
     }

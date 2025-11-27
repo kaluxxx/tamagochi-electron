@@ -59,6 +59,9 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Generated Prisma Client
+src/generated/
+
 # Coverage & test
 coverage/
 .nyc_output/

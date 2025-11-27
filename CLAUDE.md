@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Tamagotchi Electron - Application desktop de gestion d'animaux virtuels type Tamagotchi. Les utilisateurs créent et prennent soin de créatures (chat, chien, alien) dont les stats se dégradent avec le temps.
 
-**Stack:** React 18, TypeScript, Electron, Prisma, SQLite, TanStack Query/Router, Tailwind CSS, Vite
+**Stack:** React 18, TypeScript, Electron, Prisma, SQLite, TanStack Query/Router, Zustand, Tailwind CSS, Vite
 
 ## Development Commands
 
@@ -51,16 +51,17 @@ npm run type-check            # TypeScript check
 
 ## Key Architectural Points
 
-- **Feature-based structure:** `src/features/{animals,actions,stats}` with components/hooks/services/types per feature
+- **Feature-based structure:** `src/features/{animals,actions,history,inventory}` with components/hooks/services/types per feature
 - **Layered architecture:** Components → Hooks → Services → IPC → Electron Main → Prisma → SQLite
-- **IPC via Context Bridge:** Use `window.api.*` methods (defined in `electron/preload.ts`)
-- **Time system:** Tick every 10s, calculate elapsed time from `updatedAt`, handle offline time in batch
-- **Stats degradation:** Hunger -2/h, Happiness -1.5/h, Energy -1/h, Health -3/h (only if hunger or happiness < 20)
+- **IPC via Context Bridge:** Use `window.api.*` methods (defined in `src/electron/preload.ts`)
+- **Time system:** Tick every 10s in main process, calculate elapsed time from `updatedAt`, handle offline time in batch on app start
+- **Stats degradation:** Type-specific rates (Cat: Hunger -2.5/h, Dog: Happiness -2/h, Alien: Energy -1.5/h), Health -3/h only if any stat < 20 (multiplied by count of critical stats)
+- **State management:** TanStack Query for server state, Zustand for action progress state
 - **Type safety:** Strict TypeScript, Prisma-generated types, no `any`
 
 ## Database Schema
 
-**4 tables pour gestion complète:**
+**5 tables pour gestion complète:**
 
 ```prisma
 model AnimalType {
@@ -76,12 +77,20 @@ model Animal {
 
 model Action {
   id, animalId, actionType, itemId?, timestamp
-  animal Animal @relation
+  hungerBefore?, happinessBefore?, healthBefore?, energyBefore?   // Stats avant action
+  hungerAfter?, happinessAfter?, healthAfter?, energyAfter?       // Stats après action
+  animal Animal @relation (onDelete: Cascade)
   item Item? @relation
 }
 
 model Item {
   id, name, type, hungerBoost, happinessBoost, healthBoost, energyBoost, energyCost, emoji, description
   actions Action[]
+  inventory Inventory?
+}
+
+model Inventory {
+  id, itemId (unique), quantity
+  item Item @relation
 }
 ```
